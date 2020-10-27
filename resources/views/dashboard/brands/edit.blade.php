@@ -2,7 +2,7 @@
 
 
 @php
-$model_name = 'main-categories';
+$model_name = 'brands';
 @endphp
 
 @section('title')
@@ -121,19 +121,53 @@ $model_name = 'main-categories';
 
 
 
-                                                {{-- ---------image---------
+                                                {{-- ---------image- and parent --------
                                                 --}}
 
                                                 <div class="row">
 
-                                                    <div class="col-md-12">
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="parent_id">Main Category</label>
+                                                            <select name="main_category_id"
+                                                                class="select2 select2-placeholder form-control select2-hidden-accessible"
+                                                                id="single-placeholder" tabindex="-1" aria-hidden="true">
+                                                                @isset($main_categories)
+
+
+                                                                    @if ($main_categories->count() > 0)
+
+                                                                        @foreach ($main_categories as $main_category)
+                                                                            <option value="{{ $main_category->id }}"
+                                                                                {{ $row->main_category_id == $main_category->id ? 'selected' : '' }}>
+                                                                                {{ $main_category->name }}
+                                                                            </option>
+
+                                                                        @endforeach
+
+                                                                    @else
+                                                                        <option disabled> add main category</option>
+                                                                    @endif
+                                                                @endisset
+
+
+                                                            </select>
+                                                            @error('parent_id')
+                                                            <span class="text-danger">{{ $message }} </span>
+                                                            @enderror
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
                                                         @php
                                                         $input = 'image';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
                                                             <input type="file" id="{{ $input }}" class="form-control" "
-                                                                                name=" {{ $input }}">
+                                                                                    name=" {{ $input }}">
                                                             @error($input)
                                                             <span class="text-danger">{{ $message }} </span>
                                                             @enderror
@@ -171,9 +205,9 @@ $model_name = 'main-categories';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> meta keywords </label>
-                                                            <input type="text" value="{{ $row->meta_keywords  }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input meta keywords   "
-                                                                name="{{ $input }}">
+                                                            <input type="text" value="{{ $row->meta_keywords }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input meta keywords   " name="{{ $input }}">
                                                             @error($input)
                                                             <span class="text-danger">{{ $message }} </span>
                                                             @enderror
@@ -192,7 +226,7 @@ $model_name = 'main-categories';
                                                             <label for="{{ $input }}"> meta description </label>
                                                             <textarea rows="4" id="{{ $input }}" class="form-control"
                                                                 placeholder="input meta description   "
-                                                                name="{{ $input }}">{{ $row->meta_description  }}</textarea>
+                                                                name="{{ $input }}">{{ $row->meta_description }}</textarea>
 
                                                             @error($input)
                                                             <span class="text-danger">{{ $message }} </span>
@@ -211,7 +245,7 @@ $model_name = 'main-categories';
 
                                                             <label>
                                                                 <input type="checkbox" name="is_active" value="true"
-                                                                    {{$row->is_active  == 'active' ? 'checked' : ''}}  > active
+                                                                    {{ $row->is_active == 'active' ? 'checked' : '' }}> active
                                                             </label>
                                                         </div>
                                                     </div>

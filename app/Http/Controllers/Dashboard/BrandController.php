@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\Brand;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\DataTables\BrandDataTable;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
-use App\DataTables\SubCategoryDataTable;
-use App\Http\Requests\Dashboard\SubCategoryRequest;
+use App\Http\Requests\Dashboard\BrandRequest;
 
-class SubCategoryController extends Controller
+class BrandController extends Controller
 {
     use AjaxResponseTrait;
-    protected $view_model = 'dashboard.sub_categories';
+    protected $view_model = 'dashboard.brands';
+    protected $model = 'brands';
 
 
     /**
@@ -21,7 +22,7 @@ class SubCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(SubCategoryDataTable $datatable)
+    public function index(BrandDataTable $datatable)
     {
 
         return $datatable->render($this->view_model . '.index');
@@ -44,7 +45,7 @@ class SubCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SubCategoryRequest $request)
+    public function store(BrandRequest $request)
     {
 
         try {
@@ -59,7 +60,7 @@ class SubCategoryController extends Controller
 
             if ($request->hasFile('image') && $request->image != null) {
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = imageUpload($image, $this->model);
                 $validated['image'] = $path;
             }
 
@@ -71,14 +72,15 @@ class SubCategoryController extends Controller
             //-----------------------------------
             $data = array_merge($translations, $validated); // handel data to create
 
-            Category::create($data); //create new sub category
+            Brand::create($data); //create new sub category
 
             DB::commit();
 
-            return redirect()->route('sub-categories.index')->with(['success' => "success create"]);
+            return redirect()->route($this->model . '.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return catchErro('sub-categories.index', $th);
+            return $th->getMessage();
+            return catchErro($this->model . '.index', $th);
         }
 
 
@@ -92,9 +94,9 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $sub_category)
+    public function edit(Brand $brand)
     {
-          $row = $sub_category;
+          $row = $brand;
           $main_categories = Category::mainCategory()->select('id')->get();
 
         return view($this->view_model . '.edit',compact('row','main_categories'));
@@ -108,7 +110,7 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SubCategoryRequest $request, Category $sub_category)
+    public function update(BrandRequest $request, Brand $brand)
     {
 
         //return $request->validated();
@@ -124,31 +126,31 @@ class SubCategoryController extends Controller
 
               if ($request->hasFile('image') && $request->image != null) {
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = imageUpload($image, $this->model);
                 $validated['image'] = $path;
 
-                deleteFile($sub_category->image);
+                deleteFile($brand->image);
 
             }
 
             //----------customize the translation-------------------
 
             $translations = nameTranslations($validated['name']);
+
             unset($validated['name']);
+
+
 
             //-----------------------------------
             $data = array_merge($translations, $validated); // handel data to update
-
-            $sub_category->update($data);
+            $brand->update($data);
 
             DB::commit();
-
-            return redirect()->route('sub-categories.index')->with(['success' => "success update"]);
+            return redirect()->route($this->model . '.index')->with(['success' => "success update"]);
 
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return catchErro('sub-categories.index', $th);
+            return catchErro($this->model . '.index', $th);
         }
     }
 
@@ -158,11 +160,11 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $sub_category)
+    public function destroy(Brand $brand)
     {
         if (request()->ajax()) {
 
-            $sub_category->delete();
+            $brand->delete();
 
             return $this->successMessage('ok');
         }

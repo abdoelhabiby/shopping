@@ -1,7 +1,24 @@
 <?php
 
 
+/*
 
+ ** handel the translation
+
+*/
+
+function nameTranslations(array $translations){
+
+    $trans_content = [];
+
+    foreach ($translations as $key => $value) {
+        if (in_array($key, supportedLanguages())) {
+            $trans_content[$key] = ['name' => $value];
+        }
+    }
+
+    return $trans_content;
+}
 
 
 /*
@@ -38,13 +55,22 @@ function orderNumberOfRows()
 
 
 
+// function imageUpload($photo, $folder_save)
+// {
+
+//     $image = $photo->store("/", $folder_save);
+
+//     $path = "/images/" . $folder_save . "/" . $image;
+
+//     return $path;
+// }
+
+
+
 function imageUpload($photo, $folder_save)
 {
-
-    $image = $photo->store("/", $folder_save);
-
-    $path = "/images/" . $folder_save . "/" . $image;
-
+    $image = $photo->store("/" . $folder_save,'images');
+    $path = "/images/" . $image;
     return $path;
 }
 
@@ -53,7 +79,6 @@ function imageUpload($photo, $folder_save)
 function deleteFile($photo_to_delet)
 {
     if (\Illuminate\Support\Facades\File::exists(public_path($photo_to_delet))) {
-
         \Illuminate\Support\Facades\File::delete(public_path($photo_to_delet));
     }
 }

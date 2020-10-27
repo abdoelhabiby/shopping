@@ -3,10 +3,13 @@
 namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Validation\Rule;
+use App\Http\Traits\HandelSlugTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SubCategoryRequest extends FormRequest
 {
+    use HandelSlugTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,7 +37,7 @@ class SubCategoryRequest extends FormRequest
             "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('category_translations', 'name'),
             "meta_keywords" => "sometimes|nullable|string|max:100",
             "meta_description" => "sometimes|nullable|string|max:500",
-            "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg",
+            "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg|max:8000",
             "is_active" => "sometimes|nullable|",
 
         ];
@@ -57,15 +60,6 @@ class SubCategoryRequest extends FormRequest
 
 
 
-    //--------------------make slug prety--------------------
-
-    protected function prepareForValidation()
-    {
-        if ($this->has('slug'))
-            $this->merge([
-                'slug' => str_replace(" ", "-", preg_replace("/\s+/", " ", trim($this->request->get('slug'))))
-            ]);
-    }
 
 
 

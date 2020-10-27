@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Models\CategoryTranslation;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Translatable;
+use App\Http\Traits\GlobalMethodUesdInModels;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    use Translatable;
+    use Translatable,GlobalMethodUesdInModels;
 
     /**
      * The relations to eager load on every query.
@@ -32,8 +33,7 @@ class Category extends Model
 
 
     protected $casts = [
-        // 'is_active' => 'boolean',
-        'created_at' => 'datetime'
+        'created_at' => 'datetime:Y-m-d h:i:s'
     ];
 
 
@@ -57,14 +57,8 @@ class Category extends Model
     //----------------------- relation to get default translation data in datatabales-------------------
     public function translation_default()
     {
-        //return $this->name;
-        $locale = \Config::get('app.locale');
-        $fallback_locale = \Config::get('translatable.fallback_locale');
-
 
         return $this->hasOne(CategoryTranslation::class, 'category_id', 'id');
-                    //  ->where('locale', $locale)
-                    //  ->orWhere('locale','ar');
     }
     //--------------------------------------------
 
@@ -83,19 +77,7 @@ class Category extends Model
     }
 
 
-    //------------------------return attibute is active prety-------------
-    public function getIsActiveAttribute($p)
-    {
-        return $p == true ? 'active' : 'deactive';
-    }
-
-    //------------------return prety date---------------------
-    public function getCreatedAtAttribute($p)
-    {
-        return  date('Y-m-d h:i:s', strtotime($p));
-    }
 
 
-    //---------------------------------------------------------
 
 } ///end of class model

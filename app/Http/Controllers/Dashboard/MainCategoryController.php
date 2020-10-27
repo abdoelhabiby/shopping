@@ -64,17 +64,11 @@ class MainCategoryController extends Controller
 
             //----------customize the translation-------------------
 
-            $translations = $validated['name'];
+            $translations = nameTranslations($validated['name']);
             unset($validated['name']);
-            $trans_content = [];
 
-            foreach ($translations as $key => $value) {
-                if (in_array($key, supportedLanguages())) {
-                    $trans_content[$key] = ['name' => $value];
-                }
-            }
             //-----------------------------------
-            $data = array_merge($trans_content, $validated); // handel data to create
+            $data = array_merge($translations, $validated); // handel data to create
 
             Category::create($data); //create new category
 
@@ -135,17 +129,11 @@ class MainCategoryController extends Controller
 
             //----------customize the translation-------------------
 
-            $translations = $validated['name'];
+            $translations = nameTranslations($validated['name']);
             unset($validated['name']);
-            $trans_content = [];
 
-            foreach ($translations as $key => $value) {
-                if (in_array($key, supportedLanguages())) {
-                    $trans_content[$key] = ['name' => $value];
-                }
-            }
             //-----------------------------------
-            $data = array_merge($trans_content, $validated); // handel data to update
+            $data = array_merge($translations, $validated); // handel data to update
 
             $main_category->update($data);
 

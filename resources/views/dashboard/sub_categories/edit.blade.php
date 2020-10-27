@@ -237,7 +237,7 @@ $model_name = 'sub-categories';
 
                                                             <label>
                                                                 <input type="checkbox" name="is_active" value="true"
-                                                                    {{$row->is_active ? 'checked' : ''}}  > active
+                                                                    {{$row->is_active  == 'active' ? 'checked' : ''}}  > active
                                                             </label>
                                                         </div>
                                                     </div>

@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\Category;
+use App\Models\Brand;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class SubCategoryDataTable extends DataTable
+class BrandDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,27 +21,20 @@ class SubCategoryDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'dashboard.sub_categories.button.index');
+            ->addColumn('action', 'dashboard.brands.button.index')
+            ->addColumn('image', 'dashboard.brands.button.image');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \Category $model
+     * @param \App\Brand $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Category $model)
+    public function query(Brand $model)
     {
-        $locale = \Config::get('app.locale');
-        $fallback_locale = \Config::get('translatable.fallback_locale');
-
-        return $model->whereHas('parent.translation_default')->subCategory()->with(['parent.translation_default' => function($q) use ($locale,$fallback_locale){
-            return $q->where('locale',$locale)->orWhere('locale',$fallback_locale)->get();
-        }])->newQuery();
+        return $model->with(['category'])->newQuery();
     }
-
-
-
 
     /**
      * Optional method if you want to use html builder.
@@ -51,7 +44,7 @@ class SubCategoryDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('sub-category-table')
+            ->setTableId('brand-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -65,7 +58,7 @@ class SubCategoryDataTable extends DataTable
                 'buttons' => ['csv', 'excel', 'pdf', 'print', 'reset', 'reload', 'pageLength'],
                 "language" => [
 
-                   // "url" => asset("data_table_arabic.json"),
+                    // "url" => asset("data_table_arabic.json"),
 
                     // "buttons" => [
                     //     "print" =>  "طباعه",
@@ -81,6 +74,7 @@ class SubCategoryDataTable extends DataTable
                     // ]
 
                 ]
+
             ]);
     }
 
@@ -95,11 +89,15 @@ class SubCategoryDataTable extends DataTable
 
             Column::make('id'),
             Column::make('slug'),
-          //  Column::make('translation_default.name')->title('name')->orderable(false),
-            Column::make('parent.translation_default.name')->title('parent')->orderable(false),
-
-
+            Column::make('name')->title('name')->orderable(false)->searchable(false),
             Column::make('is_active')->title('active'),
+            Column::make('category.slug')->title('category'),
+            Column::make('created_at')->title('created at'),
+            Column::computed('image')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -116,6 +114,6 @@ class SubCategoryDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'MainCategory_' . date('YmdHis');
+        return 'Brand_' . date('YmdHis');
     }
 }

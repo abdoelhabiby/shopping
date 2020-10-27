@@ -2,7 +2,7 @@
 
 
 @php
-$model_name = 'main-categories';
+$model_name = 'brands';
 @endphp
 
 
@@ -17,7 +17,6 @@ $model_name = 'main-categories';
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-12 mb-2">
-
 
                     <div class="row breadcrumbs-top">
                         <div class="breadcrumb-wrapper col-12">

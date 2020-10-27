@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
         "users" => "UserController",
         "main-categories" => "MainCategoryController",
         "sub-categories" => "SubCategoryController",
+        "brands" => "BrandController",
     ],[
         'except' => 'show'
     ]);
