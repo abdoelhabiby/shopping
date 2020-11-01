@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\DataTables\BrandDataTable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\DataTables\ProductDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
-use App\Http\Requests\Dashboard\BrandRequest;
+use App\Models\Product;
 
-class BrandController extends Controller
+class ProductController extends Controller
 {
     use AjaxResponseTrait;
+    protected $view_model = 'dashboard.products';
+    protected $model = 'products';
 
-    protected $view_model = 'dashboard.brands';
-    protected $model = 'brands';
+    public $default_paginate = 10;
 
 
     /**
@@ -23,10 +24,11 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BrandDataTable $datatable)
+    public function index(Request $request)
     {
+        $products = Product::with('categories')->paginate($this->default_paginate);
 
-        return $datatable->render($this->view_model . '.index');
+        return view($this->view_model . '.index',compact('products'));
     }
 
     /**
@@ -36,8 +38,9 @@ class BrandController extends Controller
      */
     public function create()
     {
-        $main_categories = Category::mainCategory()->select('id')->get();
-        return view($this->view_model . '.create',compact('main_categories'));
+        $sub_categories = Category::subCategory()->select('id')->get();
+        $brands = Brand::select('id')->get();
+        return view($this->view_model . '.create',compact(['sub_categories','brands']));
     }
 
     /**

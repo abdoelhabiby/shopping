@@ -98,9 +98,6 @@ $model_name = 'sub-categories';
 
 
 
-    <!-- Modal delete -->
-
-    @include('dashboard.includes.alerts.model_delete')
 
 
 

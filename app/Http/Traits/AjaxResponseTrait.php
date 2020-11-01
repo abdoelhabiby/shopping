@@ -50,4 +50,15 @@ trait AjaxResponseTrait
     }
 
 
+    public function returnRenderHtml($key,$html)
+    {
+        $data = [
+            'status' => true,
+            $key => $html
+        ];
+
+        return response()->json($data, 200);
+
+    }
+
 }

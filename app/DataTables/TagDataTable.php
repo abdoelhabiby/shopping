@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\Brand;
+use App\Models\Tag;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BrandDataTable extends DataTable
+class TagDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,19 +21,18 @@ class BrandDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'dashboard.brands.button.index')
-            ->addColumn('image', 'dashboard.brands.button.image');
+            ->addColumn('action', 'dashboard.tags.button.index');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Brand $model
+     * @param \App\Tag $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Brand $model)
+    public function query(Tag $model)
     {
-        return $model->with(['category'])->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -44,7 +43,7 @@ class BrandDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('brand-table')
+            ->setTableId('tag-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -91,13 +90,7 @@ class BrandDataTable extends DataTable
             Column::make('slug'),
             Column::make('name')->title('name')->orderable(false)->searchable(false),
             Column::make('is_active')->title('active'),
-            Column::make('category.slug')->title('category')->orderable(false),
             Column::make('created_at')->title('created at'),
-            Column::computed('image')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

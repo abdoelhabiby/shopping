@@ -2,7 +2,7 @@
 
 
 @php
-$model_name = 'main-categories';
+$model_name = 'products';
 @endphp
 
 
@@ -17,7 +17,6 @@ $model_name = 'main-categories';
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-12 mb-2">
-
 
                     <div class="row breadcrumbs-top">
                         <div class="breadcrumb-wrapper col-12">
@@ -47,7 +46,7 @@ $model_name = 'main-categories';
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route( $model_name . '.create') }}"
+                                            <li><a href="{{ route($model_name . '.create') }}"
                                                     class="btn btn-outline-info btn-sm box-shadow-2"><i
                                                         class="la la-plus"></i></a></li>
                                             <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
@@ -66,25 +65,56 @@ $model_name = 'main-categories';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <div class="container" style="background: #FFF;padding-top: 20px;">
 
-                                            {!! $dataTable->table() !!}
-                                        </div>
+                                        <table class="table">
+                                            <thead>
+                                                <th>ID</th>
+                                                <th>Slug</th>
+                                                <th>Name</th>
+                                                <th>Image</th>
+                                                <th>quantity</th>
+                                                <th>Attributes</th>
+                                                <th>Action</th>
+                                            </thead>
+
+                                            <tbody>
+                                                @isset($products)
+
+                                                    @if ($products->count() > 0)
+                                                        @foreach ($products as $key => $product)
+
+                                                            <tr>
+                                                                <td>{{$product->id}}</td>
+                                                                <td>{{$product->slug}}</td>
+                                                                <td>{{$product->name}}</td>
+
+                                                                <td>
+                                                                <a href="{{route('product.images.index',$product->slug)}}">
+                                                                <i class="la la-eye"></i>
+                                                                </a>
+                                                                </td>
+                                                                <td>{{$product->name}}</td>
+                                                                <td>
+
+                                                                </td>
+                                                                <td>product</td>
+                                                            </tr>
+                                                        @endforeach
+
+                                                    @else
+                                                        <tr class="text-center">
+                                                            <td colspan="10">No matching records found </td>
+                                                        </tr>
+
+                                                    @endif
 
 
-                                        @push('scripts')
-                                            {{-- <script
-                                                src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"> </script>
-                                            --}}
-                                            <script src="/vendor/datatables/buttons.server-side.js"></script>
-                                            {!! $dataTable->scripts() !!}
+
+                                                @endisset
 
 
-
-
-
-                                        @endpush
-
+                                            </tbody>
+                                        </table>
 
                                     </div>
                                 </div>
@@ -96,6 +126,7 @@ $model_name = 'main-categories';
         </div>
 
     </div>
+
 
 
 

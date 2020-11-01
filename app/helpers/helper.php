@@ -1,6 +1,11 @@
 <?php
 
 
+
+
+
+
+
 /*
 
  ** handel the translation
@@ -51,6 +56,10 @@ function orderNumberOfRows()
 
 
 
+function localeLanguage(){
+    return \Config::get('app.locale');
+
+}
 
 
 

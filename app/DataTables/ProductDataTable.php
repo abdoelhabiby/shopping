@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\Brand;
+use App\Models\Product;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BrandDataTable extends DataTable
+class ProductDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,19 +21,20 @@ class BrandDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'dashboard.brands.button.index')
-            ->addColumn('image', 'dashboard.brands.button.image');
+            ->addColumn('action', 'dashboard.products.button.index');
+           // ->addColumn('image', 'dashboard.products.button.image');
+
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Brand $model
+     * @param \App\Product $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Brand $model)
+    public function query(Product $model)
     {
-        return $model->with(['category'])->newQuery();
+        return $model->with(['categories'])->newQuery();
     }
 
     /**
@@ -43,10 +44,13 @@ class BrandDataTable extends DataTable
      */
     public function html()
     {
+
+
+
+
         return $this->builder()
-            ->setTableId('brand-table')
+            ->setTableId('product-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
             ->dom('Bfrtip')
             ->orderBy(1)
             ->parameters([
@@ -58,7 +62,8 @@ class BrandDataTable extends DataTable
                 'buttons' => ['csv', 'excel', 'pdf', 'print', 'reset', 'reload', 'pageLength'],
                 "language" => [
 
-                    "url" => localeLanguage() == 'ar' ? asset("data_table_arabic.json") : '',
+
+                     "url" => localeLanguage() == 'ar' ? asset("data_table_arabic.json") : '',
 
                     // "buttons" => [
                     //     "print" =>  "طباعه",
@@ -91,13 +96,8 @@ class BrandDataTable extends DataTable
             Column::make('slug'),
             Column::make('name')->title('name')->orderable(false)->searchable(false),
             Column::make('is_active')->title('active'),
-            Column::make('category.slug')->title('category')->orderable(false),
+           // Column::make('category.slug')->title('category'),
             Column::make('created_at')->title('created at'),
-            Column::computed('image')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -114,6 +114,6 @@ class BrandDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Brand_' . date('YmdHis');
+        return 'Product_' . date('YmdHis');
     }
 }

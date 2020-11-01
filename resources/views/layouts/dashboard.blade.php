@@ -56,7 +56,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/core/colors/palette-gradient.css">
         <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/pages/timeline.css">
 
-        {{-- @endif --}}
+        {{--
+    @endif --}}
 
 
 
@@ -68,6 +69,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/cryptocoins/cryptocoins.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/extensions/datedropper.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/extensions/timedropper.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/dropzone.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/dropzone.css">
+
+
+
+
     <!-- END Page Level CSS-->
     <!-- BEGIN Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/style.css">
@@ -92,9 +99,12 @@
 
 
 
-     <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
+    <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
+
+    <script src="  https://printjs-4de6.kxcdn.com/print.min.js"></script>
 
 
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css" integrity="sha512-3g+prZHHfmnvE1HBLwUnVuunaPOob7dpksI7/v6UnF/rnKGwHf/GdEq9K7iEN7qTtW+S0iivTcGpeTBqqB04wA==" crossorigin="anonymous" /> --}}
 
     @stack('css')
 </head>
@@ -133,6 +143,7 @@
 
     <!-- BEGIN VENDOR JS-->
     <script src="{{ asset('admin') }}/vendors/js/vendors.min.js" type="text/javascript"></script>
+
     <!-- BEGIN VENDOR JS-->
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript">
@@ -235,6 +246,10 @@
         });
 
     </script>
+
+
+    <script src="{{ asset('admin/js/dropzone.min.js') }}"></script>
+
 
     <script src="{{ asset('admin/js/custom.js') }}"></script>
 

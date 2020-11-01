@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\Brand;
+use App\Models\Tag;
 use App\Models\Category;
-use App\DataTables\BrandDataTable;
+use Illuminate\Http\Request;
+use App\DataTables\TagDataTable;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
-use App\Http\Requests\Dashboard\BrandRequest;
+use App\Http\Requests\Dashboard\TagRequest;
 
-class BrandController extends Controller
+class TagController extends Controller
 {
     use AjaxResponseTrait;
 
-    protected $view_model = 'dashboard.brands';
-    protected $model = 'brands';
+    protected $view_model = 'dashboard.tags';
+    protected $model = 'tags';
 
 
     /**
@@ -23,7 +24,7 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BrandDataTable $datatable)
+    public function index(TagDataTable $datatable)
     {
 
         return $datatable->render($this->view_model . '.index');
@@ -36,8 +37,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        $main_categories = Category::mainCategory()->select('id')->get();
-        return view($this->view_model . '.create',compact('main_categories'));
+        return view($this->view_model . '.create');
     }
 
     /**
@@ -46,8 +46,9 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BrandRequest $request)
+    public function store(TagRequest $request)
     {
+
 
         try {
 
@@ -57,13 +58,7 @@ class BrandController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-            //-------------uploade image if found-----------
 
-            if ($request->hasFile('image') && $request->image != null) {
-                $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
-                $validated['image'] = $path;
-            }
 
             //----------customize the translation-------------------
 
@@ -73,7 +68,7 @@ class BrandController extends Controller
             //-----------------------------------
             $data = array_merge($translations, $validated); // handel data to create
 
-            Brand::create($data); //create new sub category
+            Tag::create($data); //create new tag
 
             DB::commit();
 
@@ -95,9 +90,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit(Tag $tag)
     {
-          $row = $brand;
+          $row = $tag;
           $main_categories = Category::mainCategory()->select('id')->get();
 
         return view($this->view_model . '.edit',compact('row','main_categories'));
@@ -111,10 +106,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BrandRequest $request, Brand $brand)
+    public function update(TagRequest $request, Tag $tag)
     {
 
-        //return $request->validated();
         try {
 
             DB::beginTransaction();
@@ -123,16 +117,6 @@ class BrandController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-              //-------------uploade image if found-----------
-
-              if ($request->hasFile('image') && $request->image != null) {
-                $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
-                $validated['image'] = $path;
-
-                deleteFile($brand->image);
-
-            }
 
             //----------customize the translation-------------------
 
@@ -144,7 +128,7 @@ class BrandController extends Controller
 
             //-----------------------------------
             $data = array_merge($translations, $validated); // handel data to update
-            $brand->update($data);
+            $tag->update($data);
 
             DB::commit();
             return redirect()->route($this->model . '.index')->with(['success' => "success update"]);
@@ -153,6 +137,7 @@ class BrandController extends Controller
             DB::rollback();
             return catchErro($this->model . '.index', $th);
         }
+
     }
 
     /**
@@ -161,11 +146,11 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy(Tag $tag)
     {
         if (request()->ajax()) {
 
-            $brand->delete();
+            $tag->delete();
 
             return $this->successMessage('ok');
         }

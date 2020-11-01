@@ -161,6 +161,58 @@
             </li>
             {{-- ------end nav item barnds-----------}}
 
+            {{-- -----start nav item tags----------}}
+
+            @php
+            $module_name = 'tags';
+            @endphp
+
+            <li class="nav-item {{ isActive($module_name) }}">
+
+                <a href=""><i class="la la-tags"></i>
+                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
+                    <span
+                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Tag::count() }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
+                            data-i18n="nav.dash.ecommerce">show all </a>
+                    </li>
+                    <li>
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                            add
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- ------end nav item tags-----------}}
+
+            {{-- -----start nav item products----------}}
+
+            @php
+            $module_name = 'products';
+            @endphp
+
+            <li class="nav-item {{ isActive($module_name) }}">
+
+                <a href=""><i class="la la-connectdevelop"></i>
+                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
+                    <span
+                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Product::count() }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
+                            data-i18n="nav.dash.ecommerce">show all </a>
+                    </li>
+                    <li>
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                            add
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {{-- ------end nav item products-----------}}
+
 
 
             {{-- -----start nav item ----------}}
