@@ -250,6 +250,9 @@
 
     <script src="{{ asset('admin/js/dropzone.min.js') }}"></script>
 
+    <script src="{{ asset('admin') }}/vendors/js/forms/repeater/jquery.repeater.min.js" type="text/javascript"></script>
+
+    <script src="{{ asset('admin') }}/js/scripts/forms/form-repeater.js" type="text/javascript"></script>
 
     <script src="{{ asset('admin/js/custom.js') }}"></script>
 

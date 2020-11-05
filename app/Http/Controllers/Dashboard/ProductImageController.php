@@ -29,7 +29,6 @@ class ProductImageController extends Controller
     public function fetchImages(Product $product)
     {
 
-        $images = $product->images;
 
         $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
 
@@ -153,6 +152,6 @@ class ProductImageController extends Controller
             return $this->successMessage('ok');
         }
 
-        return $this->notfound();
+       return  abort(404);
     }
 } //end of class

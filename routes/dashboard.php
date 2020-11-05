@@ -3,35 +3,30 @@
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
-define('PAGINATE_COUNT',10);
-define('MAX_IMAGES_UPLOAD',7);
+define('PAGINATE_COUNT', 10);
+define('MAX_IMAGES_UPLOAD', 7);
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
-    Route::get('test',function(){
-
-        $path = public_path('images/products/1');
-
-            $all_images = [];
-
-             foreach(File::allFiles($path) as $file ){
-
-                $all_images[] = str_replace(public_path() . '/','',$file);
-
-             }
-
-             return $all_images;
+    Route::get('test', function () {
 
 
 
 
-      //  return view('dashboard.test',compact(['product']));
 
-//$test = Category::with('parent.translation_default')->subCategory()->first();
-//
-     //  return $test;
+          return view('dashboard.test');
+
+          return "test";
+
+    });
+
+    Route::post('test', function (Request $request) {
+
+          return $request;
 
     });
 
@@ -54,7 +49,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
         "products" => "ProductController",
 
 
-    ],[
+    ], [
         'except' => 'show'
     ]);
 
@@ -62,15 +57,18 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //----------------- start routes product attributes and images---------------
 
     //---images-----
-    Route::get('product-images/{product:slug}',"ProductImageController@index")->name('product.images.index');
-    Route::post('product-images/{product}/store',"ProductImageController@store")->name('product.images.store');
-    Route::post('product-images/{product}',"ProductImageController@storeDatabase")->name('product.images.store_database');
-    Route::get('product-images/{product}/fetch',"ProductImageController@fetchImages")->name('product.images.fetch');
-    Route::delete('product-images/{product}/{image}',"ProductImageController@destroy")->name('product.images.delete');
+    Route::get('product-images/{product:slug}', "ProductImageController@index")->name('product.images.index');
+    Route::post('product-images/{product}/store', "ProductImageController@store")->name('product.images.store');
+    Route::post('product-images/{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
+    Route::get('product-images/{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
+    Route::delete('product-images/{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
 
-     //---attributes-----
-
-    Route::post('product-attributes/{product}',"ProductAttributeController@store")->name('product.attibutes.store');
+    //---attributes---------------------------------------------------
+    Route::get('product-attributes/{product:slug}', "ProductAttributeController@index")->name('product.attibutes.index');
+    Route::get('product-attributes/{product:slug}/fetch', "ProductAttributeController@fetchAttributes")->name('product.attibutes.fetch_attribute');
+    Route::post('product-attributes/{product}', "ProductAttributeController@store")->name('product.attibutes.store');
+    Route::put('product-attributes/{product}/{attribute}', "ProductAttributeController@update")->name('product.attibutes.update');
+    Route::delete('product-attributes/{product}/{attribute}', "ProductAttributeController@destroy")->name('product.attibutes.delete');
 
 
     //----------------- end routes product attributes-----------------

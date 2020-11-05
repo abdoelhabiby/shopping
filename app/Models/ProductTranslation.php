@@ -12,4 +12,7 @@ class ProductTranslation extends Model
         "description",
         "product_id",
     ];
+
+    public $timestamps = false;
+
 }
