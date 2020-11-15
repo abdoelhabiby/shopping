@@ -84,7 +84,24 @@ class Product extends Model
     }
 
 
+ //---------------------get product active--------------------------
 
+
+  public function scopeActive($product)
+  {
+      return $product->where('is_active',true)->whereHas('attributes', function($attr){
+          return $attr->where('is_active',true);
+      });
+  }
+
+
+  //  end_offer_at  check if data still work
+
+    public function ScopeOffer($q)
+    {
+      //  return $this->attributes()->first();
+        return $this->attributes()->whereNotNull('price_offer')->whereNotNull('start_offer_at')->first();
+    }
 
 
 

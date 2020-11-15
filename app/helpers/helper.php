@@ -1,7 +1,14 @@
 <?php
 
 
+//------------- macamar ----------------
 
+if(!function_exists('currentLocale')){
+
+    function currentLocale(){
+       return LaravelLocalization::getCurrentLocale();
+    }
+}
 
 
 

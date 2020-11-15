@@ -114,7 +114,7 @@
                                                  </label>
                                                  <input type="text"
                                                      id="name-{{ $language }}" class="form-control"
-                                                     placeholder="input {{ 'name ' . $language }}   "
+                                                     placeholder="input size {{ 'name ' . $language }}  "
                                                      name="name[{{ $language }}]">
 
                                              </div>

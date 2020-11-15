@@ -16,7 +16,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
 
 
-
+        return Product::withTranslation()->first();
 
           return view('dashboard.test');
 
@@ -47,7 +47,6 @@ Route::group(['middleware' => 'auth:admin'], function () {
         "brands" => "BrandController",
         "tags" => "TagController",
         "products" => "ProductController",
-
 
     ], [
         'except' => 'show'

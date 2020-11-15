@@ -132,9 +132,6 @@ class ProductImageController extends Controller
             return redirect()->back()->with(['success' => "success save"]);
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return $th->getMessage();
-
             Log::alert($th);
             return redirect()->back()->with(['error' => 'some errors happend please try agian alatarererewer']);
         }

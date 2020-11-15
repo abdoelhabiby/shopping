@@ -105,7 +105,7 @@
                                                                                 {{ 'name ' . $language }}
                                                                             </label>
                                                                             <input type="text" class="form-control"
-                                                                                placeholder="input {{ 'name ' . $language }}   "
+                                                                                placeholder="input size {{ 'name ' . $language }}   "
                                                                                 name="name[{{ $language }}]"
                                                                                 value="{{ $attribute->translate($language)->name ?? '' }} ">
 

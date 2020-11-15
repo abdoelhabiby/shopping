@@ -114,7 +114,7 @@ $model_name = 'sub-categories';
 
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="parent_id">Main Category</label>
+                                                            <label for="parent_id">Category</label>
                                                             <select id='parent_id' class="select2 form-control "
                                                                 name="parent_id" tabindex="-1" aria-hidden="true">
                                                                 @if ($main_categories->count() > 0)

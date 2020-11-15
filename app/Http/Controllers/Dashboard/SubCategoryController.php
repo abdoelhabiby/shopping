@@ -34,7 +34,8 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        $main_categories = Category::mainCategory()->select('id')->get();
+        $main_categories = Category::select('id')->get();
+       // $main_categories = Category::mainCategory()->select('id')->get();
         return view($this->view_model . '.create',compact('main_categories'));
     }
 
@@ -95,7 +96,9 @@ class SubCategoryController extends Controller
     public function edit(Category $sub_category)
     {
           $row = $sub_category;
-          $main_categories = Category::mainCategory()->select('id')->get();
+//          $main_categories = Category::mainCategory()->select('id')->get();
+          $main_categories = Category::select('id')->get();
+
 
         return view($this->view_model . '.edit',compact('row','main_categories'));
 

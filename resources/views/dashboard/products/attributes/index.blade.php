@@ -72,13 +72,24 @@ $model_name = 'product attributes';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <div class="card-text">
-                                            <h5>Sku :
-                                                <small><i>{{ $product->sku }}</i></small>
-                                            </h5>
-                                            <h5>Name :
-                                                <small><i>{{ $product->name }}</i></small>
-                                            </h5>
+                                        <div class="card-text row">
+                                            <div class="col-md-6">
+                                                <h5>Sku :
+                                                    <small><i>{{ $product->sku }}</i></small>
+                                                </h5>
+                                                <h5>Name :
+                                                    <small><i>{{ $product->name }}</i></small>
+                                                </h5>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                @if ($product->firstImage())
+                                                    <img src="{{ asset($product->firstImage()->name) }}" width="270"
+                                                        height="300" alt="">
+
+                                                @endif
+                                            </div>
+
 
                                         </div>
 
@@ -175,7 +186,7 @@ $model_name = 'product attributes';
         fetchAttribute(); // mounted fetch get attribute
 
 
-        //---------------------print attribute----------------
+        //---------------------print attributes----------------
         $(".printMe").click(function() {
 
             $('.tabel-print').printThis({
@@ -205,8 +216,8 @@ $model_name = 'product attributes';
                 data: data,
                 beforeSend: function() {
 
-                    $(".display-errors").empty();
-                    $(".display-errors").addClass('d-none');
+                    myform.find(".display-errors").empty();
+                    myform.find(".display-errors").addClass('d-none');
 
                 },
                 success: function(success) {
@@ -229,8 +240,8 @@ $model_name = 'product attributes';
                 error: function(getError) {
                     if (getError.status == 422) {
                         var arr = Object.values(getError.responseJSON.errors);
-                        $(".display-errors").removeClass('d-none');
-                        $(".display-errors").append('<p>' + arr[0] + '</p>');
+                        myform.find(".display-errors").removeClass('d-none');
+                        myform.find(".display-errors").append('<p>' + arr[0] + '</p>');
 
                         //console.log(arr[0]);
 

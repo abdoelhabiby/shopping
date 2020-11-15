@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductAttribute extends Model
 {
-    use Translatable,GlobalMethodUesdInModels;
+    use Translatable,SoftDeletes,GlobalMethodUesdInModels;
 
     protected $fillable = [
         "sku",

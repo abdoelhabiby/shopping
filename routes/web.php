@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+    ], function(){
+
+
+        Route::get('/','HomeController@index')->name('front.home');
+
+
+        //--------------------------------
+
+        Route::get('test',function(){
+
+          return  $product = Product::with(['attributes' => function($q){
+              return $q->whereNotNull('price_offer')->whereNotNull('start_offer_at')->first();
+          }])->get();
+        });
+
+    });
+
+
+
 
 Auth::routes();
 
