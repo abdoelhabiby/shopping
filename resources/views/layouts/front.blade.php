@@ -10,7 +10,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
 
-    <title>Prestashop_Savemart</title>
+    <title>Osah Store @yield('title')</title>
     <meta name="description" content="Shop powered by PrestaShop">
     <meta name="keywords" content="">
 

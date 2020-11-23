@@ -80,6 +80,13 @@ $model_name = 'product attributes';
                                                 <h5>Name :
                                                     <small><i>{{ $product->name }}</i></small>
                                                 </h5>
+                                                <h5>images :
+                                                    <small><i>
+                                                        <a
+                                                        href="{{ route('product.images.index', $product->slug) }}">
+                                                        <i class="la la-image"></i>
+                                                    </a></i></small>
+                                                </h5>
                                             </div>
 
                                             <div class="col-md-6">

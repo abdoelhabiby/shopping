@@ -204,7 +204,7 @@ $model_name = 'products';
                                                                             </option>
                                                                         @endforeach
                                                                     @else
-                                                                        <option disabled> add main category</option>
+                                                                        <option disabled> add category</option>
                                                                     @endif
                                                                 @endisset
                                                             </select>
@@ -242,7 +242,7 @@ $model_name = 'products';
                                                                         @endforeach
 
                                                                     @else
-                                                                        <option disabled> add main category</option>
+                                                                        <option disabled> add brand</option>
                                                                     @endif
 
                                                                 @endisset

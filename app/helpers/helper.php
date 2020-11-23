@@ -1,6 +1,20 @@
 <?php
 
 
+
+//------------- return limit length string------
+
+
+if(!function_exists('stringLength')){
+
+    function stringLength(string $str,int $length){
+
+       return \Str::limit($str, $length);
+
+    }
+}
+
+
 //------------- macamar ----------------
 
 if(!function_exists('currentLocale')){
@@ -98,6 +112,32 @@ function deleteFile($photo_to_delet)
         \Illuminate\Support\Facades\File::delete(public_path($photo_to_delet));
     }
 }
+
+//------------------------------
+
+if(!function_exists('fileExist')){
+
+    function fileExist($path){
+        if (\Illuminate\Support\Facades\File::exists(public_path($path))) {
+            return true;
+        }
+        return false;
+    }
+}
+
+
+//-------------------function return pass no image
+
+
+if(!function_exists('pathNoImage')){
+
+    function pathNoImage($path){
+
+        return '/images/noImage.jpg';
+    }
+}
+
+
 
 
 function user()

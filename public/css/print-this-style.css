@@ -2,4 +2,7 @@
     .no-print-this {
         display: none !important;
     }
+    .table-responsive {
+        overflow: hidden;
+    }
 }

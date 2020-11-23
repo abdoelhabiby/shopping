@@ -76,33 +76,46 @@ class Product extends Model
         return $this->images()->first();
     }
 
+
     //--------------------------get relation has many attributes--------
 
     public function attributes()
     {
-        return $this->hasMany(ProductAttribute::class,'product_id','id');
+        return $this->hasMany(ProductAttribute::class, 'product_id', 'id');
     }
 
 
- //---------------------get product active--------------------------
+    //--------------------------get one relation  attributes--------
 
 
-  public function scopeActive($product)
-  {
-      return $product->where('is_active',true)->whereHas('attributes', function($attr){
-          return $attr->where('is_active',true);
-      });
-  }
-
-
-  //  end_offer_at  check if data still work
-
-    public function ScopeOffer($q)
+    public function attribute()
     {
-      //  return $this->attributes()->first();
-        return $this->attributes()->whereNotNull('price_offer')->whereNotNull('start_offer_at')->first();
+        return $this->hasOne(ProductAttribute::class, 'product_id', 'id');
     }
 
+
+    //---------------------get product active--------------------------
+
+
+    public function scopeActive($product)
+    {
+        return $product->where('is_active', true)->whereHas('attributes', function ($attr) {
+            return $attr->where('is_active', true);
+        });
+    }
+
+
+
+
+
+    public function offer()
+    {
+        return $this->hasOne(ProductAttribute::class, 'product_id', 'id')
+            ->where('is_active', true)
+            ->whereNotNull('price_offer')
+            ->whereNotNull('start_offer_at')
+            ->whereDate('end_offer_at', '>', now());
+    }
 
 
 

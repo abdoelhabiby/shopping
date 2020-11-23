@@ -70,6 +70,12 @@ $model_name = 'product-images';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
+                                        <div>
+                                              <a href="{{route('product.attibutes.index',$product->slug)}}" class="">
+                                                Attributes
+                                              </a>
+                                        </div>
+
                                         <!-- /resources/views/post/create.blade.php -->
 
                                         @if ($errors->any())
