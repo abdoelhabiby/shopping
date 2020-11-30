@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use Carbon\Carbon;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\Front\HomeRepository;
@@ -22,19 +23,40 @@ class HomeController extends Controller
 
 
 
-        $test = Product::where('slug','samsung-galaxy-7')->active()->with('attribute')->first();
-
-
         //----------get some offers to show in section offers----
-         $products_offer = $homeRepository->getProductsOffer(9);
+        $products_offer = $homeRepository->getProductsOffer(9);
 
-         //--------------------get new products added----------
+        //--------------------get new products added----------
 
-          $new_poducts = $homeRepository->getNewProducts(18);
+        $new_poducts = $homeRepository->getNewProducts(18);
+
+        //--------------------get products best sellers ----------
+
+        $best_sellers = $homeRepository->getBestSellers(18);
+
+        //--------------------get products trending ----------
+
+        $trending = $homeRepository->getProductsTrending(6);
 
 
+        //-----------get 3 main categories with his chileds products-------
 
-        $compacts = ['products_offer','new_poducts'];
+        /*
+         **
+         ** alert danger
+         ** we must decide count of chields get
+         ** and limit of product in this chiled to
+         ** performance and thow count show in page
+         ** the cield get = 3 * 4 products = 12 to every category
+         **
+
+        */
+
+
+        $three_main_categories = $homeRepository->getThreeMainCategoriesWithChieldsProducts(3,4);
+
+
+        $compacts = ['products_offer', 'new_poducts', 'trending', 'best_sellers', 'three_main_categories'];
         return view('front.home.index', compact($compacts));
     }
 }

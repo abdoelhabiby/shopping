@@ -35,8 +35,59 @@ Route::group(
         Route::get('test', function () {
 
 
+            $categories = Category::mainCategory()
+                ->active()
+                ->whereHas('chields', function ($chi) {
+                    return $chi->whereHas('products');
+                })
+                ->with(['chields'])
+                ->inRandomOrder()
+                ->get()
+                ->map(function ($main) {
+                    $main->setRelation('chields', $main->chields->take(2));
+                    return $main;
+                });
 
-            return ProductAttribute::where('sku', 'TSH-lg')->get();
+
+
+
+            //  return $categories;
+
+            $groups = [];
+
+            foreach ($categories as $main_categories) {
+                // echo "(div) $main_categories->name"; // strat get main category name
+
+                foreach ($main_categories->chields as $subcategory) {
+                    if ($subcategory->products->count() > 0) { // if not fund name translation
+                        foreach ($subcategory->products()->active()->whereHas('attribute')->take(2)->get() as $product) {
+                            // echo "<br>---(div) $product->name ";
+                            // echo "(/div)<br>";
+
+                            $groups[$main_categories->name][] = $product;
+
+                        }
+                    }
+                }
+
+                // echo "(/div)<br><br>------------------------------- <br>"; // end get main category name
+
+            }
+
+            return $groups;
+            return;
+
+
+
+
+
+
+
+            //-----------get product by relation throught----------------
+
+
+
+
         });
     }
 );

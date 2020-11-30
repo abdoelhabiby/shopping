@@ -8,4 +8,8 @@ return [
       'offers' => 'offers',
       'egp' => 'EGP',
       'new_products' => 'new products',
+      'trending_now' => 'TRENDING NOW',
+      'best_sellers' => 'BEST SELLERS',
+
+
     ];

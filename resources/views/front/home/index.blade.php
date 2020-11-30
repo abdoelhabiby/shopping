@@ -20,7 +20,7 @@
 
 
                     {{-- ------ section first banner --}}
-                    {{-- @include('front.home._first_banner') --}}
+                    @include('front.home._first_banner')
                     {{-- ------------------------- --}}
 
 
@@ -31,7 +31,9 @@
 
 
                     {{-- ------ section seconde banner --}}
-                    {{-- @include('front.home._seconde_banner') --}}
+
+                         {{-- @include('front.home._seconde_banner') --}}
+
                     {{-- ------------------------- --}}
 
 
@@ -39,6 +41,7 @@
                     --}}
 
                     {{-- @include('front.home._trending_best_seller') --}}
+
                     {{-- ------------------------- --}}
 
 {{--
@@ -88,10 +91,13 @@
                         </div>
                     </div> --}}
 
+
+
                     {{-- ------ section bottom sho 3categories with his products
                     --}}
 
                     {{-- @include('front.home._bottom_category_wis_his_products') --}}
+
                     {{-- ------------------------- --}}
 
 

@@ -13,6 +13,7 @@ class CategoriesSeeder extends Seeder
     public function run()
     {
 
+
         $m_data = [
             'slug' => 'clothes',
             'en' => ['name' => 'clothes'],
@@ -37,6 +38,38 @@ class CategoriesSeeder extends Seeder
             'parent_id' => $sub_category->id,
             'en' => ['name' => 'tshirt'],
             'ar' => ['name' => 'تيشيرت'],
+        ];
+
+        $sub_category = Category::create($c_data);
+
+
+        //-------------------seconde category-------------------------------
+
+
+        $m_data = [
+            'slug' => 'computer',
+            'en' => ['name' => 'computer'],
+            'ar' => ['name' => 'كمبيوتر'],
+        ];
+
+        $main_category = Category::create($m_data);
+        //-------------------------------------------------
+
+        $s_data = [
+            'slug' => 'laptop',
+            'parent_id' => $main_category->id,
+            'en' => ['name' => 'laptop'],
+            'ar' => ['name' => 'لابتوب'],
+        ];
+
+        $sub_category = Category::create($s_data);
+        //-------------------------------------------------
+
+        $c_data = [
+            'slug' => 'laptop-games',
+            'parent_id' => $sub_category->id,
+            'en' => ['name' => 'laptop-games'],
+            'ar' => ['name' => 'لابتوب العاب'],
         ];
 
         $sub_category = Category::create($c_data);

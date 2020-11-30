@@ -180,3 +180,11 @@ function  supportedLanguages(){
 
 
 
+//--------------------------function check if has has Tow image
+
+
+function hasTwoImage(int $count){
+
+    echo $count > 1 ? 'two-image' : '';
+}
+

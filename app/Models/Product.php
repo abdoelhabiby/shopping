@@ -25,7 +25,7 @@ class Product extends Model
     ];
 
     protected $translatedAttributes = ['name', 'description'];
-    protected $hidden = ['pivot'];
+    protected $hidden = ['pivot','translations'];
 
 
     protected $casts = [
@@ -90,7 +90,7 @@ class Product extends Model
 
     public function attribute()
     {
-        return $this->hasOne(ProductAttribute::class, 'product_id', 'id');
+        return $this->hasOne(ProductAttribute::class, 'product_id', 'id')->where('is_active',true);
     }
 
 

@@ -43,9 +43,6 @@ class ProductAttributeController extends Controller
                 $validated = $request->validated();
                 $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
-
-
-
                 //----------add product id-------------------
 
                 $validated['product_id'] = $product->id;

@@ -29,12 +29,22 @@ class Category extends Model
     ];
 
 
+    protected $hidden = ['pivot','translations'];
     protected $translatedAttributes = ['name'];
 
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i:s'
     ];
+
+
+//-------add scope is active--------------
+
+
+public function scopeActive($q)
+{
+    return $q->where('is_active', true);
+}
 
 
     //---------------get main categories----------------
@@ -78,6 +88,17 @@ class Category extends Model
 
 
 
+    //---------------get product by relation has many throught-------------
+
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_categories',  'category_id');
+    }
+
+
+
+    //------------------------------------------------------------
 
 
 } ///end of class model

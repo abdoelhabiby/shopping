@@ -178,7 +178,7 @@
 
 
 
-                                @foreach ($new_poducts->chunk(6) as $index => $new_product)
+                                @foreach ($new_poducts->chunk(3) as $index => $new_product)
                                     <div class="item  text-center ">
 
                                         @foreach ($new_product as $key => $product)
@@ -252,7 +252,7 @@
 
                                                             <div class="product-title" itemprop="name"><a
                                                                     href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
-                                                                    {{ stringLength($product->description, 30) }}
+                                                                    {{ $product->name }}
                                                                 </a></div>
 
                                                             <div class="product-group-price">

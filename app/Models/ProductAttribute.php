@@ -25,6 +25,7 @@ class ProductAttribute extends Model
     ];
 
 
+    protected $hidden = ['translations'];
 
     protected $translatedAttributes = ['name'];
 
