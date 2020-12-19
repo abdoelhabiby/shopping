@@ -120,10 +120,10 @@ $model_name = 'products';
                                                 <th>Name</th>
                                                 <th class="no-print-this">Images</th>
                                                 <th>quantity</th>
-                                                <th>brand</th>
+                                                {{-- <th>brand</th> --}}
                                                 <th>is active</th>
-                                                <th>categories</th>
-                                                <th>tags</th>
+                                                {{-- <th>categories</th> --}}
+                                                {{-- <th>tags</th> --}}
                                                 <th class="no-print-this">Attributes</th>
                                                 <th class="no-print-this">Action</th>
                                             </thead>
@@ -146,9 +146,9 @@ $model_name = 'products';
                                                                 </td>
                                                                 <td>{{ $product->attributes->sum('qty') }}</td>
 
-                                                                <td>{{ $product->brand->name }}</td>
+                                                                {{-- <td>{{ $product->brand->name }}</td> --}}
                                                                 <td>{{ $product->is_active }}</td>
-                                                                <td>
+                                                                {{-- <td>
                                                                     @if ($product->categories->count() > 0)
                                                                         @foreach ($product->categories as $category)
                                                                             {{ $category->name }}
@@ -158,8 +158,8 @@ $model_name = 'products';
 
                                                                         @endforeach
                                                                     @endif
-                                                                </td>
-                                                                <td>
+                                                                </td> --}}
+                                                                {{-- <td>
                                                                     @if ($product->tags->count() > 0)
                                                                         @foreach ($product->tags as $tag)
                                                                             {{ $tag->name }}
@@ -169,7 +169,7 @@ $model_name = 'products';
 
                                                                         @endforeach
                                                                     @endif
-                                                                </td>
+                                                                </td> --}}
 
                                                                 <td class="no-print-this">
                                                                 <a href="{{route('product.attibutes.index',$product->slug)}}" class="btn btn-outline-info btn-sm">

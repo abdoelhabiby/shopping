@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Slider;
 use App\Repositories\Front\HomeRepository;
 
 class HomeController extends Controller
@@ -38,6 +39,9 @@ class HomeController extends Controller
 
         $trending = $homeRepository->getProductsTrending(6);
 
+        //----------------------get image sliders------------------
+
+        $slider_images = Slider::select('image')->latest()->limit(10)->get();
 
         //-----------get 3 main categories with his chileds products-------
 
@@ -53,10 +57,17 @@ class HomeController extends Controller
         */
 
 
-        $three_main_categories = $homeRepository->getThreeMainCategoriesWithChieldsProducts(3,4);
+        $three_main_categories = $homeRepository->getThreeMainCategoriesWithChieldsProducts(3, 4);
 
-
-        $compacts = ['products_offer', 'new_poducts', 'trending', 'best_sellers', 'three_main_categories'];
+        // ---------------------------------------------------
+        $compacts = [
+            'products_offer',
+            'new_poducts',
+            'trending',
+            'best_sellers',
+            'three_main_categories',
+            'slider_images'
+        ];
         return view('front.home.index', compact($compacts));
     }
 }

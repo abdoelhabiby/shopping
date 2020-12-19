@@ -11,7 +11,7 @@ use App\Interfaces\Front\HomeRepositoryInterface;
 class HomeRepository implements HomeRepositoryInterface
 {
 
-    public $product; // modal
+    public $product; // model
 
     public function __construct(Product $product)
     {
@@ -53,7 +53,11 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getNewProducts($limit)
     {
-        return $this->product->active()->with(
+        return $this->product->active()
+        ->whereHas('attribute',function($attribute){
+            return $attribute->where('is_active', true);
+        })
+        ->with(
             [
                 'vendor' => function ($vend) {
                     return $vend->select(['name', 'id']);
@@ -69,7 +73,7 @@ class HomeRepository implements HomeRepositoryInterface
                         "price_offer",
                         "start_offer_at",
                         "end_offer_at",
-                    ])->where('is_active', true);
+                    ]);
                 }
 
             ]
@@ -129,12 +133,12 @@ class HomeRepository implements HomeRepositoryInterface
                 }
 
             ]
-        )->active()->latest()->limit(18)->get();
+        )->active()->latest()->limit($limit)->get();
     }
 
 
 
-    //------------------get 3 main categories wsi his chields products ----
+    //------------------get 3 main categories wsi his chields with products products ----
 
 
     public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3,int $products_count = 4)
@@ -159,12 +163,12 @@ class HomeRepository implements HomeRepositoryInterface
         foreach ($categories as $key => $main_categories) {
 
             foreach ($main_categories->chields as $subcategory) {
-                if ($subcategory->products->count() > 0) { // if not fund name translation
+                if ($subcategory->products->count() > 0) {
                     $groups[$key]['name'] = $main_categories->name;
 
-                    //------ add limit of products get in chiled
+                    //------ add limit of products get in chiled------
+                    //-------i dont like it need to upgrade !!!!------
                     foreach ($subcategory->products()->active()->with('attribute')->whereHas('attribute')->latest()->take($products_count)->get() as $product) {
-
                         $groups[$key]['products'][] = $product;
                     }
                 }

@@ -241,7 +241,7 @@
                 </a>
                 <ul class="menu-content">
                     <li class="">
-                        <a class="menu-item" href="" data-i18n="nav.dash.ecommerce">sett 1 </a>
+                    <a class="menu-item" href="{{route('admin.homepage_slider.index')}}" data-i18n="nav.dash.ecommerce">Home Page slider </a>
                     </li>
                     <li class="">
                         <a class="menu-item" href="" data-i18n="nav.dash.ecommerce">sett 2 </a>

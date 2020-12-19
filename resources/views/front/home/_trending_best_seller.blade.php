@@ -1,6 +1,13 @@
-<div class="nov-row  col-lg-12 col-xs-12">
+<div class="nov-row  col-lg-12 col-xs-12 teto">
+
+
+
 
     <div class="nov-row-wrap row">
+
+
+
+
 
         {{-- ----------------best sealere---------------------------------
         --}}
@@ -26,7 +33,8 @@
 
 
                                         <div class="product-miniature js-product-miniature item-one first_item"
-                                            data-id-product="1" data-id-product-attribute="40" itemscope=""
+                                            data-id-product="{{ $product->id }}"
+                                            data-id-product-attribute="{{ $product->attribute->id }}" itemscope=""
                                             itemtype="http://schema.org/Product">
 
 
@@ -35,7 +43,7 @@
 
 
 
-                                                <a href="smartphone-tablet/1-40-hummingbird-printed-t-shirt.html#/1-size-s/6-color-taupe"
+                                                <a href=""
                                                     class="thumbnail product-thumbnail {{ $product->images->count() > 1 ? 'two-image' : '' }}">
 
 
@@ -93,7 +101,8 @@
 
 
                                                     <div class="category-title">
-                                                        <a href="smartphone-tablet/1-hummingbird-printed-t-shirt.html">product name</a>
+                                                        <a href="smartphone-tablet/1-hummingbird-printed-t-shirt.html">product
+                                                            name</a>
                                                     </div>
 
                                                     <div class="product-comments">
@@ -160,10 +169,16 @@
                                                         <i class="fa fa-heart"></i>
                                                         <span>Add to Wishlist</span>
                                                     </a>
+
+
                                                     <a href="#" class="quick-view hidden-sm-down"
-                                                        data-link-action="quickview">
+                                                        data-product-id="{{ $product->id }}">
                                                         <i class="fa fa-search"></i><span> Quick view</span>
                                                     </a>
+
+
+
+
                                                 </div>
                                             </div>
                                         </div>
@@ -213,18 +228,18 @@
                                 @foreach ($trending as $product)
 
 
-                                <div class="d-flex flex-wrap align-items-start product-miniature js-product-miniature  first_item"
-                                    data-id-product="1" data-id-product-attribute="40" itemscope=""
-                                    itemtype="http://schema.org/Product">
+                                    <div class="d-flex flex-wrap align-items-start product-miniature js-product-miniature  first_item"
+                                        data-id-product="1" data-id-product-attribute="40" itemscope=""
+                                        itemtype="http://schema.org/Product">
 
-                                    <div class="col-12 col-w37 no-padding">
-                                        <div class="thumbnail-container">
+                                        <div class="col-12 col-w37 no-padding">
+                                            <div class="thumbnail-container">
 
-                                            <a href="smartphone-tablet/1-40-hummingbird-printed-t-shirt.html#/1-size-s/6-color-taupe"
-                                                class="thumbnail product-thumbnail {{ hasTwoImage($product->images->count()) }}">
+                                                <a href="smartphone-tablet/1-40-hummingbird-printed-t-shirt.html#/1-size-s/6-color-taupe"
+                                                    class="thumbnail product-thumbnail {{ hasTwoImage($product->images->count()) }}">
 
 
-                                                         {{-- ------------
+                                                    {{-- ------------
                                                     --}}
 
                                                     @if ($product->images->count() > 0)
@@ -255,76 +270,76 @@
                                                     --}}
 
 
-                                            </a>
+                                                </a>
 
 
-
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-w63 no-padding">
-                                        <div class="product-description">
-
-
-
-                                            <div class="product-groups">
-
-
-
-                                                <div class="product-comments">
-                                                    <div class="star_content">
-                                                        <div class="star"></div>
-                                                        <div class="star"></div>
-                                                        <div class="star"></div>
-                                                        <div class="star"></div>
-                                                        <div class="star"></div>
-                                                    </div>
-                                                    <span>0 review</span>
-                                                </div>
-                                                <p class="seller_name">
-                                                    <a title="View seller profile"
-                                                        href="jmarketplace/1_david-james/index.htm">
-                                                        <i class="fa fa-user"></i>
-                                                        {{ $product->vendor->name }}
-                                                    </a>
-                                                </p>
-
-
-                                                <div class="product-title" itemprop="name"><a
-                                                        href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
-                                                        {{ $product->name }}
-                                                    </a></div>
-
-                                                <div class="product-group-price">
-
-                                                    <div class="product-price-and-shipping">
-
-                                                        @if ($product->attribute->hasOffer)
-
-                                                            <span itemprop="price"
-                                                                class="price">{{ $product->attribute->price_offer }}
-                                                                @lang('front.egp')</span>
-
-                                                            <span class="regular-price">{{ $product->attribute->price }}
-                                                                @lang('front.egp')</span>
-                                                        @else
-
-                                                            <span itemprop="price"
-                                                                class="price">{{ $product->attribute->price }}
-                                                                @lang('front.egp')</span>
-
-                                                        @endif
-                                                    </div>
-
-                                                </div>
 
                                             </div>
+                                        </div>
+                                        <div class="col-12 col-w63 no-padding">
+                                            <div class="product-description">
+
+
+
+                                                <div class="product-groups">
+
+
+
+                                                    <div class="product-comments">
+                                                        <div class="star_content">
+                                                            <div class="star"></div>
+                                                            <div class="star"></div>
+                                                            <div class="star"></div>
+                                                            <div class="star"></div>
+                                                            <div class="star"></div>
+                                                        </div>
+                                                        <span>0 review</span>
+                                                    </div>
+                                                    <p class="seller_name">
+                                                        <a title="View seller profile"
+                                                            href="jmarketplace/1_david-james/index.htm">
+                                                            <i class="fa fa-user"></i>
+                                                            {{ $product->vendor->name }}
+                                                        </a>
+                                                    </p>
+
+
+                                                    <div class="product-title" itemprop="name"><a
+                                                            href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
+                                                            {{ $product->name }}
+                                                        </a></div>
+
+                                                    <div class="product-group-price">
+
+                                                        <div class="product-price-and-shipping">
+
+                                                            @if ($product->attribute->hasOffer)
+
+                                                                <span itemprop="price"
+                                                                    class="price">{{ $product->attribute->price_offer }}
+                                                                    @lang('front.egp')</span>
+
+                                                                <span class="regular-price">{{ $product->attribute->price }}
+                                                                    @lang('front.egp')</span>
+                                                            @else
+
+                                                                <span itemprop="price"
+                                                                    class="price">{{ $product->attribute->price }}
+                                                                    @lang('front.egp')</span>
+
+                                                            @endif
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
 
 
 
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                 @endforeach
 
@@ -344,3 +359,11 @@
 
     </div>
 </div>
+
+
+
+
+
+
+
+

@@ -123,10 +123,12 @@
                                                         <i class="fa fa-heart"></i>
                                                         <span>Add to Wishlist</span>
                                                     </a>
-                                                    <a href="#" class="quick-view hidden-sm-down"
+
+                                                    {{-- <a href="#" class="quick-view hidden-sm-down"
                                                         data-link-action="quickview">
                                                         <i class="fa fa-search"></i><span> Quick view</span>
-                                                    </a>
+                                                    </a> --}}
+
                                                 </div>
 
                                             </div>
@@ -181,11 +183,12 @@
                                 @foreach ($new_poducts->chunk(3) as $index => $new_product)
                                     <div class="item  text-center ">
 
+
+
                                         @foreach ($new_product as $key => $product)
 
                                             <div class="d-flex flex-wrap  align-items-center product-miniature js-product-miniature item-row"
-                                                data-id-product="2" data-id-product-attribute="60" itemscope=""
-                                                >
+                                                data-id-product="2" data-id-product-attribute="60" itemscope="">
                                                 <div class="col-12 col-w40 pl-0">
                                                     <div class="thumbnail-container">
 
@@ -265,7 +268,7 @@
                                                                             class="price">{{ $product->attribute->price_offer }}
                                                                             @lang('front.egp')</span>
 
-                                                                            <span
+                                                                        <span
                                                                             class="regular-price">{{ $product->attribute->price }}
                                                                             @lang('front.egp')</span>
                                                                     @else
@@ -306,10 +309,19 @@
                                                                 <i class="fa fa-heart"></i>
                                                                 <span>Add to Wishlist</span>
                                                             </a>
-                                                            <a href="#" class="quick-view hidden-sm-down"
-                                                                data-link-action="quickview">
-                                                                <i class="fa fa-search"></i><span> Quick view</span>
-                                                            </a>
+
+{{--
+                                                            <a href="#" class="quick-view hidden-sm-down" data-product-id="{{ $product->id }}"
+                                                                 data-link-action="quickview">
+                                                                <i class="fa fa-search"></i><span> نظرة سريعة</span>
+                                                            </a> --}}
+
+
+                                                            {{-- --- require modal product
+                                                            details ---- --}}
+
+                                                            {{-- @include('front.includes._modal_product_details',$product) --}}
+
                                                         </div>
 
                                                     </div>
@@ -334,3 +346,23 @@
 
     </div>
 </div>
+
+
+@section('scripts')
+
+
+    <script>
+       $(document).on('click', '.quick-view', function (e) {
+           e.preventDefault();
+            $('.quickview-modal-product-details-' + $(this).attr('data-product-id')).removeClass("d-none").css('display','block');
+        });
+        $(document).on('click', '.close', function () {
+            $('.quickview-modal-product-details-' + $(this).attr('data-product-id')).css("display", "none");
+            $('.not-loggedin-modal').css("display", "none");
+            $('.alert-modal').css("display", "none");
+            $('.alert-modal2').css("display", "none");
+        });
+
+    </script>
+
+@endsection

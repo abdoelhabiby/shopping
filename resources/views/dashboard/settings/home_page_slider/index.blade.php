@@ -1,13 +1,11 @@
 @extends('layouts.dashboard')
 
 
-@php
-$model_name = 'product-images';
-@endphp
+
 
 
 @section('title')
-    | dashboard | {{ $model_name }}
+    | settings | home page slider
 @endsection
 
 @section('content')
@@ -23,12 +21,12 @@ $model_name = 'product-images';
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">home</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ route('products.index') }}">products</a>
+
+                                <li class="breadcrumb-item active"> settings
                                 </li>
-                                <li class="breadcrumb-item"><a href="">{{ $product->slug }}</a>
+                                <li class="breadcrumb-item active"> home page slider
                                 </li>
-                                <li class="breadcrumb-item active"> images
-                                </li>
+
                             </ol>
                         </div>
                     </div>
@@ -46,7 +44,7 @@ $model_name = 'product-images';
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title ">
-                                        {{ $model_name }}
+                                        home page slider
                                     </h4>
 
 
@@ -70,11 +68,6 @@ $model_name = 'product-images';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <div>
-                                            <a href="{{ route('product.attibutes.index', $product->slug) }}" class="">
-                                                Attributes
-                                            </a>
-                                        </div>
 
                                         <!-- /resources/views/post/create.blade.php -->
 
@@ -97,7 +90,7 @@ $model_name = 'product-images';
 
                                             <div class="float-right">
                                                 <form id="form-images"
-                                                    action="{{ route('product.images.store_database', $product->id) }}"
+                                                    action="{{ route('admin.homepage_slider.store_database') }}"
                                                     method="post">
                                                     @csrf
                                                     <button type="submit" class="btn btn-primary btn-xs">Save
@@ -157,11 +150,10 @@ $model_name = 'product-images';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <p class="card-text "> images</p>
 
                                         <div class="show-images">
 
-                                            @include('dashboard.products.images._fetch_images')
+                                            @include('dashboard.settings.home_page_slider._fetch_images')
 
                                         </div>
 
@@ -187,7 +179,7 @@ $model_name = 'product-images';
         // fetch();
 
 
-        var url = "{{ route('product.images.store', $product->id) }}";
+        var url = "{{ route('admin.homepage_slider.store', ) }}";
 
         var uploadedDocumentMap = {}
         Dropzone.options.dpzMultipleFiles = {
@@ -305,7 +297,7 @@ $model_name = 'product-images';
         //------------ fetch images----------------------
 
         function fetch() {
-            var url = "{{ route('product.images.fetch', $product->id) }}";
+            var url = "{{ route('admin.homepage_slider.fetch') }}";
             var div_images = $('.show-images'); // to append images to parrent element
             var token = "{{ csrf_token() }}";
 

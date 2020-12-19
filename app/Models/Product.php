@@ -90,7 +90,7 @@ class Product extends Model
 
     public function attribute()
     {
-        return $this->hasOne(ProductAttribute::class, 'product_id', 'id')->where('is_active',true);
+        return $this->hasOne(ProductAttribute::class, 'product_id', 'id');
     }
 
 
@@ -112,6 +112,7 @@ class Product extends Model
     {
         return $this->hasOne(ProductAttribute::class, 'product_id', 'id')
             ->where('is_active', true)
+            ->where('qty','>',0)
             ->whereNotNull('price_offer')
             ->whereNotNull('start_offer_at')
             ->whereDate('end_offer_at', '>', now());

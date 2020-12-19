@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 define('PAGINATE_COUNT', 10);
-define('MAX_IMAGES_UPLOAD', 7);
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
@@ -18,16 +17,14 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
         return Product::withTranslation()->first();
 
-          return view('dashboard.test');
+        return view('dashboard.test');
 
-          return "test";
-
+        return "test";
     });
 
     Route::post('test', function (Request $request) {
 
-          return $request;
-
+        return $request;
     });
 
 
@@ -55,22 +52,47 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //----------------- start routes product attributes and images---------------
 
-    //---images-----
-    Route::get('product-images/{product:slug}', "ProductImageController@index")->name('product.images.index');
-    Route::post('product-images/{product}/store', "ProductImageController@store")->name('product.images.store');
-    Route::post('product-images/{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
-    Route::get('product-images/{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
-    Route::delete('product-images/{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
+    //---------------------------product images--------------------------
+    Route::group(['prefix' => 'product-images'], function () {
 
-    //---attributes---------------------------------------------------
-    Route::get('product-attributes/{product:slug}', "ProductAttributeController@index")->name('product.attibutes.index');
-    Route::get('product-attributes/{product:slug}/fetch', "ProductAttributeController@fetchAttributes")->name('product.attibutes.fetch_attribute');
-    Route::post('product-attributes/{product}', "ProductAttributeController@store")->name('product.attibutes.store');
-    Route::put('product-attributes/{product}/{attribute}', "ProductAttributeController@update")->name('product.attibutes.update');
-    Route::delete('product-attributes/{product}/{attribute}', "ProductAttributeController@destroy")->name('product.attibutes.delete');
+        Route::get('{product:slug}', "ProductImageController@index")->name('product.images.index');
+        Route::post('{product}/store', "ProductImageController@store")->name('product.images.store');
+        Route::post('{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
+        Route::get('{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
+        Route::delete('{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
+    });
 
+    //-------------------------product attributes-----------------------------
+    Route::group(['prefix' => 'product-attributes'], function () {
+
+        Route::get('{product:slug}', "ProductAttributeController@index")->name('product.attibutes.index');
+        Route::get('{product:slug}/fetch', "ProductAttributeController@fetchAttributes")->name('product.attibutes.fetch_attribute');
+        Route::post('{product}', "ProductAttributeController@store")->name('product.attibutes.store');
+        Route::put('{product}/{attribute}', "ProductAttributeController@update")->name('product.attibutes.update');
+        Route::delete('{product}/{attribute}', "ProductAttributeController@destroy")->name('product.attibutes.delete');
+    });
 
     //----------------- end routes product attributes-----------------
+
+
+    //----------------------strat settings-----------------------
+
+    Route::group(['prefix' => 'settings', 'namespace' => 'Settings'], function () {
+
+        //-------------------------home page sliders---------------------------
+        Route::group(['prefix' => 'homepage-sliders'], function () {
+
+            Route::get('/', 'HomepageSlider@index')->name('admin.homepage_slider.index');
+            Route::post('store', "HomepageSlider@store")->name('admin.homepage_slider.store');
+            Route::post('/', "HomepageSlider@storeDatabase")->name('admin.homepage_slider.store_database'); //store into databse
+            Route::get('fetch', "HomepageSlider@fetchImages")->name('admin.homepage_slider.fetch');
+            Route::delete('{slider}', "HomepageSlider@destroy")->name('admin.homepage_slider.delete');
+        });
+    });
+
+    //----------------------end settings-----------------------
+
+    // ------------------------------------------------------------
 
 
     Route::get('logout', 'Auth\LoginController@logout')->name('dashboard.logout');

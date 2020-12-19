@@ -10,5 +10,7 @@ return [
       'new_products' => 'منتجات جديده',
       'trending_now' => 'تريند',
       'best_sellers' => 'الأكثر مبيعًا',
+      'close' => 'غلق',
+      'other_options' => 'خيارات أخري',
 
     ];
