@@ -3,6 +3,8 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Support\Str;
+
 
 trait HandelSlugTrait
 {
@@ -11,8 +13,11 @@ trait HandelSlugTrait
     protected function prepareForValidation()
     {
         if ($this->has('slug'))
+
+       $slug = Str::slug($this->request->get('slug'));
+
             $this->merge([
-                'slug' => str_replace(" ", "-", preg_replace("/\s+/", " ", trim($this->request->get('slug'))))
+                'slug' => $slug
             ]);
     }
 }

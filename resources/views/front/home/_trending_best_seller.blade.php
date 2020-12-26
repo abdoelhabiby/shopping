@@ -56,12 +56,12 @@
 
                                                             @if ($index == 0 && fileExist($image->name))
                                                                 <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt="" width="600"
+                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" width="600"
                                                                     height="600">
                                                             @elseif($index == 1 && fileExist($image->name))
 
                                                                 <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}" alt="" alt=""
+                                                                    src="{{ asset($image->name) }}"  alt="" title="{{$product->name}}"
                                                                     width="600" height="600">
                                                             @else
                                                                 @break
@@ -125,7 +125,7 @@
 
 
                                                     <div class="product-title" itemprop="name"><a
-                                                            href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
+                                                            href="">
                                                             {{ $product->name }}
                                                         </a></div>
 
@@ -160,7 +160,7 @@
                                                             action=""
                                                             method="post" class="formAddToCart">
                                                             @csrf
-                                                            <a class="add-to-cart" href="#" data-add-cart="{{ route('cart.add', [$product->sku, $product->attribute->sku]) }}">
+                                                            <a class="add-to-cart" href="#" data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                                                 <i class="novicon-cart"></i>
                                                                 <span>Add to cart</span>
                                                             </a>
@@ -256,12 +256,12 @@
 
                                                             @if ($index == 0 && fileExist($image->name))
                                                                 <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt="" width="600"
+                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" width="600"
                                                                     height="600">
                                                             @elseif($index == 1 && fileExist($image->name))
 
                                                                 <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}" alt="" alt=""
+                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" alt=""
                                                                     width="600" height="600">
                                                             @else
                                                                 @break

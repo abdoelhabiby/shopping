@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -33,7 +34,7 @@ Route::group(
             Route::get('/', 'HomeController@index')->name('front.home');
 
             //-------------------routes cart-----------------
-            Route::post('cart/{product_sku}/{product_attribute_sku}', 'CartController@store')->name('cart.add');
+            Route::post('cart/{product_slug}/{product_attribute_id}', 'CartController@store')->name('cart.add');
 
             //---------------get modal show product details by ajax--------------
 
@@ -48,7 +49,7 @@ Route::group(
 
 
 
-
+return session()->all();
 
 
 

@@ -17,7 +17,7 @@
 
                                 @if (fileExist($product->images[0]->name))
                                     <img class="js-qv-product-cover img-fluid" src="{{ $product->images[0]->name }}"
-                                        alt="" title="" style="width:100%;" itemprop="image">
+                                        alt="" title="{{$product->name}}" style="width:100%;" itemprop="image">
                                 @endif
 
 
