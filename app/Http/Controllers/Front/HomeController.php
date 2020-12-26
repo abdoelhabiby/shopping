@@ -3,41 +3,53 @@
 namespace App\Http\Controllers\Front;
 
 use Carbon\Carbon;
+use App\Models\Slider;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Slider;
 use App\Repositories\Front\HomeRepository;
+use App\Interfaces\Front\HomeRepositoryInterface;
 
 class HomeController extends Controller
 {
 
+
+    // protected $home_repository_interface;
+
+    // public function __construct(HomeRepositoryInterface $home_repository_interface)
+    // {
+    //     $this->home_repository_interface = $home_repository_interface;
+    // }
 
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(HomeRepository $homeRepository)
+    public function index(HomeRepositoryInterface $home_repository_interface)
     {
 
 
 
+        $home_repository = $home_repository_interface;
+
+
+
         //----------get some offers to show in section offers----
-        $products_offer = $homeRepository->getProductsOffer(9);
+        $products_offer = $home_repository->getProductsOffer(9);
 
         //--------------------get new products added----------
 
-        $new_poducts = $homeRepository->getNewProducts(18);
+        $new_poducts = $home_repository->getNewProducts(18);
 
         //--------------------get products best sellers ----------
 
-        $best_sellers = $homeRepository->getBestSellers(18);
+        $best_sellers = $home_repository->getBestSellers(18);
 
         //--------------------get products trending ----------
 
-        $trending = $homeRepository->getProductsTrending(6);
+        $trending = $home_repository->getProductsTrending(6);
 
         //----------------------get image sliders------------------
 
@@ -57,7 +69,7 @@ class HomeController extends Controller
         */
 
 
-        $three_main_categories = $homeRepository->getThreeMainCategoriesWithChieldsProducts(3, 4);
+        $three_main_categories = $home_repository->getThreeMainCategoriesWithChieldsProducts(3, 4);
 
         // ---------------------------------------------------
         $compacts = [
@@ -70,4 +82,8 @@ class HomeController extends Controller
         ];
         return view('front.home.index', compact($compacts));
     }
+
+
+
+
 }

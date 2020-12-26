@@ -15,14 +15,11 @@
 
 @section('content')
 
-    <div id="main" >
+    <div id="main">
 
         <section id="content" class="page-home pagehome-three">
             <div class="container">
                 <div class="row">
-
-
-
 
 
 
@@ -39,7 +36,8 @@
 
                     {{-- ------ section seconde banner --}}
 
-                    {{-- @include('front.home._seconde_banner') --}}
+                    {{-- @include('front.home._seconde_banner')
+                    --}}
 
                     {{-- ------------------------- --}}
 
@@ -103,7 +101,8 @@
                     {{-- ------ section bottom sho 3categories with his products
                     --}}
 
-                    {{-- @include('front.home._bottom_category_wis_his_products') --}}
+                    {{-- @include('front.home._bottom_category_wis_his_products')
+                    --}}
 
                     {{-- ------------------------- --}}
 
@@ -128,7 +127,32 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        //---------------------------------------------------------------
 
+        //------------------ add product to cart--------------------
+
+        $(document).on('click', '.add-to-cart', function(e) {
+            e.preventDefault();
+            var url = $(this).data('add-cart');
+
+            $.ajax({
+                method: 'post',
+                url,
+                success: function(response) {
+
+                    swal({
+                        title: '{{__("front.success_add_product")}}',
+                        type: "success",
+                        timer: 2000,
+                    });
+                    //---- fetch get count products to change icon cart add total products count
+                },
+                error: function(error) {
+                    // console.log(error);
+                }
+            });
+
+        });
 
 
         //-----------------get modal ajax to show product details-----------
@@ -141,15 +165,16 @@
             var product_id = product_miniature.data('id-product');
             var product_attribute_id = product_miniature.data('id-product-attribute');
 
-            var url = 'product-details/' + product_id + '/' + product_attribute_id;
+            var url = $(this).data('url');
 
             $.ajax({
+                method: 'post',
                 url,
                 success: function(response) {
                     $('body').append(response.quickview_modal);
                 },
                 error: function(error) {
-                    //console.log(error);
+                    // console.log(error);
                 }
             });
 
@@ -159,14 +184,16 @@
         //----------------------select attribute -------------------
 
         $(document).on('change', '.select_attibute', function() {
-            var product_id = $(this).data('product-id');
-            var product_attribute_id = this.value;
+            var product_sku = $(this).data('product-sku');
+            var product_attribute_sku = this.value;
 
-            var url = 'product-details/' + product_id + '/' + product_attribute_id;
+            var url = '{{ localeLanguage() }}/product-details/' + product_sku + '/' + product_attribute_sku;
+
+
 
             $.ajax({
+                method: 'post',
                 url,
-
                 success: function(response) {
                     $('.quickview').remove();
                     $('body').append(response.quickview_modal);

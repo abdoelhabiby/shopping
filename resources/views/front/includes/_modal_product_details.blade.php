@@ -1,4 +1,5 @@
-<div id="quickview-modal-{{$product->id}}-{{$attribute->id}}" class="modal fade quickview in" tabindex="-1" role="dialog" style="display: block;">
+<div id="quickview-modal-{{ $product->id }}-{{ $product->attribute->id }}" class="modal fade quickview in" tabindex="-1"
+    role="dialog" style="display: block;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,10 +15,9 @@
 
                             <div class="product-cover">
 
-                                @if(fileExist($product->images[0]->name))
-                                <img class="js-qv-product-cover img-fluid"
-                                src="{{$product->images[0]->name}}"
-                                alt="" title="" style="width:100%;" itemprop="image">
+                                @if (fileExist($product->images[0]->name))
+                                    <img class="js-qv-product-cover img-fluid" src="{{ $product->images[0]->name }}"
+                                        alt="" title="" style="width:100%;" itemprop="image">
                                 @endif
 
 
@@ -30,31 +30,29 @@
 
                     </div>
                     <div class="col-md-7 col-sm-7">
-                        <h1 class="product-name">{{$product->name}}</h1>
+                        <h1 class="product-name">{{ $product->name }}</h1>
 
                         <div class="product-prices">
 
 
-                            <div class="product-price " itemprop="offers" >
+                            <div class="product-price " itemprop="offers">
 
 
                                 <div class="current-price">
 
-                                    @if ($attribute->hasOffer)
+                                    @if ($product->attribute->hasOffer)
 
-                                    <span itemprop="price"
-                                        class="price">{{ $attribute->price_offer }}
-                                        @lang('front.egp')</span>
+                                        <span itemprop="price" class="price">{{ $product->attribute->price_offer }}
+                                            @lang('front.egp')</span>
 
-                                    <span class="regular-price">{{ $attribute->price }}
-                                        @lang('front.egp')</span>
-                                @else
+                                        <span class="regular-price">{{ $product->attribute->price }}
+                                            @lang('front.egp')</span>
+                                    @else
 
-                                    <span itemprop="price"
-                                        class="price">{{ $attribute->price }}
-                                        @lang('front.egp')</span>
+                                        <span itemprop="price" class="price">{{ $product->attribute->price }}
+                                            @lang('front.egp')</span>
 
-                                @endif
+                                    @endif
 
                                 </div>
 
@@ -71,47 +69,62 @@
 
 
                         <div id="product-description-short" itemprop="description">
-                            <p>{{stringLength($product->description,200)}}</p>
+                            <p>{{ stringLength($product->description, 200) }}</p>
                         </div>
 
 
                         <div class="product-actions">
 
 
-                                <div class="product-variants in_border">
+                            <div class="product-variants in_border">
 
-                                    @if($product->attributes->count() > 1)
+                                @if ($product->attributes->count() > 1)
 
                                     <div class="product-variants-item">
                                         <span class="control-label">@lang('front.other_options') : </span>
-                                        <select id="" class="select_attibute" data-product-id="{{$product->id}}" name="select_attibute">
-                                           @foreach($product->attributes as $product_attrbiute)
-                                           <option value="{{$product_attrbiute->id}}" title="{{$product_attrbiute->name}}"
-                                             {{$product_attrbiute->id == $attribute->id ? 'selected' : ''}}
-                                             {{!$product_attrbiute->qty > 0 ? 'disabled' : ''}}>
-                                             {{$product_attrbiute->name}}
-                                            </option>
+                                        <select id="" class="select_attibute" data-product-sku="{{ $product->sku }}"
+                                            name="select_attibute">
+                                            @foreach ($product->attributes as $product_attrbiute)
+                                                <option value="{{ $product_attrbiute->sku }}"
+                                                    title="{{ $product_attrbiute->name }}"
+                                                    {{ $product_attrbiute->sku == $product->attribute->sku ? 'selected' : '' }}
+                                                    {{ !$product_attrbiute->qty > 0 ? 'disabled' : '' }}>
+                                                    {{ $product_attrbiute->name }}
+                                                </option>
 
-                                           @endforeach
+                                            @endforeach
 
                                         </select>
                                     </div>
 
+                                @endif
+
+
+                                <div id="product-availability" class="info-stock ">
+                                    <label class="control-label">{{ ucfirst(__('front.availability')) }} : </label>
+
+                                    @if ($product->attribute->qty > 0)
+                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    @else
+                                        <span class="text-danger">@lang('front.unavailable')</span>
                                     @endif
-
-
-
 
                                 </div>
 
+                            </div>
 
 
 
 
-                                <div class="product-add-to-cart in_border">
+
+
+
+                            <div class="product-add-to-cart in_border">
+
+                                @if ($product->attribute->qty > 0)
                                     <div class="add">
-                                        <button class="btn btn-primary add-to-cart" data-button-action="add-to-cart"
-                                            type="submit">
+                                        <button class="btn btn-primary add-to-cart"
+                                            data-add-cart="{{ route('cart.add', [$product->sku, $product->attribute->sku]) }}">
                                             <div class="icon-cart">
                                                 <i class="shopping-cart"></i>
                                             </div>
@@ -119,25 +132,23 @@
                                         </button>
                                     </div>
 
-                                    <a class="addToWishlist wishlistProd_3" href="#" data-rel="3"
-                                        onclick="WishlistCart('wishlist_block_list', 'add', '3', false, 1); return false;">
-                                        <i class="fa fa-heart"></i>
-                                        <span>Add to Wishlist</span>
-                                    </a>
+                                @endif
 
-                                    <div class="clearfix"></div>
+                                <a class="addToWishlist wishlistProd_3" href="#" data-rel="3"
+                                    onclick="WishlistCart('wishlist_block_list', 'add', '3', false, 1); return false;">
+                                    <i class="fa fa-heart"></i>
+                                    <span>Add to Wishlist</span>
+                                </a>
 
-                                    <div id="product-availability" class="info-stock mt-20">
-                                        <label class="control-label">Availability:</label>
-                                        in stock
-                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    </div>
+                                <div class="clearfix"></div>
 
 
-                                    <p class="product-minimal-quantity mt-20">
-                                    </p>
 
-                                </div>
+
+                                <p class="product-minimal-quantity mt-20">
+                                </p>
+
+                            </div>
 
 
 

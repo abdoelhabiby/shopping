@@ -1,5 +1,6 @@
 <?php
 
+use App\Cart\Cart;
 use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Category;
@@ -31,26 +32,41 @@ Route::group(
 
             Route::get('/', 'HomeController@index')->name('front.home');
 
+            //-------------------routes cart-----------------
+            Route::post('cart/{product_sku}/{product_attribute_sku}', 'CartController@store')->name('cart.add');
 
-            //---------------------------------------------
             //---------------get modal show product details by ajax--------------
 
-            Route::get('product-details/{product}/{attribute}','ProductDetailsAjax@index');
+            Route::post('product-details/{product_sku}/{attribute_sku}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
 
             //---------------------------------------------
-
-            Route::get('test', function () {
-
-
-                return strlen('ss');
-            });
         });
+
+
+
+        Route::get('test', function () {
+
+
+
+
+
+
+
+
+        });
+
+
+
+        //------------routes default auth-----------------
+        Auth::routes();
     }
-);
+); // end group packege LaravelLocalization
 
 
 
 
-Auth::routes();
+
+
+
 
 Route::get('/home', 'HomeController@index')->name('home');

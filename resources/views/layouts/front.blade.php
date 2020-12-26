@@ -38,6 +38,8 @@
     @endif
 
 
+    <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
+
 
 
     <script type="text/javascript">

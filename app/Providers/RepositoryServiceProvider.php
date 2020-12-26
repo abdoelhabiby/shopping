@@ -18,6 +18,8 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repositories\Front\HomeRepository'
 
         );
+
+
     }
 
     /**

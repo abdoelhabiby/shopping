@@ -153,16 +153,22 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="product-buttons d-flex justify-content-center" itemprop="offers"
-                                                    itemscope="" itemtype="http://schema.org/Offer">
-                                                    <form action="http://demo.bestprestashoptheme.com/savemart/en/cart"
-                                                        method="post" class="formAddToCart">
-                                                        <input type="hidden" name="token"
-                                                            value="28add935523ef131c8432825597b9928">
-                                                        <input type="hidden" name="id_product" value="1">
-                                                        <a class="add-to-cart" href="#" data-button-action="add-to-cart"><i
-                                                                class="novicon-cart"></i><span>Add to cart</span></a>
-                                                    </form>
+                                                <div class="product-buttons d-flex justify-content-center">
+
+                                                    @if ($product->attribute->qty > 0)
+                                                        <form
+                                                            action=""
+                                                            method="post" class="formAddToCart">
+                                                            @csrf
+                                                            <a class="add-to-cart" href="#" data-add-cart="{{ route('cart.add', [$product->sku, $product->attribute->sku]) }}">
+                                                                <i class="novicon-cart"></i>
+                                                                <span>Add to cart</span>
+                                                            </a>
+                                                        </form>
+
+                                                    @endif
+
+
 
                                                     <a class="addToWishlist wishlistProd_1" href="#" data-rel="1"
                                                         onclick="WishlistCart('wishlist_block_list', 'add', '1', false, 1); return false;">
@@ -170,9 +176,12 @@
                                                         <span>Add to Wishlist</span>
                                                     </a>
 
+                                                    {{-- show details
+                                                    --}}
 
                                                     <a href="#" class="quick-view hidden-sm-down"
-                                                        data-product-id="{{ $product->id }}">
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-url="{{ route('get-product-details-modal', [$product->sku, $product->attribute->sku]) }}">
                                                         <i class="fa fa-search"></i><span> Quick view</span>
                                                     </a>
 
@@ -359,11 +368,3 @@
 
     </div>
 </div>
-
-
-
-
-
-
-
-
