@@ -17,7 +17,7 @@ class Product extends Model
         "sku",
         "slug",
         "is_active",
-        "parent_is_active",
+        "parent_is_active", // check what is beast remove this coulmn or still
         "meta_keywords",
         "brand_id",
         "views",
@@ -25,7 +25,7 @@ class Product extends Model
     ];
 
     protected $translatedAttributes = ['name', 'description'];
-    protected $hidden = ['pivot','translations'];
+    protected $hidden = ['pivot', 'translations'];
 
 
     protected $casts = [
@@ -54,6 +54,12 @@ class Product extends Model
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
+
+    public function image()
+    {
+        return $this->hasOne(ProductImage::class, 'product_id', 'id');
+    }
+
     //------------------get categories relation-----------
 
     public function categories()
@@ -73,7 +79,9 @@ class Product extends Model
 
     public function firstImage()
     {
-        return $this->images()->first();
+        // return $this->images()->first();
+        return $this->hasOne(ProductImage::class, 'product_id', 'id');
+
     }
 
 
@@ -96,12 +104,20 @@ class Product extends Model
 
     //---------------------get product active--------------------------
 
+    /**
+     * get products ative by categories and has attributeactive
+     * used in front views
+     * neeeeed to upgrade
+     */
 
     public function scopeActive($product)
     {
-        return $product->where('is_active', true)->whereHas('attributes', function ($attr) {
-            return $attr->where('is_active', true);
-        });
+        return $product->where('is_active', true)
+            ->whereHas('categories', function ($cate) {
+                return $cate->where('is_active', true);
+            })->whereHas('attributes', function ($attr) {
+                return $attr->where('is_active', true);
+            });
     }
 
 
@@ -112,12 +128,9 @@ class Product extends Model
     {
         return $this->hasOne(ProductAttribute::class, 'product_id', 'id')
             ->where('is_active', true)
-            ->where('qty','>',0)
+            ->where('qty', '>', 0)
             ->whereNotNull('price_offer')
             ->whereNotNull('start_offer_at')
             ->whereDate('end_offer_at', '>', now());
     }
-
-
-
 }

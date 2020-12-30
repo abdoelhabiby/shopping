@@ -61,4 +61,17 @@ trait AjaxResponseTrait
 
     }
 
+    public function returnResponseJsone($key,$value)
+    {
+        $data = [
+            'status' => true,
+            $key => $value
+        ];
+
+        return response()->json($data, 200);
+
+    }
+
+
+
 }

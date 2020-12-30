@@ -1,6 +1,28 @@
 <?php
 
+use App\Cart\Cart;
 
+
+
+        //-----------------get count cart products----------
+
+
+if(!function_exists('get_cart_products_count')){
+
+    function get_cart_products_count(){
+
+        if (session()->has('cart')) {
+
+            $cart = new Cart(session('cart'));
+        } else {
+            $cart = new Cart();
+        }
+       return $cart->getCountProducts();
+
+
+
+    }
+}
 
 //------------- return limit length string------
 

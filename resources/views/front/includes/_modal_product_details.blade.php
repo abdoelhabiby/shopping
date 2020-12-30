@@ -17,7 +17,7 @@
 
                                 @if (fileExist($product->images[0]->name))
                                     <img class="js-qv-product-cover img-fluid" src="{{ $product->images[0]->name }}"
-                                        alt="" title="{{$product->name}}" style="width:100%;" itemprop="image">
+                                        alt="" title="{{ $product->name }}" style="width:100%;" itemprop="image">
                                 @endif
 
 
@@ -82,12 +82,12 @@
 
                                     <div class="product-variants-item">
                                         <span class="control-label">@lang('front.other_options') : </span>
-                                        <select id="" class="select_attibute" data-product-sku="{{ $product->sku }}"
+                                        <select id="" class="select_attibute" data-product-slug="{{ $product->slug }}"
                                             name="select_attibute">
                                             @foreach ($product->attributes as $product_attrbiute)
-                                                <option value="{{ $product_attrbiute->sku }}"
+                                                <option value="{{ $product_attrbiute->id }}"
                                                     title="{{ $product_attrbiute->name }}"
-                                                    {{ $product_attrbiute->sku == $product->attribute->sku ? 'selected' : '' }}
+                                                    {{ $product_attrbiute->id == $product->attribute->id ? 'selected' : '' }}
                                                     {{ !$product_attrbiute->qty > 0 ? 'disabled' : '' }}>
                                                     {{ $product_attrbiute->name }}
                                                 </option>
@@ -124,7 +124,7 @@
                                 @if ($product->attribute->qty > 0)
                                     <div class="add">
                                         <button class="btn btn-primary add-to-cart"
-                                            data-add-cart="{{ route('cart.add', [$product->sku, $product->attribute->sku]) }}">
+                                            data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                             <div class="icon-cart">
                                                 <i class="shopping-cart"></i>
                                             </div>
@@ -134,11 +134,21 @@
 
                                 @endif
 
-                                <a class="addToWishlist wishlistProd_3" href="#" data-rel="3"
-                                    onclick="WishlistCart('wishlist_block_list', 'add', '3', false, 1); return false;">
-                                    <i class="fa fa-heart"></i>
-                                    <span>Add to Wishlist</span>
-                                </a>
+                                @auth()
+                                    <a class="addToWishlist add_to_wislist"
+                                        href="{{ route('mywishlist.store', [$product->slug]) }}">
+                                        <i class="fa fa-heart"></i>
+                                        <span>Add to Wishlist</span>
+                                    </a>
+                                @else
+
+                                    <a class="addToWishlist " href="{{ route('login') }}">
+                                        <i class="fa fa-heart"></i>
+                                        <span>Add to Wishlist</span>
+                                    </a>
+
+
+                                @endauth
 
                                 <div class="clearfix"></div>
 

@@ -32,10 +32,10 @@ class FrontViewServiceProvider extends ServiceProvider
             return $q->select(['parent_id','slug','id'])->whereHas('chields');
         }])->select(['slug','id'])->get();
 
-
-
-
         view()->share('main_categories_home', $main_categories_home);
+
+
+
 
 
     }

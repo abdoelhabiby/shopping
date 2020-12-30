@@ -122,12 +122,45 @@
 
 @section('scripts')
     <script>
+
+// mywishlist.store
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         //---------------------------------------------------------------
+
+        //------------------ add product to wishlist-------------------
+
+
+        $(document).on('click', '.add_to_wislist', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+
+            $.ajax({
+                method: 'post',
+                url,
+                success: function(response) {
+
+                    swal({
+                        title: '{{ __("front.success_add_to_wishlist") }}',
+                        type: "success",
+                        timer: 2000,
+                    });
+                    //---- fetch get count products to change icon cart add total products count
+                },
+                error: function(error) {
+                    // console.log(error);
+                }
+            });
+
+        });
+
+
+
+
 
         //------------------ add product to cart--------------------
 
@@ -140,8 +173,14 @@
                 url,
                 success: function(response) {
 
+                    if(response.cart_products_count && parseInt(response.cart_products_count) > 0){
+                       $(".cart-products-count").text(response.cart_products_count);
+
+                    }
+
+
                     swal({
-                        title: '{{__("front.success_add_product")}}',
+                        title: '{{ __("front.success_add_product") }}',
                         type: "success",
                         timer: 2000,
                     });
@@ -184,10 +223,11 @@
         //----------------------select attribute -------------------
 
         $(document).on('change', '.select_attibute', function() {
-            var product_sku = $(this).data('product-sku');
-            var product_attribute_sku = this.value;
+            var product_slug = $(this).data('product-slug');
+            var product_attribute_id = this.value;
 
-            var url = '{{ localeLanguage() }}/product-details/' + product_sku + '/' + product_attribute_sku;
+
+            var url = '/{{ localeLanguage() }}/product-details/' + product_slug + '/' + product_attribute_id;
 
 
 

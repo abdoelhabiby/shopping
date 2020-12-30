@@ -12,12 +12,13 @@ trait HandelSlugTrait
 
     protected function prepareForValidation()
     {
-        if ($this->has('slug'))
+        if ($this->has('slug')) {
 
-       $slug = Str::slug($this->request->get('slug'));
+            $slug = Str::slug($this->request->get('slug'));
 
             $this->merge([
                 'slug' => $slug
             ]);
+        }
     }
 }

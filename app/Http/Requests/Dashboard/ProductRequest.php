@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Dashboard;
 
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\HandelSlugTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
 {
-    use HandelSlugTrait;
+     use HandelSlugTrait;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -27,6 +28,7 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+
 
 
 
@@ -65,11 +67,4 @@ class ProductRequest extends FormRequest
             "name.*" => 'input',
         ];
     }
-
-
-
-
-
-
-
 }

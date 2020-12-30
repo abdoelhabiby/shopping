@@ -15,11 +15,11 @@ class ProductDetailsAjax extends Controller
 
     //get product details ande return as render html modal
 
-
-    public function index($product_sku, $attribute_sku)
+    public function index($product_slug, $product_attribute_id)
     {
 
 
+        // return $product_attribute_id;
 
         if (!request()->ajax()) {
             return $this->notfound();
@@ -27,13 +27,13 @@ class ProductDetailsAjax extends Controller
 
 
 
-        $product =  Product::active()->where('sku',$product_sku)
-        ->whereHas('attribute', function ($attribute) use ($attribute_sku) {
-            return $attribute->where('sku',$attribute_sku)->where('is_active', true);
+        $product =  Product::active()->where('slug',$product_slug)
+        ->whereHas('attribute', function ($attribute) use ($product_attribute_id) {
+            return $attribute->where('id',$product_attribute_id)->where('is_active', true);
         })
         ->with([
-            'attribute' => function ($attr) use ($attribute_sku) {
-                return $attr->where('is_active', true)->where('sku', $attribute_sku)->first();
+            'attribute' => function ($attr) use ($product_attribute_id) {
+                return $attr->where('is_active', true)->where('id', $product_attribute_id);
             },
             'attributes' => function ($at) {
                 return $at->where('is_active', true);
@@ -42,20 +42,6 @@ class ProductDetailsAjax extends Controller
         ->first();
 
 
-
-        // $product = Product::active()
-        //     ->whereHas('attribute', function ($attribute) use ($attribute_id) {
-        //         return $attribute->where('id', $attribute_id)->where('is_active', true);
-        //     })
-        //     ->with([
-        //         'attribute' => function ($attr) use ($attribute_id) {
-        //             return $attr->where('is_active', true)->where('id', $attribute_id)->first();
-        //         },
-        //         'attributes' => function ($at) {
-        //             return $at->where('is_active', true);
-        //         }
-        //     ])
-        //     ->find($product_id);
 
 
             if(!$product){

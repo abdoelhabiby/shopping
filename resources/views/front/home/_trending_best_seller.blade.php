@@ -56,13 +56,13 @@
 
                                                             @if ($index == 0 && fileExist($image->name))
                                                                 <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" width="600"
-                                                                    height="600">
+                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    title="{{ $product->name }}" width="600" height="600">
                                                             @elseif($index == 1 && fileExist($image->name))
 
                                                                 <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}"  alt="" title="{{$product->name}}"
-                                                                    width="600" height="600">
+                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    title="{{ $product->name }}" width="600" height="600">
                                                             @else
                                                                 @break
                                                             @endif
@@ -124,8 +124,7 @@
                                                     </p>
 
 
-                                                    <div class="product-title" itemprop="name"><a
-                                                            href="">
+                                                    <div class="product-title" itemprop="name"><a href="">
                                                             {{ $product->name }}
                                                         </a></div>
 
@@ -156,11 +155,10 @@
                                                 <div class="product-buttons d-flex justify-content-center">
 
                                                     @if ($product->attribute->qty > 0)
-                                                        <form
-                                                            action=""
-                                                            method="post" class="formAddToCart">
+                                                        <form action="" method="post" class="formAddToCart">
                                                             @csrf
-                                                            <a class="add-to-cart" href="#" data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
+                                                            <a class="add-to-cart" href="#"
+                                                                data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                                                 <i class="novicon-cart"></i>
                                                                 <span>Add to cart</span>
                                                             </a>
@@ -169,19 +167,31 @@
                                                     @endif
 
 
+                                                    {{-- --------add to wish list --}}
 
-                                                    <a class="addToWishlist wishlistProd_1" href="#" data-rel="1"
-                                                        onclick="WishlistCart('wishlist_block_list', 'add', '1', false, 1); return false;">
+                                                    @auth()
+                                                    <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
                                                         <i class="fa fa-heart"></i>
                                                         <span>Add to Wishlist</span>
                                                     </a>
+                                                    @else
+
+                                                    <a class="addToWishlist " href="{{route('login')}}">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>Add to Wishlist</span>
+                                                    </a>
+
+
+                                                    @endauth
+
+
 
                                                     {{-- show details
                                                     --}}
 
                                                     <a href="#" class="quick-view hidden-sm-down"
                                                         data-product-id="{{ $product->id }}"
-                                                        data-url="{{ route('get-product-details-modal', [$product->sku, $product->attribute->sku]) }}">
+                                                        data-url="{{ route('get-product-details-modal', [$product->slug, $product->attribute->id]) }}">
                                                         <i class="fa fa-search"></i><span> Quick view</span>
                                                     </a>
 
@@ -256,13 +266,14 @@
 
                                                             @if ($index == 0 && fileExist($image->name))
                                                                 <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" width="600"
-                                                                    height="600">
+                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    title="{{ $product->name }}" width="600" height="600">
                                                             @elseif($index == 1 && fileExist($image->name))
 
                                                                 <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}" alt="" title="{{$product->name}}" alt=""
-                                                                    width="600" height="600">
+                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    title="{{ $product->name }}" alt="" width="600"
+                                                                    height="600">
                                                             @else
                                                                 @break
                                                             @endif

@@ -34,6 +34,9 @@ class CartController extends Controller
     public function store($product_slug, $product_attribute_id)
     {
 
+        if (!request()->ajax()) {
+            return $this->notfound();
+        }
 
         $cart = $this->myCart();
 
@@ -63,12 +66,11 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        return session('cart')->items;
 
-        return $this->successMessage('success');
+        return $this->returnResponseJsone('cart_products_count', $cart->getCountProducts());
     }
 
-  //--------------------------------------------------------
+    //--------------------------------------------------------
 
 
 

@@ -4,6 +4,7 @@ use App\Cart\Cart;
 use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Mywishlist;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -38,22 +39,51 @@ Route::group(
 
             //---------------get modal show product details by ajax--------------
 
-            Route::post('product-details/{product_sku}/{attribute_sku}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
+            Route::post('product-details/{product_slug}/{product_attribute_id}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
 
-            //---------------------------------------------
+            //-------------------------------------------------------
+
+            //-----------------------routes auth----------------------------
+
+            Route::group(['middleware' => 'auth'], function () {
+
+                //-------------------start wishlis--------------------
+                Route::group(['prefix' => 'mywishlist'], function () {
+
+                    Route::get('/', 'MywishlistController@index')->name('mywishlist.index');
+                    Route::post('product-details/{product_slug}', 'MywishlistController@store')->name('mywishlist.store');
+                });
+
+                //-------------------end wishlis--------------------
+
+
+            });
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            //-------------------------------------------------------
         });
 
 
+        // class Foo{
+        //     public function __invoke()
+        //     {
+        //         return "test";
+        //     }
+        // }
 
         Route::get('test', function () {
 
+            // return new Foo;
+
+            $product =  Product::first();
+
+          return   $mywishlist = Mywishlist::firstOrCreate([
+                 'product_id' => $product->id,
+                 'user_id' => user()->id
+             ]);
 
 
-return session()->all();
-
-
-
-
+            return user()->mywishlists;
         });
 
 

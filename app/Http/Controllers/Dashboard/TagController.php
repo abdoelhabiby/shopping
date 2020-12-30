@@ -75,7 +75,6 @@ class TagController extends Controller
             return redirect()->route($this->model . '.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $th->getMessage();
             return catchErro($this->model . '.index', $th);
         }
 

@@ -22,5 +22,7 @@ return [
       'create_new_account' => 'انشاء حساب جديد',
       'logout' => 'تسجيل الخروج',
       'success_add_product' => 'تم اضافه المنتج',
+      'success_add_to_wishlist' => 'تم اضافه المنتج الي المفضله',
+      'mywishlist' => 'ألمفضله',
 
     ];

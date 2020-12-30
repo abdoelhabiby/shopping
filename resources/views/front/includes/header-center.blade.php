@@ -24,29 +24,38 @@
                         <a class="login" href="login-1.html" rel="nofollow" title="Log in to your customer account"><i class="header-icon-account"></i></a>
                     </div>
                     <div class="header_link_wishlist">
-                        <a href="login-2.html" title="My Wishlists">
+
+                        @auth
+                        <a href="{{route('mywishlist.index')}}" title="My Wishlists">
                             <i class="header-icon-wishlist"></i>
                         </a>
+                        @else
+                        <a href="{{route('login')}}" title="My Wishlists">
+                            <i class="header-icon-wishlist"></i>
+                        </a>
+
+                        @endauth
+
                     </div>
                     <div id="_desktop_cart">
-                        <div class="blockcart cart-preview active" data-refresh-url="//demo.bestprestashoptheme.com/savemart/en/module/ps_shoppingcart/ajax">
+                        <div class="blockcart cart-preview active" >
                             <div class="header-cart">
                                 <div class="cart-left">
-                                    <div class="shopping-cart"><i class="zmdi zmdi-shopping-cart"></i></div>
-                                    <div class="cart-products-count">0</div>
+                                    <div class="shopping-cart">
+                                        <a href="#">
+                                            <i class="zmdi zmdi-shopping-cart"></i>
+
+                                        </a>
+                                    </div>
+                                    <div class="cart-products-count">{{get_cart_products_count()}}</div>
                                 </div>
                                 <div class="cart-right d-flex flex-column align-self-end ml-13">
                                     <span class="title-cart">Cart</span>
                                     <span class="cart-item"> items</span>
                                 </div>
                             </div>
-                            <div class="cart_block ">
-                                <div class="cart-block-content">
-                                    <div class="no-items">
-                                        No products in the cart
-                                    </div>
-                                </div>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>

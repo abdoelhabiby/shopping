@@ -24,26 +24,6 @@ class Cart
     }
 
     //------------------add items to cart----------------------
-    // public function add($product_sku, $product_attribute_sku)
-    // {
-
-    //     $item_key_name = $product_sku . '_' . $product_attribute_sku;
-
-    //     if (array_key_exists($item_key_name, $this->items)) {
-
-    //         $this->items[$item_key_name]['quantity'] += 1;
-
-    //         return true;
-    //     } else {
-    //         $this->items[$item_key_name] = [
-    //             'product_sku' =>  $product_sku,
-    //             'attribute_sku' =>  $product_attribute_sku,
-    //             'quantity' => 1
-    //         ];
-    //     }
-
-    //     return true;
-    // } //end class add item
 
 
     public function add($product)
@@ -63,7 +43,7 @@ class Cart
         } else {
             $this->items[$item_key_name] = [
                 'product_sku' =>  $product->sku,
-                'attribute_sku' =>  $product->attribute->sku,
+                'attribute_id' =>  $product->attribute->id,
                 'quantity' => 1
             ];
         }

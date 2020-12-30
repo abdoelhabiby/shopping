@@ -156,9 +156,9 @@
 
                                         <div class="">
                                             <div class="form-check">
-                                                <input type="checkbox" class="" name="remember_me" id="remember_me">
+                                                <input type="checkbox" class="" name="remember" id="remember">
                                                 <label class="form-check-label"
-                                                    for="remember_me">@lang('front.remember_me')</label>
+                                                    for="remember">@lang('front.remember_me')</label>
                                             </div>
                                         </div>
 
