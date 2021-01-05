@@ -54,9 +54,7 @@ class HomeRepository implements HomeRepositoryInterface
     public function getNewProducts($limit)
     {
         return $this->product->active()
-        ->whereHas('attribute',function($attribute){
-            return $attribute->where('is_active', true);
-        })
+
         ->with(
             [
                 'vendor' => function ($vend) {
@@ -73,7 +71,7 @@ class HomeRepository implements HomeRepositoryInterface
                         "price_offer",
                         "start_offer_at",
                         "end_offer_at",
-                    ]);
+                    ])->where('is_active', true);
                 }
 
             ]
@@ -85,7 +83,9 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getBestSellers($limit)
     {
-        return $this->product->active()->with(
+        return $this->product->active()
+
+        ->with(
             [
                 'vendor' => function ($vend) {
                     return $vend->select(['name', 'id']);
@@ -101,11 +101,11 @@ class HomeRepository implements HomeRepositoryInterface
                         "price_offer",
                         "start_offer_at",
                         "end_offer_at",
-                    ]);
+                    ])->where('is_active', true);
                 }
 
             ]
-        )->active()->latest()->limit(18)->get();
+        )->latest()->limit(18)->get();
     }
 
     //----------------get  products trending---------
@@ -113,7 +113,8 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getProductsTrending($limit)
     {
-        return $this->product->active()->with(
+        return $this->product->active()
+        ->with(
             [
                 'vendor' => function ($vend) {
                     return $vend->select(['name', 'id']);
@@ -129,11 +130,11 @@ class HomeRepository implements HomeRepositoryInterface
                         "price_offer",
                         "start_offer_at",
                         "end_offer_at",
-                    ]);
+                    ])->where('is_active', true);
                 }
 
             ]
-        )->active()->latest()->limit($limit)->get();
+        )->latest()->limit($limit)->get();
     }
 
 

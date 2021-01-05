@@ -43,7 +43,7 @@
 
 
 
-                                                <a href=""
+                                                <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}"
                                                     class="thumbnail product-thumbnail {{ $product->images->count() > 1 ? 'two-image' : '' }}">
 
 
@@ -101,7 +101,7 @@
 
 
                                                     <div class="category-title">
-                                                        <a href="smartphone-tablet/1-hummingbird-printed-t-shirt.html">product
+                                                        <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">product
                                                             name</a>
                                                     </div>
 
@@ -117,14 +117,14 @@
                                                     </div>
                                                     <p class="seller_name">
                                                         <a title="View seller profile"
-                                                            href="jmarketplace/1_david-james/index.htm">
+                                                            href=">
                                                             <i class="fa fa-user"></i>
                                                             {{ $product->vendor->name }}
                                                         </a>
                                                     </p>
 
 
-                                                    <div class="product-title" itemprop="name"><a href="">
+                                                    <div class="product-title" itemprop="name"><a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">
                                                             {{ $product->name }}
                                                         </a></div>
 

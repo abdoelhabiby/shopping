@@ -62,7 +62,8 @@ class CartController extends Controller
             return $this->notfound();
         }
 
-        $cart->add($product);
+        $quantity =  request()->quantity ?? 1;
+        $cart->add($product,$quantity);
 
         session()->put('cart', $cart);
 

@@ -33,7 +33,7 @@ class BrandDataTable extends DataTable
      */
     public function query(Brand $model)
     {
-        return $model->with(['category'])->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -91,7 +91,6 @@ class BrandDataTable extends DataTable
             Column::make('slug'),
             Column::make('name')->title('name')->orderable(false)->searchable(false),
             Column::make('is_active')->title('active'),
-            Column::make('category.slug')->title('category')->orderable(false),
             Column::make('created_at')->title('created at'),
             Column::computed('image')
                 ->exportable(false)

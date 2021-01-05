@@ -24,5 +24,16 @@ return [
       'success_add_product' => 'تم اضافه المنتج',
       'success_add_to_wishlist' => 'تم اضافه المنتج الي المفضله',
       'mywishlist' => 'ألمفضله',
+      'wishlist_products' => 'قائمة المنتجات المفضلة',
+      'success_delete' => 'تم الحذف',
+      'exception_error' => 'لقد حث خطأ ما برجاء المحاوله في وقت لاحق',
+      'havent_saved_aproduct' => 'لم تحفظ منتج',
+      'home' => 'الصفحة الرئيسية',
+      'categories' => 'ألاقسام',
+      'tags' => 'تاجات',
+      'qty' => 'ألكميه',
+      'other_options' => 'خيارات اخري',
+      'add_to_cart' => 'اضافه الي السله',
+      'description' => 'الوصف',
 
     ];

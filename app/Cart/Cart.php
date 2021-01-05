@@ -26,27 +26,30 @@ class Cart
     //------------------add items to cart----------------------
 
 
-    public function add($product)
+    public function add($product,int $quantity = 1)
     {
 
         $item_key_name = $product->sku . '_' . $product->attribute->sku;
 
         if (array_key_exists($item_key_name, $this->items)) {
 
-            if($this->items[$item_key_name]['quantity'] + 1 <= $product->attribute->qty){
-                $this->items[$item_key_name]['quantity'] += 1;
+            if ($this->items[$item_key_name]['quantity'] + $quantity <= $product->attribute->qty) {
+                $this->items[$item_key_name]['quantity'] += $quantity;
             }
 
-                // $this->items[$item_key_name]['quantity'] += 1;
+            // $this->items[$item_key_name]['quantity'] += 1;
 
             return true;
-        } else {
-            $this->items[$item_key_name] = [
-                'product_sku' =>  $product->sku,
-                'attribute_id' =>  $product->attribute->id,
-                'quantity' => 1
-            ];
         }
+
+        $check_quantity = $quantity <= $product->attribute->qty ? $quantity : 1;
+
+        $this->items[$item_key_name] = [
+            'product_sku' =>  $product->sku,
+            'attribute_id' =>  $product->attribute->id,
+            'quantity' => $check_quantity
+        ];
+
 
         return true;
     } //end class add item

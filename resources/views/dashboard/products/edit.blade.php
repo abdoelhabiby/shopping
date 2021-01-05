@@ -16,6 +16,7 @@ $model_name = 'products';
 @section('content')
 
 
+
     <div class="app-content content">
         <div class="content-wrapper">
 
@@ -195,6 +196,9 @@ $model_name = 'products';
 
                                                             <select name="categories[]" class="select2 form-control "
                                                                 multiple="" tabindex="-1" aria-hidden="true">
+
+
+                                                                <option disabled >Select Categories</option>
                                                                 @isset($sub_categories)
                                                                     @if ($sub_categories->count() > 0)
 

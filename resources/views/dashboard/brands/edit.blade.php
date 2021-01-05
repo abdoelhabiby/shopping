@@ -124,8 +124,7 @@ $model_name = 'brands';
                                                 {{-- ---------image- and parent --------
                                                 --}}
 
-                                                <div class="row">
-
+                                                {{-- <div class="row">
 
                                                     <div class="col-md-6">
                                                         <div class="form-group">
@@ -160,6 +159,31 @@ $model_name = 'brands';
                                                         </div>
                                                     </div>
 
+
+                                                </div> --}}
+
+
+
+                                                {{-- -----------------------
+                                                --}}
+
+                                                <div class="row">
+
+                                                    <div class="col-md-6">
+                                                        @php
+                                                        $input = 'slug';
+                                                        @endphp
+                                                        <div class="form-group">
+                                                            <label for="{{ $input }}"> {{ $input }} </label>
+                                                            <input type="text" value="{{ $row->slug }}" id="{{ $input }}"
+                                                                class="form-control" placeholder="input {{ $input }}  "
+                                                                name="{{ $input }}">
+                                                            @error($input)
+                                                            <span class="text-danger">{{ $message }} </span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-6">
                                                         @php
                                                         $input = 'image';
@@ -174,29 +198,6 @@ $model_name = 'brands';
                                                         </div>
                                                     </div>
 
-                                                </div>
-
-
-
-                                                {{-- -----------------------
-                                                --}}
-
-                                                <div class="row">
-
-                                                    <div class="col-md-12">
-                                                        @php
-                                                        $input = 'slug';
-                                                        @endphp
-                                                        <div class="form-group">
-                                                            <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="text" value="{{ $row->slug }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}  "
-                                                                name="{{ $input }}">
-                                                            @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
 
 
                                                     <div class="col-md-12">

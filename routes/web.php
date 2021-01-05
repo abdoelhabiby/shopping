@@ -41,7 +41,10 @@ Route::group(
 
             Route::post('product-details/{product_slug}/{product_attribute_id}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
 
-            //-------------------------------------------------------
+            //-------------------------------------------------------------
+            //----------------------------product--------------------------
+            Route::get('p/{product_slug}/{product_attribute_id}','ProductController@show')->name('front.prouct.show');
+            //-------------------------------------------------------------
 
             //-----------------------routes auth----------------------------
 
@@ -51,7 +54,8 @@ Route::group(
                 Route::group(['prefix' => 'mywishlist'], function () {
 
                     Route::get('/', 'MywishlistController@index')->name('mywishlist.index');
-                    Route::post('product-details/{product_slug}', 'MywishlistController@store')->name('mywishlist.store');
+                    Route::post('{product_slug}', 'MywishlistController@store')->name('mywishlist.store');
+                    Route::delete('{product_id}', 'MywishlistController@destroy')->name('mywishlist.destroy');
                 });
 
                 //-------------------end wishlis--------------------
@@ -64,26 +68,18 @@ Route::group(
         });
 
 
-        // class Foo{
-        //     public function __invoke()
-        //     {
-        //         return "test";
-        //     }
-        // }
+
 
         Route::get('test', function () {
 
-            // return new Foo;
+            // $atribute_id = 8;
 
-            $product =  Product::first();
+            // $product = Product::where('slug','d-ress')->latest()->take(5)->get();
 
-          return   $mywishlist = Mywishlist::firstOrCreate([
-                 'product_id' => $product->id,
-                 'user_id' => user()->id
-             ]);
+            // return $product;
 
+           return view('front.product.index');
 
-            return user()->mywishlists;
         });
 
 

@@ -15,12 +15,7 @@ class HomeController extends Controller
 {
 
 
-    // protected $home_repository_interface;
 
-    // public function __construct(HomeRepositoryInterface $home_repository_interface)
-    // {
-    //     $this->home_repository_interface = $home_repository_interface;
-    // }
 
     /**
      * Show the application dashboard.
@@ -59,11 +54,11 @@ class HomeController extends Controller
 
         /*
          **
-         ** alert danger
+         **  warning
          ** we must decide count of chields get
          ** and limit of product in this chiled to
-         ** performance and thow count show in page
-         ** the cield get = 3 * 4 products = 12 to every category
+         ** performance and how count show in page
+         ** the chield get = 3 * 4 products = 12 to every category
          **
 
         */

@@ -33,7 +33,7 @@ class BrandRequest extends FormRequest
             "slug" => "required|string|" . Rule::unique('brands', 'slug')->ignore($this->brand),
             "name" =>   "required|array|min:1|max:" . count(supportedLanguages()),
             "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('brand_translations', 'name'),
-            "main_category_id" => 'sometimes|nullable|integer|exists:categories,id',
+            // "main_category_id" => 'sometimes|nullable|integer|exists:categories,id',
             "meta_keywords" => "sometimes|nullable|string|max:100",
             "meta_description" => "sometimes|nullable|string|max:500",
             "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg|max:8000",
@@ -54,7 +54,7 @@ class BrandRequest extends FormRequest
     {
         return [
             "name.*" => 'input',
-            "main_category_id.exists" => 'main category'
+            // "main_category_id.exists" => 'main category'
         ];
     }
 

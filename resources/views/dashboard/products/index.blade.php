@@ -77,6 +77,12 @@ $model_name = 'products';
                                                     </a>
                                                 </button>
 
+                                                <button class="btn btn-primary ">
+                                                    <a href="" class="text-white">
+                                                        products deleted !!
+                                                    </a>
+                                                </button>
+
 
 
                                             </div>

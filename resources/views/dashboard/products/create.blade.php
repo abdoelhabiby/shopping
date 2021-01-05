@@ -186,11 +186,20 @@ $model_name = 'products';
 
                                                             <select name="categories[]" class="select2 form-control "
                                                                 multiple="" tabindex="-1" aria-hidden="true">
+                                                                <option disabled >Select Categories</option>
+
                                                                 @isset($sub_categories)
                                                                     @if ($sub_categories->count() > 0)
 
                                                                         @foreach ($sub_categories as $category)
-                                                                            <option value="{{ $category->id }}">
+                                                                            <option value="{{ $category->id }}"
+                                                                                @if(old('categories') && is_array(old('categories')))
+
+                                                                                {{ in_array($category->id,old('categories')) ? 'selected' : '' }}
+
+                                                                                @endif
+
+                                                                                >
                                                                                 {{ $category->name }}
                                                                             </option>
                                                                         @endforeach
@@ -218,7 +227,7 @@ $model_name = 'products';
                                                                 class="select2  form-control "
                                                                 id="single-placeholder" tabindex="-1" aria-hidden="true">
 
-                                                                {{-- <option disabled selected>Select brand</option> --}}
+                                                                <option disabled selected>Select brand</option>
 
                                                                 @isset($brands)
 

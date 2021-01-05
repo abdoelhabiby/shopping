@@ -79,8 +79,8 @@ class Product extends Model
 
     public function firstImage()
     {
-        // return $this->images()->first();
-        return $this->hasOne(ProductImage::class, 'product_id', 'id');
+        return $this->images()->first();
+        // return $this->hasOne(ProductImage::class, 'product_id', 'id');
 
     }
 

@@ -36,8 +36,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        $main_categories = Category::mainCategory()->select('id')->get();
-        return view($this->view_model . '.create',compact('main_categories'));
+        return view($this->view_model . '.create');
     }
 
     /**
@@ -98,9 +97,9 @@ class BrandController extends Controller
     public function edit(Brand $brand)
     {
           $row = $brand;
-          $main_categories = Category::mainCategory()->select('id')->get();
+        //   $main_categories = Category::mainCategory()->select('id')->get();
 
-        return view($this->view_model . '.edit',compact('row','main_categories'));
+        return view($this->view_model . '.edit',compact('row'));
 
     }
 

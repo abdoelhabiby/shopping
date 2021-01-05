@@ -20,8 +20,8 @@ class CreateBrandsTable extends Migration
             $table->string('image')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('meta_description')->nullable();
-            $table->unsignedBigInteger('main_category_id')->nullable();
-            $table->foreign('main_category_id')->references('id')->on('categories')->onDelete('set null');
+            // $table->unsignedBigInteger('main_category_id')->nullable();
+            // $table->foreign('main_category_id')->references('id')->on('categories')->onDelete('set null');
             $table->timestamps();
         });
     }

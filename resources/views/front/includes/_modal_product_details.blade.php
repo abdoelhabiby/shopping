@@ -84,12 +84,12 @@
                                         <span class="control-label">@lang('front.other_options') : </span>
                                         <select id="" class="select_attibute" data-product-slug="{{ $product->slug }}"
                                             name="select_attibute">
-                                            @foreach ($product->attributes as $product_attrbiute)
-                                                <option value="{{ $product_attrbiute->id }}"
-                                                    title="{{ $product_attrbiute->name }}"
-                                                    {{ $product_attrbiute->id == $product->attribute->id ? 'selected' : '' }}
-                                                    {{ !$product_attrbiute->qty > 0 ? 'disabled' : '' }}>
-                                                    {{ $product_attrbiute->name }}
+                                            @foreach ($product->attributes as $product_attribute)
+                                                <option value="{{ $product_attribute->id }}"
+                                                    title="{{ $product_attribute->name }}"
+                                                    {{ $product_attribute->id == $product->attribute->id ? 'selected' : '' }}
+                                                    {{ !$product_attribute->qty > 0 ? 'disabled' : '' }}>
+                                                    {{ $product_attribute->name }}
                                                 </option>
 
                                             @endforeach

@@ -58,6 +58,8 @@ trait AjaxResponseTrait
         ];
 
         return response()->json($data, 200);
+        // return response()->json($data,  200)
+        // ->header('Content-Type', 'text/plain');
 
     }
 

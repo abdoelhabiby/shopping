@@ -19,8 +19,9 @@ class Brand extends Model
         'image',
         'meta_keywords',
         'meta_description',
-        'main_category_id'
+        // 'main_category_id'
     ];
+    protected $hidden = ['pivot','translations'];
 
     protected $translatedAttributes = ['name'];
 
@@ -30,9 +31,9 @@ class Brand extends Model
     ];
 
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class,'main_category_id','id')->withDefault();
-    }
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class,'main_category_id','id')->withDefault();
+    // }
 
 }

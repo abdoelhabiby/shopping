@@ -132,35 +132,6 @@
         });
         //---------------------------------------------------------------
 
-        //------------------ add product to wishlist-------------------
-
-
-        $(document).on('click', '.add_to_wislist', function(e) {
-            e.preventDefault();
-            var url = $(this).attr('href');
-
-            $.ajax({
-                method: 'post',
-                url,
-                success: function(response) {
-
-                    swal({
-                        title: '{{ __("front.success_add_to_wishlist") }}',
-                        type: "success",
-                        timer: 2000,
-                    });
-                    //---- fetch get count products to change icon cart add total products count
-                },
-                error: function(error) {
-                    // console.log(error);
-                }
-            });
-
-        });
-
-
-
-
 
         //------------------ add product to cart--------------------
 
