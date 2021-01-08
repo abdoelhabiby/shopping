@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Mywishlist;
 use App\Models\ProductAttribute;
+use App\Models\ProductReview;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -24,7 +26,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(
     [
-        'prefix' => LaravelLocalization::setLocale(),
+        // 'prefix' => LaravelLocalization::setLocale(),
+        //------for unit testing stop redirect set language------
+        'prefix' => !App::runningUnitTests() ? LaravelLocalization::setLocale(null) : config('app.locale'),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
     function () {
@@ -43,7 +47,9 @@ Route::group(
 
             //-------------------------------------------------------------
             //----------------------------product--------------------------
-            Route::get('p/{product_slug}/{product_attribute_id}','ProductController@show')->name('front.prouct.show');
+            Route::get('p/{product_slug}/{product_attribute_id}', 'ProductController@show')->name('front.prouct.show');
+            //-------------------------------------------------------------
+
             //-------------------------------------------------------------
 
             //-----------------------routes auth----------------------------
@@ -60,6 +66,15 @@ Route::group(
 
                 //-------------------end wishlis--------------------
 
+                //-------------------start product reviews--------------------
+
+                Route::post('product/review', 'ProductReviewController@store')->name('product.review.store');
+                Route::put('product/review', 'ProductReviewController@update')->name('product.review.update');
+                Route::delete('product/review', 'ProductReviewController@destroy')->name('product.review.destroy');
+
+
+                //-------------------end product reviews--------------------
+
 
             });
             //-------------------------------------------------------
@@ -72,14 +87,10 @@ Route::group(
 
         Route::get('test', function () {
 
-            // $atribute_id = 8;
 
-            // $product = Product::where('slug','d-ress')->latest()->take(5)->get();
 
-            // return $product;
 
-           return view('front.product.index');
-
+            return view('front.test');
         });
 
 
@@ -88,7 +99,6 @@ Route::group(
         Auth::routes();
     }
 ); // end group packege LaravelLocalization
-
 
 
 

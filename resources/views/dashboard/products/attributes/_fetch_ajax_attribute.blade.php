@@ -66,7 +66,7 @@
                                                     <h4 class="modal-title" id="myModalLabel17">Upadte attribute
                                                         {{ $attribute->name }}
                                                     </h4>
-                                                    <button type="button" class="close" data-dismiss="modal"
+                                                    <button type="button" class="close close-edit-attribute" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>

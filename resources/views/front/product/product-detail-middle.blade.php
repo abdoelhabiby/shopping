@@ -133,7 +133,7 @@
                     </div>
 
 
-                    <div class="modal fade in" id="new_comment_form" tabindex="-1" role="dialog"
+                    {{-- <div class="modal fade in" id="new_comment_form" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -182,7 +182,7 @@
                                                 <li>
                                                     <label>Quality</label>
                                                     <div class="star_content">
-                                                        <input type="hidden" name="criterion[1]" value="5">
+                                                        <input type="hidden" name="criterion[1]" value="4">
                                                         <div class="cancel"><a title="Cancel Rating"></a>
                                                         </div>
                                                         <div class="star star_on"><a title="1">1</a>
@@ -193,7 +193,7 @@
                                                         </div>
                                                         <div class="star star_on"><a title="4">4</a>
                                                         </div>
-                                                        <div class="star star_on"><a title="5">5</a>
+                                                        <div class="star "><a title="5">5</a>
                                                         </div>
                                                     </div>
                                                     <div class="clearfix"></div>
@@ -225,7 +225,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="tab-pane fade in" id="tab-custom">

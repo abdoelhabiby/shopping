@@ -193,6 +193,11 @@ $model_name = 'product attributes';
         fetchAttribute(); // mounted fetch get attribute
 
 
+
+        $(document).on('click', '.close-edit-attribute', function() {
+            fetchAttribute();
+         });
+
         //---------------------print attributes----------------
         $(".printMe").click(function() {
 

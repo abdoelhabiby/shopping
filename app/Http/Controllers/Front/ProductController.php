@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductReview;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -37,10 +38,10 @@ class ProductController extends Controller
             abort(404);
         }
 
-        //  return $product;
+        $user_product_review = ProductReview::where('product_id',$product->id)->where('user_id',user()->id)->first();
 
 
 
-        return view('front.product.index', compact('product'));
+        return view('front.product.index', compact(['product','user_product_review']));
     }
 }

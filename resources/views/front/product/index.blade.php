@@ -39,7 +39,6 @@
 
 @section('content')
 
-
     <div class="no-index">
         <div id="content-wrapper">
 
@@ -126,6 +125,7 @@
                                         <form action="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}" method="post"
                                             id="form-add-to-cart" class="row">
 
+                                            {{-- ---------------product reviews------------ --}}
                                             <div class="productdetail-right col-12 col-lg-6 col-md-6">
                                                 <div class="product-reviews">
                                                     <div id="product_comments_block_extra">
@@ -142,12 +142,25 @@
                                                         </div>
 
 
-                                                        <div class="comments_advices">
-                                                            <a href="#" class="comments_advices_tab"><i
-                                                                    class="fa fa-comments"></i>Read reviews (2)</a>
-                                                            <a class="open-comment-form" data-toggle="modal"
-                                                                data-target="#new_comment_form" href="#"><i
-                                                                    class="fa fa-edit"></i>Write your review</a>
+                                                        <div class="comments_advices d-block">
+                                                            <span  class="comments_advices_tab"><i
+                                                                    class="fa fa-comments"></i>@lang('front.reviews') (2)
+                                                            </span>
+
+                                                                    @auth()
+
+
+                                                                    <a class="open-comment-form" data-toggle="modal"
+                                                                    data-target="#new_comment_form" href="#"><i
+                                                                        class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}
+                                                                    </a>
+                                                                    @else
+                                                                    <a class=""
+                                                                     href="{{route('login')}}"><i
+                                                                        class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}</a>
+
+                                                                    @endauth
+
                                                         </div>
                                                     </div>
 
@@ -306,9 +319,7 @@
 
 
 
-{{--
-                                                <input class="product-refresh ps-hidden-by-js" name="refresh" type="submit"
-                                                    value="Refresh" style="display: none;"> --}}
+
 
                                             </div>
 
@@ -480,6 +491,17 @@
                 @include('front.product._product_images_modal',$product)
 
 
+                @auth()
+                @if($user_product_review)
+                @include('front.product._update_comment_form',['product' => $product,'user_product_review' => $user_product_review])
+
+                @else
+                @include('front.product._new_comment_form',$product)
+
+                @endif
+
+                @endauth
+
                 {{-- ------------------------ --}}
 
 
@@ -498,6 +520,7 @@
 
         </div>
     </div>
+
 
 
 
@@ -541,7 +564,198 @@
         });
 
 
+// -------------------modal review-------------------
+//------------close modal form add review------------
+        $(".close_modal_review").click(function(){
 
+            $('#id_new_comment_form')[0].reset();
+            $('#id_new_comment_form').find(".display-errors").empty().addClass('d-none');
+
+        });
+
+
+   //------delete review---------------
+
+   $(document).on('click','#delete-review',function(e){
+
+       e.preventDefault();
+
+
+            var url = $(this).data('action');
+            var token = "{{ csrf_token() }}";
+            var product_id = "{{$product->id}}";
+
+
+            swal({
+                title: "{{__('front.are_you_sure')}}",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6B6F82',
+                cancelButtonText: "{{__('front.cancel')}}",
+                confirmButtonText: "{{__('front.yes_delete')}}"
+            }).then(function(result) {
+
+                if (result.value == true) {
+
+                    $.ajax({
+                        url: url,
+                        method: 'delete',
+                        data: {
+                            _token: token,product_id : product_id
+                        },
+                        beforeSend: function() {
+
+                        },
+                        success: function(response) {
+
+                            $('#new_comment_form').modal('hide');
+
+                        //set timeout because the modal to fix background  e..e.
+                            setTimeout(function(){
+                                $('#new_comment_form').remove();
+
+                                $('body').append(response.append_modal);
+
+                                }, 1000);
+
+                            swal({
+                                title: 'succes delete',
+                                type: "success",
+                                timer: 1000,
+                            });
+
+
+                        },
+                        error: function(response) {
+
+                            swal({
+                                title: '404 not found',
+                                type: "error",
+                                timer: 3000,
+                            });
+
+                        }
+                    })
+
+
+                }
+            });
+
+
+
+   });
+
+
+
+   //------modal form update review---------------
+   $(document).on('submit','#id_update_comment_form',function(e){
+
+e.preventDefault();
+var myform = $(this);
+var url = $(this).attr('action');
+var data = $(this).serialize();
+
+
+
+
+
+$.ajax({
+    url: url,
+    method: 'put',
+    data: data,
+    beforeSend: function() {
+
+        myform.find(".display-errors").empty();
+        myform.find(".display-errors").addClass('d-none');
+
+    },
+    success: function(success) {
+
+        $('#new_comment_form').modal('hide');
+
+       //set timeout because the modal to fix background  e..e.
+        setTimeout(function(){
+             $('#new_comment_form').remove();
+             $('body').append(success.append_modal);
+            }, 1000);
+
+
+        swal({
+            title: "{{__('front.success_update_review')}}",
+            type: "success",
+            timer: 2000,
+        });
+
+
+    },
+    error: function(getError) {
+        if (getError.status == 422) {
+
+            var arr = Object.values(getError.responseJSON.errors);
+            myform.find(".display-errors").append('<p>' + arr[0] + '</p>');
+            myform.find(".display-errors").removeClass('d-none');
+
+        }
+
+    }
+});
+
+});
+
+   //------modal form add review------------------
+
+        $(document).on('submit','#id_new_comment_form',function(e){
+
+
+            e.preventDefault();
+            var myform = $(this);
+            var url = $(this).attr('action');
+            var data = $(this).serialize();
+
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: data,
+                beforeSend: function() {
+
+                    myform.find(".display-errors").empty();
+                    myform.find(".display-errors").addClass('d-none');
+
+                },
+                success: function(success) {
+
+                    $('#new_comment_form').modal('hide');
+
+                   //set timeout because the modal to fix background  e..e.
+                    setTimeout(function(){
+                         $('#new_comment_form').remove();
+                         $('body').append(success.append_modal);
+                        }, 1000);
+
+
+                    swal({
+                        title: "{{__('front.success_add_review')}}",
+                        type: "success",
+                        timer: 2000,
+                    });
+
+
+                },
+                error: function(getError) {
+                    if (getError.status == 422) {
+
+                        var arr = Object.values(getError.responseJSON.errors);
+                        myform.find(".display-errors").append('<p>' + arr[0] + '</p>');
+                        myform.find(".display-errors").removeClass('d-none');
+
+                    }
+
+                }
+            });
+
+        });
+        // ---------------------------------------------------------
         //------------------ add product to cart--------------------
 
         $(document).on('submit', '#form-add-to-cart', function(e) {
@@ -580,5 +794,7 @@
         });
 
     </script>
+
+
 
 @stop

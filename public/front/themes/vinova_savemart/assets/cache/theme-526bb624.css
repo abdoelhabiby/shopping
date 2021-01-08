@@ -17545,7 +17545,7 @@ div.checker input {
 
 .cancel,
 .cancel a {
-    background: url(../../modules/jmarketplace/views/img/delete.gif) no-repeat 0 -16px!important
+    /* background: url(../../modules/jmarketplace/views/img/delete.gif) no-repeat 0 -16px!important */
 }
 
 .cancel a,
