@@ -4,12 +4,45 @@ use App\Cart\Cart;
 
 
 
-        //-----------------get count cart products----------
+
+//--------------hundelProductReviewsStars------------
+
+function hundelProductReviewsStars($product_reviews)
+{
+
+    $stars =  $product_reviews->stars ?? 0;
+    $stars = (int) $stars;
+    $total_rating = $product_reviews->total_rating ?? 0;
+
+    echo '<div class="star_content">';
+
+    $product_reviews = $product_reviews;
 
 
-if(!function_exists('get_cart_products_count')){
+    for ($i = 0; $i < $stars; $i++) {
+        echo '<div class="star star_on"></div>';
+    }
+    $minus = 5 - $stars;
 
-    function get_cart_products_count(){
+    if ($minus > 0) {
+        for ($i = 0; $i < $minus; $i++) {
+            echo ' <div class="star "></div>';
+        }
+    }
+
+    echo '</div>';
+
+    echo "<span> $total_rating  review</span>";
+}
+
+
+//-----------------get count cart products----------
+
+
+if (!function_exists('get_cart_products_count')) {
+
+    function get_cart_products_count()
+    {
 
         if (session()->has('cart')) {
 
@@ -17,32 +50,30 @@ if(!function_exists('get_cart_products_count')){
         } else {
             $cart = new Cart();
         }
-       return $cart->getCountProducts();
-
-
-
+        return $cart->getCountProducts();
     }
 }
 
 //------------- return limit length string------
 
 
-if(!function_exists('stringLength')){
+if (!function_exists('stringLength')) {
 
-    function stringLength(string $str,int $length){
+    function stringLength(string $str, int $length)
+    {
 
-       return \Str::limit($str, $length);
-
+        return \Str::limit($str, $length);
     }
 }
 
 
 //------------- macamar ----------------
 
-if(!function_exists('currentLocale')){
+if (!function_exists('currentLocale')) {
 
-    function currentLocale(){
-       return LaravelLocalization::getCurrentLocale();
+    function currentLocale()
+    {
+        return LaravelLocalization::getCurrentLocale();
     }
 }
 
@@ -55,7 +86,8 @@ if(!function_exists('currentLocale')){
 
 */
 
-function nameTranslations(array $translations){
+function nameTranslations(array $translations)
+{
 
     $trans_content = [];
 
@@ -73,7 +105,7 @@ function nameTranslations(array $translations){
    sidebar item is active and open
 */
 
-function isActive($module,$number = 2)
+function isActive($module, $number = 2)
 {
 
     return request()->segment($number) !== null && request()->segment($number) == $module ? 'active open' : '';
@@ -99,9 +131,9 @@ function orderNumberOfRows()
 
 
 
-function localeLanguage(){
+function localeLanguage()
+{
     return \Config::get('app.locale');
-
 }
 
 
@@ -121,7 +153,7 @@ function localeLanguage(){
 
 function imageUpload($photo, $folder_save)
 {
-    $image = $photo->store("/" . $folder_save,'images');
+    $image = $photo->store("/" . $folder_save, 'images');
     $path = "/images/" . $image;
     return $path;
 }
@@ -137,9 +169,10 @@ function deleteFile($photo_to_delet)
 
 //------------------------------
 
-if(!function_exists('fileExist')){
+if (!function_exists('fileExist')) {
 
-    function fileExist($path){
+    function fileExist($path)
+    {
         if (\Illuminate\Support\Facades\File::exists(public_path($path))) {
             return true;
         }
@@ -151,9 +184,10 @@ if(!function_exists('fileExist')){
 //-------------------function return pass no image
 
 
-if(!function_exists('pathNoImage')){
+if (!function_exists('pathNoImage')) {
 
-    function pathNoImage($path){
+    function pathNoImage($path)
+    {
 
         return '/images/noImage.jpg';
     }
@@ -184,7 +218,7 @@ function pageNameReplaceespace($name)
 
 //----------function return catch error---------------
 
-function catchErro($route_name,$error_catch, $message = 'some errors happend pleas try again later')
+function catchErro($route_name, $error_catch, $message = 'some errors happend pleas try again later')
 {
 
     \Illuminate\Support\Facades\Log::alert($error_catch);
@@ -196,7 +230,8 @@ function catchErro($route_name,$error_catch, $message = 'some errors happend ple
 //-----------------get supported languages---------------------
 
 
-function  supportedLanguages(){
+function  supportedLanguages()
+{
     return  Mcamara\LaravelLocalization\Facades\LaravelLocalization::getSupportedLanguagesKeys();
 }
 
@@ -205,8 +240,8 @@ function  supportedLanguages(){
 //--------------------------function check if has has Tow image
 
 
-function hasTwoImage(int $count){
+function hasTwoImage(int $count)
+{
 
     echo $count > 1 ? 'two-image' : '';
 }
-

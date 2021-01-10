@@ -38,6 +38,13 @@ class HomeRepository implements HomeRepositoryInterface
             },
             'images' => function ($im) {
                 return $im->select(['name', 'product_id']);
+            },
+            'reviews' => function ($rev) {
+                return $rev->select(
+                    'product_id',
+                    \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                    \DB::raw("COUNT(product_id) as total_rating"),
+                )->groupBy('product_id');
             }
         ])
             ->limit($limit)->get()->map(function ($album) {
@@ -55,27 +62,34 @@ class HomeRepository implements HomeRepositoryInterface
     {
         return $this->product->active()
 
-        ->with(
-            [
-                'vendor' => function ($vend) {
-                    return $vend->select(['name', 'id']);
-                },
-                'attribute' => function ($attr) {
-                    return $attr->select([
-                        "id",
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "is_active",
-                        "price",
-                        "price_offer",
-                        "start_offer_at",
-                        "end_offer_at",
-                    ])->where('is_active', true);
-                }
+            ->with(
+                [
+                    'vendor' => function ($vend) {
+                        return $vend->select(['name', 'id']);
+                    },
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->where('is_active', true);
+                    },
+                    'reviews' => function ($rev) {
+                        return $rev->select(
+                            'product_id',
+                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                            \DB::raw("COUNT(product_id) as total_rating"),
+                        )->groupBy('product_id');
+                    }
 
-            ]
-        )->active()->latest()->limit(18)->get();
+                ]
+            )->active()->latest()->limit(18)->get();
     }
 
     //----------------get  products best sellers---------
@@ -85,27 +99,34 @@ class HomeRepository implements HomeRepositoryInterface
     {
         return $this->product->active()
 
-        ->with(
-            [
-                'vendor' => function ($vend) {
-                    return $vend->select(['name', 'id']);
-                },
-                'attribute' => function ($attr) {
-                    return $attr->select([
-                        "id",
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "is_active",
-                        "price",
-                        "price_offer",
-                        "start_offer_at",
-                        "end_offer_at",
-                    ])->where('is_active', true);
-                }
+            ->with(
+                [
+                    'vendor' => function ($vend) {
+                        return $vend->select(['name', 'id']);
+                    },
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->where('is_active', true);
+                    },
+                    'reviews' => function ($rev) {
+                        return $rev->select(
+                            'product_id',
+                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                            \DB::raw("COUNT(product_id) as total_rating"),
+                        )->groupBy('product_id');
+                    }
 
-            ]
-        )->latest()->limit(18)->get();
+                ]
+            )->latest()->limit(18)->get();
     }
 
     //----------------get  products trending---------
@@ -114,27 +135,34 @@ class HomeRepository implements HomeRepositoryInterface
     public function getProductsTrending($limit)
     {
         return $this->product->active()
-        ->with(
-            [
-                'vendor' => function ($vend) {
-                    return $vend->select(['name', 'id']);
-                },
-                'attribute' => function ($attr) {
-                    return $attr->select([
-                        "id",
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "is_active",
-                        "price",
-                        "price_offer",
-                        "start_offer_at",
-                        "end_offer_at",
-                    ])->where('is_active', true);
-                }
+            ->with(
+                [
+                    'vendor' => function ($vend) {
+                        return $vend->select(['name', 'id']);
+                    },
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->where('is_active', true);
+                    },
+                    'reviews' => function ($rev) {
+                        return $rev->select(
+                            'product_id',
+                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                            \DB::raw("COUNT(product_id) as total_rating"),
+                        )->groupBy('product_id');
+                    }
 
-            ]
-        )->latest()->limit($limit)->get();
+                ]
+            )->latest()->limit($limit)->get();
     }
 
 
@@ -142,19 +170,21 @@ class HomeRepository implements HomeRepositoryInterface
     //------------------get 3 main categories wsi his chields with products products ----
 
 
-    public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3,int $products_count = 4)
+    public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3, int $products_count = 4)
     {
         $categories = Category::mainCategory()
             ->active()
             ->whereHas('chields', function ($chi) {
                 return $chi->whereHas('products');
             })
-            ->with(['chields'])
+            ->with([
+                'chields'
+            ])
             ->inRandomOrder()
             ->take(3)
             ->get()
-            ->map(function ($main) use($chields_count) {
-                $main->setRelation('chields', $main->chields->take($chields_count) ); // limit of chields
+            ->map(function ($main) use ($chields_count) {
+                $main->setRelation('chields', $main->chields->take($chields_count)); // limit of chields
                 return $main;
             });
 
@@ -169,7 +199,18 @@ class HomeRepository implements HomeRepositoryInterface
 
                     //------ add limit of products get in chiled------
                     //-------i dont like it need to upgrade !!!!------
-                    foreach ($subcategory->products()->active()->with('attribute')->whereHas('attribute')->latest()->take($products_count)->get() as $product) {
+                    $get_poducts = $subcategory->products()->active()->with([
+                        'attribute',
+                        'reviews' => function ($rev) {
+                            return $rev->select(
+                                'product_id',
+                                \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                                \DB::raw("COUNT(product_id) as total_rating"),
+                            )->groupBy('product_id');
+                        }
+                    ])->whereHas('attribute')->latest()->take($products_count)->get();
+
+                    foreach ($get_poducts as $product) {
                         $groups[$key]['products'][] = $product;
                     }
                 }
@@ -179,8 +220,6 @@ class HomeRepository implements HomeRepositoryInterface
 
 
         return   collect($groups);
-
-
     }
 
 

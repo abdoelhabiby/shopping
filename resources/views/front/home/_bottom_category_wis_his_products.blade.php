@@ -27,22 +27,23 @@
 
 
 
-                                    @foreach (array_chunk($main_category['products'], 3) as $index => $products_best_sellers)
+                                    @foreach (array_chunk($main_category['products'], 3) as $index => $products)
 
                                         <div class="item  text-center ">
 
-                                            @foreach ($products_best_sellers as $key => $product)
+                                            @foreach ($products as $key => $product)
 
                                                 <div class="d-flex flex-wrap align-items-start product-miniature js-product-miniature  first_item"
                                                     data-id-product="1" data-id-product-attribute="40" itemscope=""
                                                     itemtype="http://schema.org/Product">
 
-                                                    {{-- images --}}
+                                                    {{-- images
+                                                    --}}
                                                     <div class="col-12 col-w27 no-padding">
                                                         <div class="thumbnail-container">
 
 
-                                                            <a href="smartphone-tablet/1-40-hummingbird-printed-t-shirt.html#/1-size-s/6-color-taupe"
+                                                            <a href="{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}"
                                                                 class="thumbnail product-thumbnail {{ hasTwoImage($product->images->count()) }}">
 
 
@@ -81,20 +82,19 @@
                                                         </div>
                                                     </div>
 
-                                                    {{-- description --}}
+                                                    {{-- description
+                                                    --}}
                                                     <div class="col-12 col-w73 no-padding">
                                                         <div class="product-description">
 
                                                             <div class="product-groups">
                                                                 <div class="product-comments">
-                                                                    <div class="star_content">
-                                                                        <div class="star"></div>
-                                                                        <div class="star"></div>
-                                                                        <div class="star"></div>
-                                                                        <div class="star"></div>
-                                                                        <div class="star"></div>
-                                                                    </div>
-                                                                    <span>0 review</span>
+
+                                                                    {{-- --- helper function
+                                                                    tooo append
+                                                                    stars --}}
+                                                                    {{ hundelProductReviewsStars($product->reviews->first()) }}
+
                                                                 </div>
                                                                 <p class="seller_name">
                                                                     <a title="View seller profile"
@@ -106,7 +106,7 @@
 
 
                                                                 <div class="product-title" itemprop="name"><a
-                                                                        href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
+                                                                        href="{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}">
                                                                         {{ $product->name }}
                                                                     </a></div>
 

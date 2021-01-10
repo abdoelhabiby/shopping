@@ -36,8 +36,8 @@
 
                     {{-- ------ section seconde banner --}}
 
-                    {{-- @include('front.home._seconde_banner')
-                    --}}
+                    {{-- @include('front.home._seconde_banner') --}}
+
 
                     {{-- ------------------------- --}}
 
@@ -45,7 +45,7 @@
                     {{-- ------ section trending now and best saller
                     --}}
 
-                    @include('front.home._trending_best_seller')
+                    {{-- @include('front.home._trending_best_seller') --}}
 
                     {{-- ------------------------- --}}
 
@@ -101,8 +101,8 @@
                     {{-- ------ section bottom sho 3categories with his products
                     --}}
 
-                    {{-- @include('front.home._bottom_category_wis_his_products')
-                    --}}
+                    @include('front.home._bottom_category_wis_his_products')
+
 
                     {{-- ------------------------- --}}
 
@@ -131,6 +131,7 @@
             }
         });
         //---------------------------------------------------------------
+
 
 
         //------------------ add product to cart--------------------
@@ -171,9 +172,9 @@
 
             e.preventDefault();
 
-            var product_miniature = $(this).closest('.product-miniature');
-            var product_id = product_miniature.data('id-product');
-            var product_attribute_id = product_miniature.data('id-product-attribute');
+            // var product_miniature = $(this).closest('.product-miniature');
+            // var product_id = product_miniature.data('id-product');
+            // var product_attribute_id = product_miniature.data('id-product-attribute');
 
             var url = $(this).data('url');
 

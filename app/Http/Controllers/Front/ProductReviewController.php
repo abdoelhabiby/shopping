@@ -34,16 +34,25 @@ class ProductReviewController extends Controller
             $validated = $request->validated();
             $validated = array_merge(['user_id' => user()->id], $validated);
 
-            $review = ProductReview::create($validated);
+             $review = ProductReview::create($validated);
 
-            // $success_message = __("front.success_add_review");
 
             $modal_html = view(
                 'front.product._update_comment_form',
                 ['product' => $product, 'user_product_review' => $review]
             )->render();
 
-            return $this->returnRenderHtml('append_modal', $modal_html);
+            $calculate_reviews = ProductReview::select(
+                \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                \DB::raw("COUNT(id) as total_rating"),
+                )->where('product_id',$product->id)->first();
+
+                return response()->json([
+                    'append_modal'=> $modal_html,
+                    'calculate_reviews' => $calculate_reviews
+                ]);
+            // return $this->returnRenderHtml('append_modal', $modal_html);
+
         } catch (\Throwable $th) {
             return $this->notfound();
         }
@@ -81,7 +90,14 @@ class ProductReviewController extends Controller
                 ['product' => $review->product, 'user_product_review' => $review]
             )->render();
 
-            return $this->returnRenderHtml('append_modal', $modal_html);
+            $calculate_reviews = $this->getCalculateReviews($review->product->id);
+
+            return response()->json([
+                'append_modal'=> $modal_html,
+                'calculate_reviews' => $calculate_reviews
+            ]);
+
+            // return $this->returnRenderHtml('append_modal', $modal_html);
         } catch (\Throwable $th) {
             return $this->notfound();
         }
@@ -118,13 +134,29 @@ class ProductReviewController extends Controller
                 ['product' => $product]
             )->render();
 
-            return $this->returnRenderHtml('append_modal', $modal_html);
+            $calculate_reviews = $this->getCalculateReviews($review->product->id);
+
+            return response()->json([
+                'append_modal'=> $modal_html,
+                'calculate_reviews' => $calculate_reviews
+            ]);
+
+            // return $this->returnRenderHtml('append_modal', $modal_html);
         } catch (\Throwable $th) {
             return $this->notfound();
         }
     }
 
 
+    //-------------------------------------------------
+
+    private function getCalculateReviews($product_id)
+    {
+        return ProductReview::select(
+            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("COUNT(id) as total_rating"),
+            )->where('product_id',$product_id)->first();
+    }
     //-------------------------------------------------
 
 

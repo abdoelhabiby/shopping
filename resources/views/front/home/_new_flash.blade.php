@@ -22,19 +22,19 @@
 
                                 <!-- -- -- start items -- ---- -->
 
-                                @foreach ($products_offer as $product_offer)
+                                @foreach ($products_offer as $product)
 
                                     <div class="item item-list">
                                         <div class="product-miniature js-product-miniature first_item"
-                                            data-id-product="{{ $product_offer->id }}" data-id-product-attribute="232"
+                                            data-id-product="{{ $product->id }}" data-id-product-attribute="232"
                                             itemscope="" itemtype="">
                                             <div class="thumbnail-container">
 
-                                                <a href="home-appliance/12-232-nam-volutpat-justo-a-vehicula.html#/1-size-s/11-color-black"
-                                                    class="thumbnail product-thumbnail  {{ $product_offer->images->count() > 1 ? 'two-image' : '' }} ">
+                                                <a href="{{route('front.prouct.show',[$product->slug, $product->offer->id])}}"
+                                                    class="thumbnail product-thumbnail  {{ $product->images->count() > 1 ? 'two-image' : '' }} ">
 
-                                                    @if ($product_offer->images->count() > 0)
-                                                        @foreach ($product_offer->images as $index => $image)
+                                                    @if ($product->images->count() > 0)
+                                                        @foreach ($product->images as $index => $image)
 
                                                             @if ($index == 0 && fileExist($image->name))
                                                                 <img class="img-fluid image-cover"
@@ -71,26 +71,23 @@
                                                 <div class="product-groups">
 
                                                     <div class="product-title" itemprop="name"><a
-                                                            href="home-appliance/12-232-nam-volutpat-justo-a-vehicula.html#/1-size-s/11-color-black">
-                                                            {{ $product_offer->name }}
+                                                            href="{{route('front.prouct.show',[$product->slug, $product->offer->id])}}">
+                                                            {{ $product->name }}
                                                         </a>
                                                     </div>
 
                                                     <div class="product-comments">
-                                                        <div class="star_content">
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                        </div>
-                                                        <span>0 review</span>
+
+                                                        {{-- --- helper function tooo append
+                                                        stars --}}
+                                                        {{ hundelProductReviewsStars($product->reviews->first()) }}
+
                                                     </div>
                                                     <p class="seller_name">
                                                         <a title="View seller profile"
                                                             href="jmarketplace/3_harry-makle/index.htm">
                                                             <i class="fa fa-user"></i>
-                                                            {{ $product_offer->vendor->name }}
+                                                            {{ $product->vendor->name }}
                                                         </a>
                                                     </p>
 
@@ -98,42 +95,67 @@
 
                                                         <div class="product-price-and-shipping">
                                                             <span itemprop="price"
-                                                                class="price">{{ $product_offer->offer->price_offer }}
+                                                                class="price">{{ $product->offer->price_offer }}
                                                                 {{ __('front.egp') }}</span>
-                                                            <span class="regular-price">{{ $product_offer->offer->price }}
+                                                            <span class="regular-price">{{ $product->offer->price }}
                                                                 {{ __('front.egp') }}</span>
                                                         </div>
 
                                                     </div>
                                                 </div>
 
-                                                <div class="product-buttons d-flex justify-content-center" itemprop="offers"
-                                                    itemscope="" itemtype="http://schema.org/Offer">
-                                                    <form action="http://demo.bestprestashoptheme.com/savemart/en/cart"
-                                                        method="post" class="formAddToCart">
-                                                        <input type="hidden" name="token"
-                                                            value="28add935523ef131c8432825597b9928">
-                                                        <input type="hidden" name="id_product" value="12">
-                                                        <a class="add-to-cart" href="#" data-button-action="add-to-cart"><i
-                                                                class="novicon-cart"></i><span>Add to cart</span></a>
-                                                    </form>
+                                                <div class="product-buttons d-flex justify-content-center">
 
-                                                    <a class="addToWishlist wishlistProd_12" href="#" data-rel="12"
-                                                        onclick="WishlistCart('wishlist_block_list', 'add', '12', false, 1); return false;">
+                                                    @if ($product->offer->qty > 0)
+
+                                                        <form action="" method="post" class="formAddToCart">
+                                                            @csrf
+                                                            <a class="add-to-cart" href="#"
+                                                                data-add-cart="{{ route('cart.add', [$product->slug, $product->offer->id]) }}">
+                                                                <i class="novicon-cart"></i>
+                                                                <span>Add to cart</span>
+                                                            </a>
+                                                        </form>
+
+                                                    @endif
+
+
+                                                    {{-- --------add to wish list --}}
+
+                                                    @auth()
+                                                    <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
+                                                        <i class="fa fa-heart"></i>
+                                                        <span>Add to Wishlist</span>
+                                                    </a>
+                                                    @else
+
+                                                    <a class="addToWishlist " href="{{route('login')}}">
                                                         <i class="fa fa-heart"></i>
                                                         <span>Add to Wishlist</span>
                                                     </a>
 
-                                                    {{-- <a href="#" class="quick-view hidden-sm-down"
-                                                        data-link-action="quickview">
+
+                                                    @endauth
+
+
+
+                                                    {{-- show details
+                                                    --}}
+
+                                                    <a href="#" class="quick-view hidden-sm-down"
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-url="{{ route('get-product-details-modal', [$product->slug, $product->attribute->id]) }}">
                                                         <i class="fa fa-search"></i><span> Quick view</span>
-                                                    </a> --}}
+                                                    </a>
+
+
+
 
                                                 </div>
 
                                             </div>
                                             <div class="countdownfree d-flex"
-                                                data-date="{{ $product_offer->offer->end_offer_at }}"></div>
+                                                data-date="{{ $product->offer->end_offer_at }}"></div>
 
                                         </div>
                                     </div>
@@ -194,7 +216,7 @@
 
                                                         {{-- image
                                                         --}}
-                                                        <a href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black"
+                                                        <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}"
                                                             class="thumbnail product-thumbnail {{ $product->images->count() > 1 ? 'two-image' : '' }}">
 
                                                             @if ($product->images->count() > 0)
@@ -235,14 +257,12 @@
                                                                 </div>
                                                             @endif
                                                             <div class="product-comments">
-                                                                <div class="star_content">
-                                                                    <div class="star"></div>
-                                                                    <div class="star"></div>
-                                                                    <div class="star"></div>
-                                                                    <div class="star"></div>
-                                                                    <div class="star"></div>
-                                                                </div>
-                                                                <span>0 review</span>
+
+                                                                {{-- --- helper function tooo
+                                                                append
+                                                                stars --}}
+                                                                {{ hundelProductReviewsStars($product->reviews->first()) }}
+
                                                             </div>
                                                             <p class="seller_name">
                                                                 <a title="View seller profile"
@@ -254,7 +274,7 @@
 
 
                                                             <div class="product-title" itemprop="name"><a
-                                                                    href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
+                                                                    href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">
                                                                     {{ $product->name }}
                                                                 </a></div>
 
@@ -285,42 +305,52 @@
 
                                                         {{-- buttons add cart favorite and
                                                         search --}}
-                                                        <div class="product-buttons d-flex justify-content-center"
-                                                            itemprop="offers" itemscope=""
-                                                            itemtype="http://schema.org/Offer">
-                                                            {{-- add to card
-                                                            --}}
-                                                            <form
-                                                                action="http://demo.bestprestashoptheme.com/savemart/en/cart"
-                                                                method="post" class="formAddToCart">
-                                                                <input type="hidden" name="token"
-                                                                    value="28add935523ef131c8432825597b9928">
-                                                                <input type="hidden" name="id_product" value="2">
-                                                                <a class="add-to-cart" href="#"
-                                                                    data-button-action="add-to-cart"><i
-                                                                        class="novicon-cart"></i><span>Add to
-                                                                        cart</span></a>
-                                                            </form>
+                                                        <div class="product-buttons d-flex justify-content-center">
 
-                                                            {{-- add to favorite
-                                                            --}}
-                                                            <a class="addToWishlist wishlistProd_2" href="#" data-rel="2"
-                                                                onclick="WishlistCart('wishlist_block_list', 'add', '2', false, 1); return false;">
+                                                            @if ($product->attribute->qty > 0)
+
+                                                                <form action="" method="post" class="formAddToCart">
+                                                                    @csrf
+                                                                    <a class="add-to-cart" href="#"
+                                                                        data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
+                                                                        <i class="novicon-cart"></i>
+                                                                        <span>Add to cart</span>
+                                                                    </a>
+                                                                </form>
+
+                                                            @endif
+
+
+                                                            {{-- --------add to wish list --}}
+
+                                                            @auth()
+                                                            <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
+                                                                <i class="fa fa-heart"></i>
+                                                                <span>Add to Wishlist</span>
+                                                            </a>
+                                                            @else
+
+                                                            <a class="addToWishlist " href="{{route('login')}}">
                                                                 <i class="fa fa-heart"></i>
                                                                 <span>Add to Wishlist</span>
                                                             </a>
 
-{{--
-                                                            <a href="#" class="quick-view hidden-sm-down" data-product-id="{{ $product->id }}"
-                                                                 data-link-action="quickview">
-                                                                <i class="fa fa-search"></i><span> نظرة سريعة</span>
-                                                            </a> --}}
+
+                                                            @endauth
 
 
-                                                            {{-- --- require modal product
-                                                            details ---- --}}
 
-                                                            {{-- @include('front.includes._modal_product_details',$product) --}}
+                                                            {{-- show details
+                                                            --}}
+
+                                                            <a href="#" class="quick-view hidden-sm-down"
+                                                                data-product-id="{{ $product->id }}"
+                                                                data-url="{{ route('get-product-details-modal', [$product->slug, $product->attribute->id]) }}">
+                                                                <i class="fa fa-search"></i><span> Quick view</span>
+                                                            </a>
+
+
+
 
                                                         </div>
 
@@ -348,21 +378,4 @@
 </div>
 
 
-@section('scripts')
 
-
-    <script>
-       $(document).on('click', '.quick-view', function (e) {
-           e.preventDefault();
-            $('.quickview-modal-product-details-' + $(this).attr('data-product-id')).removeClass("d-none").css('display','block');
-        });
-        $(document).on('click', '.close', function () {
-            $('.quickview-modal-product-details-' + $(this).attr('data-product-id')).css("display", "none");
-            $('.not-loggedin-modal').css("display", "none");
-            $('.alert-modal').css("display", "none");
-            $('.alert-modal2').css("display", "none");
-        });
-
-    </script>
-
-@endsection

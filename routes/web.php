@@ -88,8 +88,6 @@ Route::group(
         Route::get('test', function () {
 
 
-
-
             return view('front.test');
         });
 

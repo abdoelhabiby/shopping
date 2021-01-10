@@ -86,24 +86,24 @@
 
                                         @if($product->images->count() > 0)
 
-                                        <div class="js-qv-mask mask only-product">
-                                            <div class="row">
+                                            <div class="js-qv-mask mask only-product">
+                                                <div class="row">
 
-                                                @foreach($product->images as $image)
+                                                    @foreach($product->images as $image)
 
 
-                                                <div class="item thumb-container col-md-6 col-xs-12 pt-30">
-                                                    <img class="img-fluid thumb js-thumb  @if($loop->first) 'selected' @endif "
-                                                        src="{{$image->name}}"
-                                                        alt="" title="{{$product->name}}" itemprop="image">
+                                                    <div class="item thumb-container col-md-6 col-xs-12 pt-30">
+                                                        <img class="img-fluid thumb js-thumb  @if($loop->first) 'selected' @endif "
+                                                            src="{{$image->name}}"
+                                                            alt="" title="{{$product->name}}" itemprop="image">
+                                                    </div>
+
+                                                    @endforeach
+
+
+
                                                 </div>
-
-                                                @endforeach
-
-
-
                                             </div>
-                                        </div>
 
                                         @endif
 
@@ -130,34 +130,53 @@
                                                 <div class="product-reviews">
                                                     <div id="product_comments_block_extra">
 
-                                                        <div class="comments_note">
-                                                            <span>Review: </span>
-                                                            <div class="star_content clearfix">
-                                                                <div class="star star_on"></div>
-                                                                <div class="star star_on"></div>
-                                                                <div class="star star_on"></div>
-                                                                <div class="star star_on"></div>
-                                                                <div class="star star_on"></div>
+                                                        @if($calculate_reviews)
+
+
+                                                            <div class="comments_note">
+
+                                                                <span>Review: </span>
+                                                                <div class="star_content clearfix">
+                                                                    @php
+                                                                        $stars = (int) $calculate_reviews->stars;
+                                                                            for($i=0;$i < $stars;$i++){
+                                                                                echo '<div class="star star_on"></div>';
+                                                                            }
+                                                                         $minus = 5 - $stars;
+
+                                                                           if($minus > 0){
+                                                                                for($i=0;$i < $minus;$i++){
+                                                                                    echo ' <div class="star "></div>';
+                                                                                }
+
+                                                                             }
+                                                                    @endphp
+
+                                                                </div>
                                                             </div>
-                                                        </div>
+
+                                                        @endif
 
 
                                                         <div class="comments_advices d-block">
                                                             <span  class="comments_advices_tab"><i
-                                                                    class="fa fa-comments"></i>@lang('front.reviews') (2)
+                                                                    class="fa fa-comments"></i>@lang('front.reviews')
+                                                                    @if($calculate_reviews)
+                                                                     (<span class="total_ratings">{{$calculate_reviews->total_rating}}</span>)
+
+                                                                    @endif
                                                             </span>
 
                                                                     @auth()
 
-
-                                                                    <a class="open-comment-form" data-toggle="modal"
-                                                                    data-target="#new_comment_form" href="#"><i
-                                                                        class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}
-                                                                    </a>
+                                                                        <a class="open-comment-form" data-toggle="modal"
+                                                                        data-target="#new_comment_form" href="#"><i
+                                                                            class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}
+                                                                        </a>
                                                                     @else
-                                                                    <a class=""
-                                                                     href="{{route('login')}}"><i
-                                                                        class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}</a>
+                                                                        <a class=""
+                                                                        href="{{route('login')}}"><i
+                                                                            class="fa fa-edit"></i>{{ucfirst(__('front.write_review'))}}</a>
 
                                                                     @endauth
 
@@ -216,23 +235,20 @@
 
                                                     @if($product->categories->count() > 0)
 
+                                                        <div class="pro-cate">
+                                                            <label class="control-label ">@lang('front.categories'):</label>
+                                                            <div>
+                                                                @foreach($product->categories as $category)
+                                                                <span>
+                                                                    {{-- add link to category here --}}
+                                                                    <a href="" title="{{$category->name}}">
+                                                                        {{$category->name}}
+                                                                    </a>
+                                                                </span>
+                                                                @endforeach
 
-
-
-                                                    <div class="pro-cate">
-                                                        <label class="control-label ">@lang('front.categories'):</label>
-                                                        <div>
-                                                            @foreach($product->categories as $category)
-                                                            <span>
-                                                                {{-- add link to category here --}}
-                                                                <a href="" title="{{$category->name}}">
-                                                                    {{$category->name}}
-                                                                </a>
-                                                            </span>
-                                                            @endforeach
-
+                                                            </div>
                                                         </div>
-                                                    </div>
 
                                                     @endif
 
@@ -240,21 +256,21 @@
                                                     @if($product->tags->count() > 0)
 
 
-                                                    <div class="pro-tag">
-                                                        <label class="control-label ">@lang('front.tags'):</label>
-                                                        <div>
+                                                        <div class="pro-tag">
+                                                            <label class="control-label ">@lang('front.tags'):</label>
+                                                            <div>
 
-                                                           @foreach($product->tags as $tag)
-                                                            <span>
-                                                                {{-- add link to tag here --}}
-                                                                <a href="" title="{{$tag->name}}">
-                                                                    {{$tag->name}}
-                                                                </a>
-                                                            </span>
-                                                            @endforeach
+                                                            @foreach($product->tags as $tag)
+                                                                <span>
+                                                                    {{-- add link to tag here --}}
+                                                                    <a href="" title="{{$tag->name}}">
+                                                                        {{$tag->name}}
+                                                                    </a>
+                                                                </span>
+                                                                @endforeach
 
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     @endif
 
                                                 </div>
@@ -276,15 +292,15 @@
                                                         @if($product->attribute->qty > 0)
 
 
-                                                        <div class="add">
-                                                            <button class="btn btn-primary add-to-cart"
-                                                                 type="submit">
-                                                                <div class="icon-cart">
-                                                                    <i class="shopping-cart"></i>
-                                                                </div>
-                                                                <span>@lang('front.add_to_cart')</span>
-                                                            </button>
-                                                        </div>
+                                                            <div class="add">
+                                                                <button class="btn btn-primary add-to-cart"
+                                                                    type="submit">
+                                                                    <div class="icon-cart">
+                                                                        <i class="shopping-cart"></i>
+                                                                    </div>
+                                                                    <span>@lang('front.add_to_cart')</span>
+                                                                </button>
+                                                            </div>
 
                                                         @endif
 
@@ -292,16 +308,16 @@
                                                         {{--  -add to wishlist ----------- --}}
 
                                                         @auth()
-                                                        <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
-                                                            <i class="fa fa-heart"></i>
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
+                                                            <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
+                                                                <i class="fa fa-heart"></i>
+                                                                <span>Add to Wishlist</span>
+                                                            </a>
                                                         @else
 
-                                                        <a class="addToWishlist " href="{{route('login')}}">
-                                                            <i class="fa fa-heart"></i>
-                                                            <span>Add to Wishlist</span>
-                                                        </a>
+                                                            <a class="addToWishlist " href="{{route('login')}}">
+                                                                <i class="fa fa-heart"></i>
+                                                                <span>Add to Wishlist</span>
+                                                            </a>
 
 
                                                         @endauth
@@ -530,270 +546,7 @@
 
 @section('scripts')
 
-
-    @if (session()->has('success'))
-
-        <script>
-            swal({
-                title: "{{ session('success') }}",
-                type: "success",
-                timer: 2000,
-            });
-
-        </script>
-
-    @endif
-    @if (session()->has('exception_error'))
-
-        <script>
-            swal({
-                title: "{{ session('exception_error') }}",
-                type: "error",
-                timer: 3000,
-            });
-
-        </script>
-
-    @endif
-
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-
-// -------------------modal review-------------------
-//------------close modal form add review------------
-        $(".close_modal_review").click(function(){
-
-            $('#id_new_comment_form')[0].reset();
-            $('#id_new_comment_form').find(".display-errors").empty().addClass('d-none');
-
-        });
-
-
-   //------delete review---------------
-
-   $(document).on('click','#delete-review',function(e){
-
-       e.preventDefault();
-
-
-            var url = $(this).data('action');
-            var token = "{{ csrf_token() }}";
-            var product_id = "{{$product->id}}";
-
-
-            swal({
-                title: "{{__('front.are_you_sure')}}",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6B6F82',
-                cancelButtonText: "{{__('front.cancel')}}",
-                confirmButtonText: "{{__('front.yes_delete')}}"
-            }).then(function(result) {
-
-                if (result.value == true) {
-
-                    $.ajax({
-                        url: url,
-                        method: 'delete',
-                        data: {
-                            _token: token,product_id : product_id
-                        },
-                        beforeSend: function() {
-
-                        },
-                        success: function(response) {
-
-                            $('#new_comment_form').modal('hide');
-
-                        //set timeout because the modal to fix background  e..e.
-                            setTimeout(function(){
-                                $('#new_comment_form').remove();
-
-                                $('body').append(response.append_modal);
-
-                                }, 1000);
-
-                            swal({
-                                title: 'succes delete',
-                                type: "success",
-                                timer: 1000,
-                            });
-
-
-                        },
-                        error: function(response) {
-
-                            swal({
-                                title: '404 not found',
-                                type: "error",
-                                timer: 3000,
-                            });
-
-                        }
-                    })
-
-
-                }
-            });
-
-
-
-   });
-
-
-
-   //------modal form update review---------------
-   $(document).on('submit','#id_update_comment_form',function(e){
-
-e.preventDefault();
-var myform = $(this);
-var url = $(this).attr('action');
-var data = $(this).serialize();
-
-
-
-
-
-$.ajax({
-    url: url,
-    method: 'put',
-    data: data,
-    beforeSend: function() {
-
-        myform.find(".display-errors").empty();
-        myform.find(".display-errors").addClass('d-none');
-
-    },
-    success: function(success) {
-
-        $('#new_comment_form').modal('hide');
-
-       //set timeout because the modal to fix background  e..e.
-        setTimeout(function(){
-             $('#new_comment_form').remove();
-             $('body').append(success.append_modal);
-            }, 1000);
-
-
-        swal({
-            title: "{{__('front.success_update_review')}}",
-            type: "success",
-            timer: 2000,
-        });
-
-
-    },
-    error: function(getError) {
-        if (getError.status == 422) {
-
-            var arr = Object.values(getError.responseJSON.errors);
-            myform.find(".display-errors").append('<p>' + arr[0] + '</p>');
-            myform.find(".display-errors").removeClass('d-none');
-
-        }
-
-    }
-});
-
-});
-
-   //------modal form add review------------------
-
-        $(document).on('submit','#id_new_comment_form',function(e){
-
-
-            e.preventDefault();
-            var myform = $(this);
-            var url = $(this).attr('action');
-            var data = $(this).serialize();
-
-            $.ajax({
-                url: url,
-                method: 'post',
-                data: data,
-                beforeSend: function() {
-
-                    myform.find(".display-errors").empty();
-                    myform.find(".display-errors").addClass('d-none');
-
-                },
-                success: function(success) {
-
-                    $('#new_comment_form').modal('hide');
-
-                   //set timeout because the modal to fix background  e..e.
-                    setTimeout(function(){
-                         $('#new_comment_form').remove();
-                         $('body').append(success.append_modal);
-                        }, 1000);
-
-
-                    swal({
-                        title: "{{__('front.success_add_review')}}",
-                        type: "success",
-                        timer: 2000,
-                    });
-
-
-                },
-                error: function(getError) {
-                    if (getError.status == 422) {
-
-                        var arr = Object.values(getError.responseJSON.errors);
-                        myform.find(".display-errors").append('<p>' + arr[0] + '</p>');
-                        myform.find(".display-errors").removeClass('d-none');
-
-                    }
-
-                }
-            });
-
-        });
-        // ---------------------------------------------------------
-        //------------------ add product to cart--------------------
-
-        $(document).on('submit', '#form-add-to-cart', function(e) {
-            e.preventDefault();
-             var url = $(this).attr('action');
-             var quantity = $(this).find('input[name="quantity"]').val();
-
-
-
-
-
-            $.ajax({
-                method: 'post',
-                url,
-                data:{'quantity' : quantity},
-                success: function(response) {
-
-                    if (response.cart_products_count && parseInt(response.cart_products_count) > 0) {
-                        $(".cart-products-count").text(response.cart_products_count);
-
-                    }
-
-
-                    swal({
-                        title: "{{ __('front.success_add_product') }}",
-                        type: "success",
-                        timer: 2000,
-                    });
-                    //---- fetch get count products to change icon cart add total products count
-                },
-                error: function(error) {
-                    // console.log(error);
-                }
-            });
-
-        });
-
-    </script>
+@include('front.product._scripts',$product)
 
 
 

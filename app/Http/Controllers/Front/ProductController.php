@@ -38,10 +38,18 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $user_product_review = ProductReview::where('product_id',$product->id)->where('user_id',user()->id)->first();
+        $user_product_review = null;
+        if (user()) {
+            $user_product_review = ProductReview::where('product_id', $product->id)->where('user_id', user()->id)->first();
+        }
+
+         $calculate_reviews = ProductReview::select(
+            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("COUNT(id) as total_rating"),
+            )->where('product_id',$product->id)->first();
 
 
 
-        return view('front.product.index', compact(['product','user_product_review']));
+         return view('front.product.index', compact(['product', 'user_product_review','calculate_reviews']));
     }
 }

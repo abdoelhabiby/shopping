@@ -32,176 +32,7 @@
                                     @foreach ($products_best_sellers as $key => $product)
 
 
-                                        <div class="product-miniature js-product-miniature item-one first_item"
-                                            data-id-product="{{ $product->id }}"
-                                            data-id-product-attribute="{{ $product->attribute->id }}" itemscope=""
-                                            itemtype="http://schema.org/Product">
-
-
-
-                                            <div class="thumbnail-container">
-
-
-
-                                                <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}"
-                                                    class="thumbnail product-thumbnail {{ $product->images->count() > 1 ? 'two-image' : '' }}">
-
-
-
-                                                    {{-- ------------
-                                                    --}}
-
-                                                    @if ($product->images->count() > 0)
-                                                        @foreach ($product->images as $index => $image)
-
-                                                            @if ($index == 0 && fileExist($image->name))
-                                                                <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt=""
-                                                                    title="{{ $product->name }}" width="600" height="600">
-                                                            @elseif($index == 1 && fileExist($image->name))
-
-                                                                <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}" alt=""
-                                                                    title="{{ $product->name }}" width="600" height="600">
-                                                            @else
-                                                                @break
-                                                            @endif
-                                                        @endforeach
-
-                                                    @else
-
-                                                        <img class="img-fluid image-cover"
-                                                            src="{{ asset('/images/noImage.jpg') }}" alt="" width="600"
-                                                            height="600">
-
-                                                    @endif
-                                                    {{-- ------------
-                                                    --}}
-
-
-
-                                                </a>
-
-
-                                                {{-- check if has offer
-                                                --}}
-
-                                                @if ($product->attribute->hasOffer)
-                                                    <div class="product-flags discount">@Lang('front.offer')
-                                                    </div>
-                                                @endif
-
-
-                                            </div>
-
-                                            <div class="product-description">
-
-                                                <div class="product-groups">
-
-
-
-                                                    <div class="category-title">
-                                                        <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">product
-                                                            name</a>
-                                                    </div>
-
-                                                    <div class="product-comments">
-                                                        <div class="star_content">
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                        </div>
-                                                        <span>0 review</span>
-                                                    </div>
-                                                    <p class="seller_name">
-                                                        <a title="View seller profile"
-                                                            href=">
-                                                            <i class="fa fa-user"></i>
-                                                            {{ $product->vendor->name }}
-                                                        </a>
-                                                    </p>
-
-
-                                                    <div class="product-title" itemprop="name"><a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">
-                                                            {{ $product->name }}
-                                                        </a></div>
-
-                                                    <div class="product-group-price">
-
-                                                        <div class="product-price-and-shipping">
-
-                                                            @if ($product->attribute->hasOffer)
-
-                                                                <span itemprop="price"
-                                                                    class="price">{{ $product->attribute->price_offer }}
-                                                                    @lang('front.egp')</span>
-
-                                                                <span class="regular-price">{{ $product->attribute->price }}
-                                                                    @lang('front.egp')</span>
-                                                            @else
-
-                                                                <span itemprop="price"
-                                                                    class="price">{{ $product->attribute->price }}
-                                                                    @lang('front.egp')</span>
-
-                                                            @endif
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="product-buttons d-flex justify-content-center">
-
-                                                    @if ($product->attribute->qty > 0)
-                                                        <form action="" method="post" class="formAddToCart">
-                                                            @csrf
-                                                            <a class="add-to-cart" href="#"
-                                                                data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
-                                                                <i class="novicon-cart"></i>
-                                                                <span>Add to cart</span>
-                                                            </a>
-                                                        </form>
-
-                                                    @endif
-
-
-                                                    {{-- --------add to wish list --}}
-
-                                                    @auth()
-                                                    <a class="addToWishlist add_to_wislist" href="{{route('mywishlist.store',[$product->slug])}}">
-                                                        <i class="fa fa-heart"></i>
-                                                        <span>Add to Wishlist</span>
-                                                    </a>
-                                                    @else
-
-                                                    <a class="addToWishlist " href="{{route('login')}}">
-                                                        <i class="fa fa-heart"></i>
-                                                        <span>Add to Wishlist</span>
-                                                    </a>
-
-
-                                                    @endauth
-
-
-
-                                                    {{-- show details
-                                                    --}}
-
-                                                    <a href="#" class="quick-view hidden-sm-down"
-                                                        data-product-id="{{ $product->id }}"
-                                                        data-url="{{ route('get-product-details-modal', [$product->slug, $product->attribute->id]) }}">
-                                                        <i class="fa fa-search"></i><span> Quick view</span>
-                                                    </a>
-
-
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        @include('front.includes.section_product',$product)
 
                                     @endforeach
 
@@ -234,6 +65,7 @@
                         @lang('front.trending_now')
                     </h2>
                     <div class="block_content">
+
                         <div id="productlist72625769" class="product_list grid owl-carousel owl-theme multi-row"
                             data-autoplay="false" data-autoplaytimeout="6000" data-loop="false" data-margin="0"
                             data-dots="false" data-nav="true" data-items="1" data-items_large="3" data-items_tablet="2"
@@ -254,7 +86,7 @@
                                         <div class="col-12 col-w37 no-padding">
                                             <div class="thumbnail-container">
 
-                                                <a href="smartphone-tablet/1-40-hummingbird-printed-t-shirt.html#/1-size-s/6-color-taupe"
+                                                <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}"
                                                     class="thumbnail product-thumbnail {{ hasTwoImage($product->images->count()) }}">
 
 
@@ -306,14 +138,14 @@
 
 
                                                     <div class="product-comments">
-                                                        <div class="star_content">
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                            <div class="star"></div>
-                                                        </div>
-                                                        <span>0 review</span>
+
+                                                        {{-- --- helper function tooo append
+                                                        stars --}}
+
+                                                        {{ hundelProductReviewsStars($product->reviews->first()) }}
+
+
+
                                                     </div>
                                                     <p class="seller_name">
                                                         <a title="View seller profile"
@@ -325,7 +157,7 @@
 
 
                                                     <div class="product-title" itemprop="name"><a
-                                                            href="smartphone-tablet/2-60-brown-bear-printed-sweater.html#/1-size-s/11-color-black">
+                                                            href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">
                                                             {{ $product->name }}
                                                         </a></div>
 
