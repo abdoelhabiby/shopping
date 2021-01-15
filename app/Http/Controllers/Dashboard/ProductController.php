@@ -20,11 +20,13 @@ class ProductController extends Controller
     protected $model = 'products';
     public $default_paginate = 10;
 
-    public $search_by = [
-        '1' => 'products',
-        '2' => 'categories',
-        '3' => 'brand',
-        '4' => 'tags'
+
+
+    protected $search_by = [
+        'products',
+        'category',
+        'brand',
+        'tag'
     ];
 
 
@@ -38,47 +40,55 @@ class ProductController extends Controller
 
 
         $search_by = $this->search_by;
-        $sh = $request->sh ?? false;
-        $sby = $request->sby ?? false;
 
-        //-------------------filter serch by category or tag or brand-------------------------
-        if ($sby && $sh && array_key_exists($sby, $search_by) && $sby != 1) {
+        $products = $request->products;
+        $category = $request->category;
+        $brand = $request->brand;
+        $tag = $request->tag;
 
-            $products = Product::whereHas($search_by[$sby], function ($query) use ($sh) {
-                $query->whereTranslationLike('name', '%' . $sh . '%')
-                    ->orWhere('slug', 'like', '%' . $sh . '%');
-            })->with([
-                'categories',
-                'tags',
-                'brand'
-            ])->orderBy('id', 'desc')->paginate($this->default_paginate);
-
-            return view($this->view_model . '.index', compact(['products', 'search_by']));
-        }
-
-        //-------------------filter serch by product name-------------------------
-
-        if ($sby && $sh && array_key_exists($sby, $search_by) && $sby == 1) {
-
-            $products = Product::with([
-                'categories',
-                'tags',
-                'brand'
-            ])
-                ->whereTranslationLike('name', '%' . $sh . '%')
-                ->orWhere('slug', 'like', '%' . $sh . '%')
-                ->orderBy('id', 'desc')->paginate($this->default_paginate);
-
-            return view($this->view_model . '.index', compact(['products', 'search_by']));
-        }
-
-        //----------------------index products-------------------------
         $products = Product::with([
             'categories',
             'tags',
             'brand'
-        ])->orderBy('id', 'desc')->paginate($this->default_paginate);
+        ])
+            ->when($category, function ($query, $category) {
+
+                return $query->whereHas('categories', function ($query) use ($category) {
+                    return $query->whereTranslationLike('name', '%' . $category . '%')
+                        ->orWhere('slug', 'like', '%' . $category . '%');
+                });
+            })
+             ->when($brand, function ($query, $brand) {
+
+                return $query->whereHas('brand', function ($query) use ($brand) {
+                    return $query->whereTranslationLike('name', '%' . $brand . '%')
+                        ->orWhere('slug', 'like', '%' . $brand . '%');
+                });
+            })
+             ->when($tag, function ($query, $tag) {
+
+                return $query->whereHas('tags', function ($query) use ($tag) {
+                    return $query->whereTranslationLike('name', '%' . $tag . '%')
+                        ->orWhere('slug', 'like', '%' . $tag . '%');
+                });
+            })
+             ->when($products, function ($query, $products) {
+
+              return $query->whereTranslationLike('name', '%' . $products . '%')
+                ->orWhere('sku', 'like', '%' . $products . '%')
+                ->orWhere('slug', 'like', '%' . $products . '%');
+            })
+
+            ->orderBy('id', 'desc')->paginate($this->default_paginate);
+
+
         return view($this->view_model . '.index', compact(['products', 'search_by']));
+
+
+
+
+
+
     }
 
     /**

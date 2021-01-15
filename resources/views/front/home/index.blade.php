@@ -5,7 +5,7 @@
     @isset($slider_images)
 
         @if ($slider_images->count() > 0)
-            {{-- @include('front.includes.slider',$slider_images) --}}
+            @include('front.includes.slider',$slider_images)
 
         @endif
 
@@ -24,19 +24,19 @@
 
 
                     {{-- ------ section first banner --}}
-                    {{-- @include('front.home._first_banner') --}}
+                    @include('front.home._first_banner')
                     {{-- ------------------------- --}}
 
 
                     {{-- ------ section new and flash deals --}}
-                    {{-- @include('front.home._new_flash') --}}
+                    @include('front.home._new_flash')
                     {{-- ------------------------- --}}
 
 
 
                     {{-- ------ section seconde banner --}}
 
-                    {{-- @include('front.home._seconde_banner') --}}
+                    @include('front.home._seconde_banner')
 
 
                     {{-- ------------------------- --}}
@@ -45,7 +45,7 @@
                     {{-- ------ section trending now and best saller
                     --}}
 
-                    {{-- @include('front.home._trending_best_seller') --}}
+                    @include('front.home._trending_best_seller')
 
                     {{-- ------------------------- --}}
 
