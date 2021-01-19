@@ -137,7 +137,9 @@
 
                                                                 <span>Review: </span>
                                                                 <div class="star_content clearfix">
-                                                                    @php
+
+                                                                    {{hundelProductReviewsStars($calculate_reviews->stars)}}
+                                                                    {{-- @php
                                                                         $stars = (int) $calculate_reviews->stars;
                                                                             for($i=0;$i < $stars;$i++){
                                                                                 echo '<div class="star star_on"></div>';
@@ -150,7 +152,7 @@
                                                                                 }
 
                                                                              }
-                                                                    @endphp
+                                                                    @endphp --}}
 
                                                                 </div>
                                                             </div>
@@ -352,6 +354,10 @@
                                                         <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{$product->attribute->qty}}"
                                                         style="min-width: 130px; border-radius: 23px;">
 
+                                                        <span class="text-warning " style=" display: flex; justify-content: flex-start;">
+                                                            {{$product->attribute->qty}} @lang('front.count_in_stock') !
+                                                        </span>
+
                                                     </div>
                                                 </div>
 
@@ -502,7 +508,8 @@
 
 
                 @include('front.product.product-detail-middle',$product)
-                @include('front.product.product-detail-bottom',$product)
+
+                {{-- @include('front.product.product-detail-bottom',$product) --}}
 
                 @include('front.product._product_images_modal',$product)
 

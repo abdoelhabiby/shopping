@@ -12,6 +12,7 @@ use App\DataTables\ProductDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
 use App\Http\Requests\Dashboard\ProductRequest;
+use Illuminate\Database\Query\Builder;
 
 class ProductController extends Controller
 {
@@ -28,6 +29,7 @@ class ProductController extends Controller
         'brand',
         'tag'
     ];
+
 
 
     /**
@@ -51,11 +53,12 @@ class ProductController extends Controller
             'tags',
             'brand'
         ])
-            ->when($category, function ($query, $category) {
+            ->when($category, function ( $query, $category) {
 
-                return $query->whereHas('categories', function ($query) use ($category) {
+                return $query->whereHas('categories', function ( $query) use ($category) {
                     return $query->whereTranslationLike('name', '%' . $category . '%')
                         ->orWhere('slug', 'like', '%' . $category . '%');
+
                 });
             })
              ->when($brand, function ($query, $brand) {

@@ -7,16 +7,15 @@ use App\Cart\Cart;
 
 //--------------hundelProductReviewsStars------------
 
-function hundelProductReviewsStars($product_reviews)
+//-----------return html div stars
+
+function hundelProductReviewsStars($stars)
 {
 
-    $stars =  $product_reviews->stars ?? 0;
-    $stars = (int) $stars;
-    $total_rating = $product_reviews->total_rating ?? 0;
+    $stars =  $stars ?? 0;
+    // $stars = (int) $stars;
 
     echo '<div class="star_content">';
-
-    $product_reviews = $product_reviews;
 
 
     for ($i = 0; $i < $stars; $i++) {
@@ -32,7 +31,7 @@ function hundelProductReviewsStars($product_reviews)
 
     echo '</div>';
 
-    echo "<span> $total_rating  review</span>";
+    // echo "<span> $total_rating  review</span>";
 }
 
 

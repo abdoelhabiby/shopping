@@ -93,7 +93,11 @@
                                                                     {{-- --- helper function
                                                                     tooo append
                                                                     stars --}}
-                                                                    {{ hundelProductReviewsStars($product->reviews->first()) }}
+                                                                    @php
+                                                                    $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+                                                                    echo hundelProductReviewsStars($stars);
+                                                                @endphp
+
 
                                                                 </div>
                                                                 <p class="seller_name">

@@ -14,15 +14,15 @@
             <div class="breadcrumb" style="background-color: #eee; border-radius: 25px;">
 
                 <ol itemscope="" itemtype="">
-                    <li itemprop="itemListElement" itemscope="" >
-                        <a itemprop="item" href="{{route('front.home')}}">
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="{{ route('front.home') }}">
                             <span itemprop="name">
                                 @lang('front.home')
                             </span>
                         </a>
                         <meta itemprop="position" content="1">
                     </li>
-                    <li itemprop="itemListElement" itemscope="" >
+                    <li itemprop="itemListElement" itemscope="">
                         <a itemprop="item" href="" class="active ">
                             <span itemprop="name">@lang('front.mywishlist')</span>
                         </a>
@@ -79,6 +79,8 @@
                                                             @foreach ($wishlist_product as $key => $product)
 
 
+
+
                                                                 <div class="product-miniature js-product-miniature item-one first_item"
                                                                     data-id-product="{{ $product->id }}"
                                                                     data-id-product-attribute="{{ $product->attribute->id }}"
@@ -90,7 +92,7 @@
 
 
 
-                                                                        <a href=""
+                                                                        <a href="{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}"
                                                                             class="thumbnail product-thumbnail {{ $product->images->count() > 1 ? 'two-image' : '' }}">
 
 
@@ -158,14 +160,15 @@
                                                                             </div>
 
                                                                             <div class="product-comments">
-                                                                                <div class="star_content">
-                                                                                    <div class="star"></div>
-                                                                                    <div class="star"></div>
-                                                                                    <div class="star"></div>
-                                                                                    <div class="star"></div>
-                                                                                    <div class="star"></div>
-                                                                                </div>
-                                                                                <span>0 review</span>
+
+                                                                                {{-- --- helper
+                                                                                function tooo append stars
+                                                                                --}}
+                                                                                @php
+                                                                                $stars = $product->reviews->first() ?
+                                                                                $product->reviews->first()->stars : 0;
+                                                                                echo hundelProductReviewsStars($stars);
+                                                                                @endphp
                                                                             </div>
                                                                             <p class="seller_name">
                                                                                 <a title="View seller profile"
@@ -177,7 +180,7 @@
 
 
                                                                             <div class="product-title" itemprop="name"><a
-                                                                                    href="">
+                                                                                    href="{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}">
                                                                                     {{ $product->name }}
                                                                                 </a></div>
 
@@ -254,6 +257,8 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+
 
 
                                                             @endforeach

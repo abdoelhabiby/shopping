@@ -36,7 +36,8 @@
     function appendFetchReviews(stars, total_rating) {
 
         var rating_stars = '';
-        var stars = parseInt(stars);
+        var stars = stars;
+        // var stars = parseInt(stars);
         for (i = 0; i < stars; i++) {
             rating_stars += '<div class="star star_on"></div>';
         }
@@ -107,10 +108,9 @@
 
                         var calculate_reviews = response.calculate_reviews;
 
-                        if (calculate_reviews.stars && calculate_reviews.total_rating) {
                             appendFetchReviews(calculate_reviews.stars, calculate_reviews
                                 .total_rating);
-                        }
+
 
                         //----------------------------add new review---------------
                         $('#new_comment_form').modal('hide');

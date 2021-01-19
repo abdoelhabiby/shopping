@@ -38,6 +38,13 @@ class MywishlistController extends Controller
                             "start_offer_at",
                             "end_offer_at",
                         ])->where('is_active', true);
+                    },
+                    'reviews' => function ($rev) {
+                        return $rev->select(
+                            'product_id',
+                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+                            \DB::raw("COUNT(product_id) as total_rating"),
+                        )->groupBy('product_id');
                     }
 
                 ]

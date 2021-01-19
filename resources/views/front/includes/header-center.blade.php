@@ -15,7 +15,7 @@
                     <div class="content-data-contact">
                         <div class="support">Call customer services :</div>
                         <div class="phone-support">
-                            1234 567 899
+                            01015357722
                         </div>
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                         <div class="blockcart cart-preview active" >
                             <div class="header-cart">
                                 <div class="cart-left">
-                                    <div class="shopping-cart">
-                                        <a href="#">
+                                    <div class="shopping-cart" onclick="window.location='{{route('cart.index')}}'">
+                                        <a href="#" >
                                             <i class="zmdi zmdi-shopping-cart"></i>
 
                                         </a>

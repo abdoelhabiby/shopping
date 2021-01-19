@@ -39,6 +39,7 @@ Route::group(
             Route::get('/', 'HomeController@index')->name('front.home');
 
             //-------------------routes cart-----------------
+            Route::get('cart', 'CartController@index')->name('cart.index');
             Route::post('cart/{product_slug}/{product_attribute_id}', 'CartController@store')->name('cart.add');
 
             //---------------get modal show product details by ajax--------------
@@ -47,8 +48,14 @@ Route::group(
 
             //-------------------------------------------------------------
             //----------------------------product--------------------------
-            Route::get('p/{product_slug}/{product_attribute_id}', 'ProductController@show')->name('front.prouct.show');
+            Route::get('product/{product_slug}/{product_attribute_id}', 'ProductController@show')->name('front.prouct.show');
             //-------------------------------------------------------------
+
+
+            //-----------------------see all product reviews-------------------------------
+
+            Route::get('product-reviews/{product_slug}', 'ProductReviewController@index')->name('product.reviews.index');
+
 
             //-------------------------------------------------------------
 
@@ -88,7 +95,9 @@ Route::group(
         Route::get('test', function () {
 
 
-            return view('front.test');
+            return "test";
+
+
         });
 
 

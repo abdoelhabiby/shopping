@@ -50,5 +50,10 @@ return [
       'are_you_sure' => 'تأكيد الحذف ؟',
       'yes_delete' => 'احذف يا خال,!',
       'cancel' => 'الغاء',
+      'count_in_stock' => 'قطع متوفره ',
+      'product_reviews' => 'تقييمات المنتج',
+      'evaluation' => 'تقيم',
+      'evaluations' => 'التقييمات',
+
 
     ];

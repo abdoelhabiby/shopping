@@ -80,7 +80,11 @@
 
                                                         {{-- --- helper function tooo append
                                                         stars --}}
-                                                        {{ hundelProductReviewsStars($product->reviews->first()) }}
+                                                        @php
+                                                                    $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+                                                                    echo hundelProductReviewsStars($stars);
+                                                                @endphp
+
 
                                                     </div>
                                                     <p class="seller_name">
@@ -189,7 +193,7 @@
             @if ($new_poducts->count() > 0)
 
 
-                <div class="nov-productlist  productlist-rows     col-xl-8 col-lg-8 col-md-8 col-xs-12 col-md-12">
+                <div class="nov-productlist  productlist-rows   {{!$products_offer->count() > 0 ? 'col-xl-12 col-lg-12 col-md-12' : 'col-xl-8 col-lg-8 col-md-8'}}    col-xs-12 col-md-12">
                     <div class="block block-product clearfix">
                         <h2 class="title_block">
                             @lang('front.new_products')
@@ -261,7 +265,13 @@
                                                                 {{-- --- helper function tooo
                                                                 append
                                                                 stars --}}
-                                                                {{ hundelProductReviewsStars($product->reviews->first()) }}
+
+                                                                @php
+                                                                    $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+                                                                    echo hundelProductReviewsStars($stars);
+                                                                @endphp
+
+
 
                                                             </div>
                                                             <p class="seller_name">

@@ -37,7 +37,8 @@ class Product extends Model
     //------------------get brand relation-----------
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id', 'id')->withDefault();
+        return $this->belongsTo(Brand::class, 'brand_id', 'id');
+        // return $this->belongsTo(Brand::class, 'brand_id', 'id')->withDefault();
     }
 
     //-------------get Product owner -----------------

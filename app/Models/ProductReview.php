@@ -21,6 +21,7 @@ class ProductReview extends Model
         'created_at' => 'datetime:Y-m-d h:i:s'
     ];
 
+    protected $hidden = ['updated_at'];
 
 
     public function user()

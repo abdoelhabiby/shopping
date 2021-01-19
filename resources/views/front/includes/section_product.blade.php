@@ -76,7 +76,11 @@ itemtype="http://schema.org/Product">
         <div class="product-comments">
 
             {{-- --- helper function tooo append stars --}}
-            {{hundelProductReviewsStars($product->reviews->first())}}
+            @php
+            $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+            echo hundelProductReviewsStars($stars);
+        @endphp
+
 
 
         </div>

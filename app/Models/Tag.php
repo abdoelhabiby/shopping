@@ -11,6 +11,7 @@ class Tag extends Model
     use Translatable,GlobalMethodUesdInModels;
 
     protected $with = ['translations'];
+    protected $hidden = ['pivot','translations'];
 
    protected $fillable = [
         'slug',
