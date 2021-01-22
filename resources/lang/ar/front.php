@@ -54,6 +54,13 @@ return [
       'product_reviews' => 'تقييمات المنتج',
       'evaluation' => 'تقيم',
       'evaluations' => 'التقييمات',
+      'total' => 'الاجمالي',
+      'count_products_in_your_cart' => 'منتجات في سله الشراء',
+      'total_price' => 'اجمالي السعر',
+      'total_products_price' => 'إجمالي المنتجات',
+      'cart' => 'سلة الشراء',
+      'continue_in_shopping' => 'ألاستمرار في التسوق',
+
 
 
     ];

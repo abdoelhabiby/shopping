@@ -156,7 +156,7 @@
                         type: "success",
                         timer: 2000,
                     });
-                    //---- fetch get count products to change icon cart add total products count
+
                 },
                 error: function(error) {
                     // console.log(error);

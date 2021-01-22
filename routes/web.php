@@ -20,6 +20,8 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
+
+{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}
 |
 */
 
@@ -41,6 +43,8 @@ Route::group(
             //-------------------routes cart-----------------
             Route::get('cart', 'CartController@index')->name('cart.index');
             Route::post('cart/{product_slug}/{product_attribute_id}', 'CartController@store')->name('cart.add');
+            Route::put('cart/{product_slug}/{product_attribute_id}', 'CartController@update')->name('cart.update');
+            Route::delete('cart/{product_slug}/{product_attribute_id}', 'CartController@destroy')->name('cart.destroy');
 
             //---------------get modal show product details by ajax--------------
 

@@ -73,7 +73,7 @@
                                                     {{ $review->user->name }}
                                                 </div>
                                                 <div class="date-comment">
-                                                    {{ $review->created_at->format('Y/m/d') }}
+                                                    {{$review->created_at ? $review->created_at->format('Y/m/d') : ''}}
                                                 </div>
                                             </div>
                                         </div>

@@ -4,6 +4,12 @@ use App\Cart\Cart;
 
 
 
+//-------------return default no image----------
+
+function getLinkImageNoImage(){
+   echo asset('/images/noImage.jpg');
+}
+
 
 //--------------hundelProductReviewsStars------------
 

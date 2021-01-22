@@ -13,6 +13,10 @@ class Product extends Model
 
     use Translatable, SoftDeletes, GlobalMethodUesdInModels;
 
+    protected $translatedAttributes = ['name', 'description'];
+    protected $hidden = ['pivot','translations'];
+
+
     protected $fillable = [
         "sku",
         "slug",
@@ -24,8 +28,7 @@ class Product extends Model
         "vendor_id",
     ];
 
-    protected $translatedAttributes = ['name', 'description'];
-    protected $hidden = ['pivot', 'translations'];
+
 
 
     protected $casts = [

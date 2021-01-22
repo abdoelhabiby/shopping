@@ -8,8 +8,7 @@ class Cart
 {
     public $items = [];
 
-    private $total_price;
-    private $total_quantity;
+
 
     public function __construct($cart = null)
     {
@@ -25,16 +24,16 @@ class Cart
 
     //------------------add items to cart----------------------
 
-
-    public function add($product,int $quantity = 1)
+    // ---------------------------------------------------
+    public function add($product)
     {
 
         $item_key_name = $product->sku . '_' . $product->attribute->sku;
 
         if (array_key_exists($item_key_name, $this->items)) {
 
-            if ($this->items[$item_key_name]['quantity'] + $quantity <= $product->attribute->qty) {
-                $this->items[$item_key_name]['quantity'] += $quantity;
+            if ($this->items[$item_key_name]['quantity'] + 1 <= $product->attribute->qty) {
+                $this->items[$item_key_name]['quantity'] += 1;
             }
 
             // $this->items[$item_key_name]['quantity'] += 1;
@@ -42,17 +41,67 @@ class Cart
             return true;
         }
 
-        $check_quantity = $quantity <= $product->attribute->qty ? $quantity : 1;
+        // $check_quantity = $quantity <= $product->attribute->qty ? $quantity : 1;
 
         $this->items[$item_key_name] = [
             'product_sku' =>  $product->sku,
             'attribute_id' =>  $product->attribute->id,
-            'quantity' => $check_quantity
+            'quantity' => 1
         ];
 
 
         return true;
     } //end class add item
+    // ---------------------------------------------------
+    // ----------------update ----------------------------
+
+    public function update($product, $quantity)
+    {
+
+
+
+        $items =  $this->items;
+        $item_key_name = $product->sku . '_' . $product->attribute->sku;
+
+        if (array_key_exists($item_key_name, $items)) {
+
+            $items[$item_key_name]['quantity'] = $quantity;
+
+            $this->items = $items;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // ---------------------------------------------------
+
+    // -----------------remove product from items-----------
+
+    public function delete($product)
+    {
+
+        $items =  $this->items;
+        $item_key_name = $product->sku . '_' . $product->attribute->sku;
+
+        if (array_key_exists($item_key_name, $items)) {
+
+            unset($items[$item_key_name]);
+
+            $this->items = $items;
+
+            return true;
+        }
+
+        return false;
+    }
+    // ---------------------------------------------------
+
+
+
+
     //-------------------get count products---------------
 
 
@@ -71,6 +120,10 @@ class Cart
 
         return $counts;
     }
+
+    //-----------------------get products--------------------
+
+
 
 
     //-------------------------------------------------
