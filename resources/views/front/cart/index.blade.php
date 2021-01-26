@@ -293,7 +293,7 @@
                             </div>
 
 
-                            <a class="label btn btn-primary" href="{{ route('front.home') }}">
+                            <a class="label btn btn-primary mt-45" href="{{ route('front.home') }}">
                                 @lang('front.continue_in_shopping')
                             </a>
 

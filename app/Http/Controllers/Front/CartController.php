@@ -73,7 +73,8 @@ class CartController extends Controller
         }
 
 
-        $cart->add($product);
+        $quantity =  request()->quantity ??  null;
+        $cart->add($product,$quantity);
         session()->put('cart', $cart);
 
 
@@ -126,7 +127,7 @@ class CartController extends Controller
     }
 
     /**
-     *
+     * delete product from cart
      */
     public function destroy($product_slug, $product_attribute_id)
     {
@@ -184,6 +185,7 @@ class CartController extends Controller
 
         foreach ($items as $key => $item) {
             if (isset($item['product_sku']) && isset($item['attribute_id'])) {
+
                 $attribute_id = $item['attribute_id'];
                 $product = Product::active()->where('sku', $item['product_sku'])
                     ->whereHas('attribute', function ($query) use ($attribute_id) {
@@ -203,7 +205,7 @@ class CartController extends Controller
                                 "end_offer_at",
                             ]);
                         }, 'images' => function ($query) {
-                            return $query->select(['product_id', 'name'])->first();
+                            return $query->select(['product_id', 'name']);
                         }
                     ])
                     ->select([
@@ -219,7 +221,8 @@ class CartController extends Controller
                     $products[] = $product;
                 }
             }
-        }
+
+        } // end forach
 
         return $products;
     }

@@ -25,28 +25,58 @@ class Cart
     //------------------add items to cart----------------------
 
     // ---------------------------------------------------
-    public function add($product)
+    public function add($product, $quantity = null)
     {
+        $add_with_quantity = null;
+
+        if ($quantity && ((int)$quantity) > 0) {
+            $add_with_quantity = (int) $quantity;
+        }
+
 
         $item_key_name = $product->sku . '_' . $product->attribute->sku;
 
+        //-----------check if product found in cart-------------
+
         if (array_key_exists($item_key_name, $this->items)) {
 
-            if ($this->items[$item_key_name]['quantity'] + 1 <= $product->attribute->qty) {
-                $this->items[$item_key_name]['quantity'] += 1;
+            //--------------update the quantity-------------
+            $item = $this->items[$item_key_name];
+
+            if ($add_with_quantity) {
+
+
+                if ($add_with_quantity <= $product->attribute->qty) {
+                    $this->update($product, $add_with_quantity);
+                }
+
+                return true;
+
+            } else {
+                return response('err',404);
+                if ($item['quantity'] + 1 <= $product->attribute->qty) {
+                    $item['quantity'] += 1;
+                }
             }
 
-            // $this->items[$item_key_name]['quantity'] += 1;
-
             return true;
-        }
 
-        // $check_quantity = $quantity <= $product->attribute->qty ? $quantity : 1;
+        }
+        //----------------------------------------------------
+
+        $check_quantity = 1;
+
+        if ($add_with_quantity) {
+
+            if ($add_with_quantity <= $product->attribute->qty) {
+                $check_quantity = $add_with_quantity;
+            }
+        }
 
         $this->items[$item_key_name] = [
             'product_sku' =>  $product->sku,
             'attribute_id' =>  $product->attribute->id,
-            'quantity' => 1
+            'quantity' => $check_quantity
         ];
 
 
