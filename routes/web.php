@@ -99,7 +99,7 @@ Route::group(
         Route::get('test', function () {
 
 
-            return "test";
+            return 0 === null ? 'yse' : 'not';
 
 
         });

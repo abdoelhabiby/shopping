@@ -42,6 +42,8 @@
 @section('content')
 
     <div class="container no-index">
+        @include('front.includes.alerts.success')
+        @include('front.includes.alerts.errors')
         <div class="row">
             <div id="content-wrapper" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 

@@ -24,17 +24,31 @@ class Cart
 
     //------------------add items to cart----------------------
 
-    // ---------------------------------------------------
-    public function add($product, $quantity = null)
+
+    private function checkValidQuantity($product, $quantity)
     {
-        $add_with_quantity = null;
 
-        if ($quantity && ((int)$quantity) > 0) {
-            $add_with_quantity = (int) $quantity;
+        if ($quantity <= $product->attribute->qty && $quantity > 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
+
+    // ---------------------------------------------------
+    public function add($product, $quantity)
+    {
 
         $item_key_name = $product->sku . '_' . $product->attribute->sku;
+
+
+
+        $add_with_quantity = $quantity ?? null;
+        // $add_with_quantity = (int) $quantity;
+
+
+
 
         //-----------check if product found in cart-------------
 
@@ -44,44 +58,43 @@ class Cart
             $item = $this->items[$item_key_name];
 
             if ($add_with_quantity) {
-
-
-                if ($add_with_quantity <= $product->attribute->qty) {
-                    $this->update($product, $add_with_quantity);
-                }
-
-                return true;
-
-            } else {
-                return response('err',404);
-                if ($item['quantity'] + 1 <= $product->attribute->qty) {
-                    $item['quantity'] += 1;
-                }
+                $new_quantity = (int) $add_with_quantity;
+            }else{
+                $new_quantity = $item['quantity'] + 1;
             }
 
-            return true;
 
+           return $this->update($product, $new_quantity);
         }
+
         //----------------------------------------------------
 
-        $check_quantity = 1;
+        $real_quantity = 1;
 
         if ($add_with_quantity) {
+            $real_quantity = (int) $add_with_quantity;
+        }
 
-            if ($add_with_quantity <= $product->attribute->qty) {
-                $check_quantity = $add_with_quantity;
-            }
+        $check_valid_quantity = $this->checkValidQuantity($product, $real_quantity);
+
+        if(!$check_valid_quantity){
+            return false;
         }
 
         $this->items[$item_key_name] = [
+
             'product_sku' =>  $product->sku,
             'attribute_id' =>  $product->attribute->id,
-            'quantity' => $check_quantity
+            'quantity' => $real_quantity
+
         ];
 
 
         return true;
     } //end class add item
+
+    //---------------------------------------------------
+
     // ---------------------------------------------------
     // ----------------update ----------------------------
 
@@ -93,6 +106,12 @@ class Cart
         $items =  $this->items;
         $item_key_name = $product->sku . '_' . $product->attribute->sku;
 
+        $check_valid_quantity = $this->checkValidQuantity($product, $quantity);
+
+        if(!$check_valid_quantity){
+             return false;
+        }
+
         if (array_key_exists($item_key_name, $items)) {
 
             $items[$item_key_name]['quantity'] = $quantity;
@@ -103,6 +122,7 @@ class Cart
         }
 
         return false;
+
     }
 
 

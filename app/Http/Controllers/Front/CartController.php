@@ -48,6 +48,8 @@ class CartController extends Controller
             return $this->notfound();
         }
 
+
+
         $cart = $this->myCart();
 
         $product =  Product::active()->where('slug', $product_slug)
@@ -73,9 +75,13 @@ class CartController extends Controller
         }
 
 
-        $quantity =  request()->quantity ??  null;
-        $cart->add($product,$quantity);
-        session()->put('cart', $cart);
+        //check if add with quantity--
+
+         $quantity =  request()->quantity;
+
+          $cart->add($product,$quantity) ; // return true or false
+
+         session()->put('cart', $cart);
 
 
         return $this->returnResponseJsone('cart_products_count', $cart->getCountProducts());
@@ -100,7 +106,8 @@ class CartController extends Controller
 
         $product =  Product::active()->where('slug', $product_slug)
             ->whereHas('attribute', function ($attribute) use ($product_attribute_id, $quantity) {
-                return $attribute->where('id', $product_attribute_id)->where('is_active', true)->where('qty', '>=', $quantity);
+                return $attribute->where('id', $product_attribute_id)->where('is_active', true);
+                // return $attribute->where('id', $product_attribute_id)->where('is_active', true)->where('qty', '>=', $quantity);
             })
             ->with([
                 'attribute' => function ($attr) use ($product_attribute_id) {
@@ -118,7 +125,8 @@ class CartController extends Controller
 
 
         if (!$cart->update($product, $quantity)) {
-            abort(404);
+            return redirect()->route('cart.index')->with(['error' => 'input valid data']);
+
         }
 
         session()->put('cart', $cart);
