@@ -255,6 +255,8 @@
 
     </style>
 
+    @yield('style')
+
 </head>
 
 
@@ -274,6 +276,8 @@
 
             @include('front.includes.header-mobile')
             @include('front.includes.header-top')
+
+
             @include('front.includes.header-center')
             @include('front.includes.header-bottom')
         </header>

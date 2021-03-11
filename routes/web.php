@@ -50,18 +50,14 @@ Route::group(
 
             Route::post('product-details/{product_slug}/{product_attribute_id}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
 
-            //-------------------------------------------------------------
             //----------------------------product--------------------------
             Route::get('product/{product_slug}/{product_attribute_id}', 'ProductController@show')->name('front.prouct.show');
-            //-------------------------------------------------------------
 
 
             //-----------------------see all product reviews-------------------------------
 
             Route::get('product-reviews/{product_slug}', 'ProductReviewController@index')->name('product.reviews.index');
 
-
-            //-------------------------------------------------------------
 
             //-----------------------routes auth----------------------------
 
@@ -86,6 +82,13 @@ Route::group(
 
                 //-------------------end product reviews--------------------
 
+                //----------------------checkout----------------------
+
+                // Route::get('checkout/{amount}','CheckoutControler@index')->name('front.checkout.index');
+
+                Route::get('checkout','CheckoutControler@index')->name('front.checkout.index');
+                Route::post('charge','CheckoutControler@charge')->name('front.checkout.charge');
+
 
             });
             //-------------------------------------------------------
@@ -100,8 +103,6 @@ Route::group(
 
 
             return 0 === null ? 'yse' : 'not';
-
-
         });
 
 

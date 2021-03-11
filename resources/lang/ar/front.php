@@ -60,6 +60,9 @@ return [
       'total_products_price' => 'إجمالي المنتجات',
       'cart' => 'سلة الشراء',
       'continue_in_shopping' => 'ألاستمرار في التسوق',
+      'no_products_in_cart' => 'لم يتم اضافه منتجات للسله',
+      'checkout' => 'اتمام الطلب',
+      'details' => 'ألتفاصيل'
 
 
 

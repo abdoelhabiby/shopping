@@ -79,7 +79,7 @@
 
 
                                                             @php
-                                                            $image=$product->images->first()->name;
+                                                                $image = $product->images->first()->name;
                                                             @endphp
                                                             <img class="img-fluid"
                                                                 src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
@@ -130,8 +130,7 @@
                                                                 <div class="product-line-info">
                                                                     {{-- <span
                                                                         class="label-atrr">الحجم:</span>
-                                                                    <span class="value">ص</span>
-                                                                    --}}
+                                                                    <span class="value">ص</span> --}}
                                                                     <span class="value">{{ $product->attribute->name }}</span>
                                                                 </div>
                                                                 {{-- <div
@@ -151,66 +150,62 @@
                                                                                 <div class="qty ">
 
                                                                                     @php
-                                                                                    $user_selected
-                                                                                    =$product->user_select_quantity ?? 1;
-                                                                                    $check_quantity = $product->attribute->qty >
-                                                                                    0 ? 1 : 0;
-                                                                                    if($user_selected <= $product->
-                                                                                        attribute->qty){
-                                                                                        $check_quantity = $user_selected;
+                                                                                        $user_selected = $product->user_select_quantity ?? 1;
+                                                                                        $check_quantity = $product->attribute->qty > 0 ? 1 : 0;
+                                                                                        if ($user_selected <= $product->attribute->qty) {
+                                                                                            $check_quantity = $user_selected;
                                                                                         }
-                                                                                        @endphp
+                                                                                    @endphp
 
-                                                                                        @if ($product->attribute->qty > 0)
-                                                                                            <form
-                                                                                                action="{{ route('cart.update', [$product->slug, $product->attribute->id]) }}"
-                                                                                                method="post">
-                                                                                                @csrf
-                                                                                                @method('put')
-                                                                                                {{--
-                                                                                                <input type="number"
+                                                                                    @if ($product->attribute->qty > 0)
+                                                                                        <form
+                                                                                            action="{{ route('cart.update', [$product->slug, $product->attribute->id]) }}"
+                                                                                            method="post">
+                                                                                            @csrf
+                                                                                            @method('put')
+                                                                                            {{-- <input type="number"
                                                                                                     name="quantity"
                                                                                                     class="form-control"
                                                                                                     value="{{ $check_quantity }}"
                                                                                                     min="1"
                                                                                                     max="{{ $product->attribute->qty }}"
                                                                                                     style="min-width: 70px; border-radius: 23px;"
-                                                                                                    onchange="this.closest('form').submit()">
-                                                                                                --}}
+                                                                                                    onchange="this.closest('form').submit()"> --}}
 
-                                                                                                <select id=""
-                                                                                                    class="form-control"
-                                                                                                    name="quantity"
-                                                                                                    style="max-width:100px; border-radius: 23px;"
-                                                                                                    onchange="this.closest('form').submit()">
+                                                                                            <select id="" class="form-control"
+                                                                                                name="quantity"
+                                                                                                style="max-width:100px; border-radius: 23px;"
+                                                                                                onchange="this.closest('form').submit()">
 
-                                                                                                    @for ($i = 1; $i <= $product->attribute->qty; $i++)
-                                                                                                        <option value="{{ $i }}"
-                                                                                                            title="{{ $i }}" {{ $i == $check_quantity ? 'selected' : '' }}>
-                                                                                                            {{ $i }}
-                                                                                                        </option>
-                                                                                                    @endfor
-
-
-                                                                                                </select>
-                                                                                            </form>
+                                                                                                @for ($i = 1; $i <= $product->attribute->qty; $i++)
+                                                                                                    <option
+                                                                                                        value="{{ $i }}"
+                                                                                                        title="{{ $i }}"
+                                                                                                        {{ $i == $check_quantity ? 'selected' : '' }}>
+                                                                                                        {{ $i }}
+                                                                                                    </option>
+                                                                                                @endfor
 
 
-                                                                                            <span class="text-warning "
-                                                                                                style=" display: flex; justify-content: flex-start;">
-                                                                                                {{ $product->attribute->qty }}
-                                                                                                @lang('front.count_in_stock') !
-                                                                                            </span>
-
-                                                                                        @else
+                                                                                            </select>
+                                                                                        </form>
 
 
-                                                                                            <div class="label text-danger">
-                                                                                                @lang('front.unavailable')</div>
+                                                                                        <span class="text-warning "
+                                                                                            style=" display: flex; justify-content: flex-start;">
+                                                                                            {{ $product->attribute->qty }}
+                                                                                            @lang('front.count_in_stock') !
+                                                                                        </span>
+
+                                                                                    @else
+
+
+                                                                                        <div class="label text-danger">
+                                                                                            @lang('front.unavailable')</div>
 
 
 
-                                                                                        @endif
+                                                                                    @endif
 
 
 
@@ -218,20 +213,18 @@
                                                                                 </div>
 
                                                                             </div>
-                                                                            {{-- -----------------
-                                                                            --}}
+                                                                            {{-- ----------------- --}}
                                                                             @php
-                                                                            $real_price = 0;
+                                                                                $real_price = 0;
 
-                                                                            if ($product->attribute->hasOffer){
-                                                                            $real_price = $product->attribute->price_offer;
-                                                                            }else{
-                                                                            $real_price = $product->attribute->price;
-                                                                            }
+                                                                                if ($product->attribute->hasOffer) {
+                                                                                    $real_price = $product->attribute->price_offer;
+                                                                                } else {
+                                                                                    $real_price = $product->attribute->price;
+                                                                                }
 
                                                                             @endphp
-                                                                            {{-- --------------
-                                                                            --}}
+                                                                            {{-- -------------- --}}
                                                                             <div class="col-md-6 col-xs-6 price">
                                                                                 <div class="label">@lang('front.total'):</div>
                                                                                 <div class="product-price total">
@@ -275,7 +268,7 @@
                                     @else
                                         <div class="d-flex justify-content-center m-4">
 
-                                            add products ya prooo
+                                            @lang('front.no_products_in_cart')
 
                                         </div>
                                     @endif
@@ -365,14 +358,17 @@
 
 
 
-                                <div class="checkout cart-detailed-actions">
-                                    <div class="text-xs-center">
-                                        <a href="http://demo.bestprestashoptheme.com/savemart/ar/طلب شراء"
-                                            class="btn btn-primary">اتمام الطلب</a>
+                                @if ($total_products_count > 0 && $total_price > 0)
 
+                                    <div class="checkout cart-detailed-actions">
+                                        <div class="text-xs-center">
+                                            <a href="{{ route('front.checkout.index') }}" class="btn btn-primary">اتمام
+                                                الطلب</a>
+
+                                        </div>
                                     </div>
-                                </div>
 
+                                @endif
 
 
 

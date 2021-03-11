@@ -17,6 +17,8 @@
 
     <div id="main">
 
+
+
         <section id="content" class="page-home pagehome-three">
             <div class="container">
                 <div class="row">
@@ -121,7 +123,40 @@
 
 
 @section('scripts')
+
+@if (session()->has('success'))
+
     <script>
+        swal({
+            title: "{{ session('success') }}",
+            type: "success",
+            timer: 3000,
+        });
+
+    </script>
+
+@endif
+@if (session()->has('error'))
+
+    <script>
+        swal({
+            title: "{{ session('error') }}",
+            type: "error",
+            timer: 3000,
+        });
+
+    </script>
+
+@endif
+
+
+    <script>
+
+
+
+
+
+
 
 // mywishlist.store
 
@@ -172,9 +207,6 @@
 
             e.preventDefault();
 
-            // var product_miniature = $(this).closest('.product-miniature');
-            // var product_id = product_miniature.data('id-product');
-            // var product_attribute_id = product_miniature.data('id-product-attribute');
 
             var url = $(this).data('url');
 
