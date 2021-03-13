@@ -27,8 +27,31 @@ class CheckoutControler extends Controller
     }
 
 
+    private function checkCartNotEmpty()
+    {
+
+
+        $cart = $this->myCart(); // service class
+
+        $total_products_count = (int) $cart->getTotalProductsQuanityt();
+
+        $total_price =  (int) $cart->getTotalProductsPrice();
+
+        if ($total_products_count > 0 && $total_price > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function index()
     {
+
+        if (!$this->checkCartNotEmpty()) {
+
+            return redirect()->route('front.home');
+        }
+
 
         $cart = $this->myCart(); // service class
 
@@ -36,11 +59,7 @@ class CheckoutControler extends Controller
 
         $total_price =  $cart->getTotalProductsPrice();
 
-        if ($total_products_count > 0 && $total_price > 0){
-            return view('front.checkout.index', compact(['total_products_count', 'total_price']));
-        }
-
-        return redirect()->route('front.home');
+        return view('front.checkout.index', compact(['total_products_count', 'total_price']));
 
     }
 
@@ -51,15 +70,22 @@ class CheckoutControler extends Controller
     public function charge(Request $request)
     {
 
+        // return $request->all();
 
         try {
+
+            $cart = $this->myCart(); // service class
+
+            $total_products_count = (int) $cart->getTotalProductsQuanityt();
+
+            $total_price =  (int) $cart->getTotalProductsPrice();
 
 
             $description = "name : " . user()->name . " email : " . user()->email;
             $charge = Stripe::charges()->create([
                 'currency' => 'USD',
                 'source' => $request->stripeToken,
-                'amount'   => $request->amount,
+                'amount'   => $total_price,
                 'description' => $description
             ]);
 
@@ -84,8 +110,11 @@ class CheckoutControler extends Controller
 
             $error_message = "لقد حدث خطأ برجاء المحاوله مره اخر";
             return redirect()->route('front.checkout.index')->with(['error' => $error_message]);
-
         }
     }
+    //------------------------------------------------
+
+
+
     //------------------------------------------------
 }
