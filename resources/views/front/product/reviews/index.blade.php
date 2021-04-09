@@ -146,7 +146,7 @@
 
                                                     <div class="comment_details col-md-8">
                                                         <h4>{{ $review->title }}</h4>
-                                                        <p>{{ $review->review }}</p>
+                                                        <p> {!! nl2br($review->review) !!} </p>
 
                                                     </div>
 

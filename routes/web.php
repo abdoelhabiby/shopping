@@ -102,7 +102,10 @@ Route::group(
         Route::get('test', function () {
 
 
-            return 0 === null ? 'yse' : 'not';
+            $product = Product::with('attribute')->find(10);
+
+            return $product;
+
         });
 
 

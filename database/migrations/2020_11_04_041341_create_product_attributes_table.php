@@ -16,7 +16,7 @@ class CreateProductAttributesTable extends Migration
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('sku')->unique();
-            $table->integer('qty')->default(0);
+            $table->integer('qty')->default(0)->unsigned();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->boolean('is_active')->default(true);

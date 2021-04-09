@@ -127,6 +127,7 @@
 @if (session()->has('success'))
 
     <script>
+
         swal({
             title: "{{ session('success') }}",
             type: "success",
