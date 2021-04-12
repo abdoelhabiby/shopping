@@ -53,8 +53,7 @@
                             <div class="nov-row-wrap row">
 
 
-                                {{-- ----------------best sealere---------------------------------
-                                --}}
+                                {{-- ----------------best sealere--------------------------------- --}}
 
 
                                 @if ($wishlist_products->count() > 0)
@@ -97,8 +96,7 @@
 
 
 
-                                                                            {{-- ------------
-                                                                            --}}
+                                                                            {{-- ------------ --}}
 
                                                                             @if ($product->images->count() > 0)
                                                                                 @foreach ($product->images as $index => $image)
@@ -106,14 +104,16 @@
                                                                                     @if ($index == 0 && fileExist($image->name))
                                                                                         <img class="img-fluid image-cover"
                                                                                             src="{{ asset($image->name) }}"
-                                                                                            alt="" title="{{ $product->name }}"
+                                                                                            alt=""
+                                                                                            title="{{ $product->name }}"
                                                                                             width="600" height="600">
                                                                                     @elseif($index == 1 &&
                                                                                         fileExist($image->name))
 
                                                                                         <img class="img-fluid image-secondary"
                                                                                             src="{{ asset($image->name) }}"
-                                                                                            alt="" title="{{ $product->name }}"
+                                                                                            alt=""
+                                                                                            title="{{ $product->name }}"
                                                                                             width="600" height="600">
                                                                                     @else
                                                                                         @break
@@ -127,16 +127,14 @@
                                                                                     alt="" width="600" height="600">
 
                                                                             @endif
-                                                                            {{-- ------------
-                                                                            --}}
+                                                                            {{-- ------------ --}}
 
 
 
                                                                         </a>
 
 
-                                                                        {{-- check if has offer
-                                                                        --}}
+                                                                        {{-- check if has offer --}}
 
                                                                         @if ($product->attribute->hasOffer)
                                                                             <div class="product-flags discount">
@@ -162,12 +160,10 @@
                                                                             <div class="product-comments">
 
                                                                                 {{-- --- helper
-                                                                                function tooo append stars
-                                                                                --}}
+                                                                                function tooo append stars --}}
                                                                                 @php
-                                                                                $stars = $product->reviews->first() ?
-                                                                                $product->reviews->first()->stars : 0;
-                                                                                echo hundelProductReviewsStars($stars);
+                                                                                    $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+                                                                                    echo hundelProductReviewsStars($stars);
                                                                                 @endphp
                                                                             </div>
                                                                             <p class="seller_name">
@@ -237,7 +233,9 @@
 
                                                                             <form
                                                                                 action="{{ route('mywishlist.destroy', $product->id) }}"
-                                                                                method="post">
+                                                                                method="post"
+                                                                                class="remove-from-mywishlist"
+                                                                                >
                                                                                 @csrf
                                                                                 @method('delete')
                                                                                 <button type="submit"
@@ -290,8 +288,7 @@
 
 
 
-                                {{-- --------------------------------------------------------
-                                --}}
+                                {{-- -------------------------------------------------------- --}}
 
 
 
@@ -416,6 +413,37 @@
                     // console.log(error);
                 }
             });
+
+        });
+
+
+        //---------------------------------------------------
+
+        $(document).on('click', '.remove-from-mywishlist', function(e) {
+
+            e.preventDefault();
+
+            var form = $(this).closest('form');
+
+            swal({
+                title: "{{ __('front.are_you_sure') }}",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6B6F82',
+                cancelButtonText: "{{ __('front.cancel') }}",
+                confirmButtonText: "{{ __('front.yes_delete') }}"
+            }).then(function(result) {
+
+                if (result.value == true) {
+
+                    form.submit();
+
+                }
+
+            });
+
+
 
         });
 

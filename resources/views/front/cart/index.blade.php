@@ -425,11 +425,7 @@
 @section('scripts')
 
     <script>
-        // $(document).on('click', '.remove-from-cart', function(e) {
-        //     e.preventDefault();
 
-        //     alert('test');
-        // })
 
         $(document).on('click', '.remove-from-cart', function(e) {
 

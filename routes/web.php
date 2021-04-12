@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Mywishlist;
+use App\Models\Order;
 use App\Models\ProductAttribute;
 use App\Models\ProductReview;
 use Illuminate\Support\Facades\DB;
@@ -99,12 +100,27 @@ Route::group(
 
 
 
+
+
         Route::get('test', function () {
 
 
-            $product = Product::with('attribute')->find(10);
+            if (session()->has('cart')) {
 
-            return $product;
+                $cart = new Cart(session('cart'));
+            } else {
+                $cart = new Cart();
+            }
+
+
+
+                $total_products_count = (int) $cart->getTotalProductsQuanityt();
+
+                $total_price =  $cart->getTotalProductsPrice();
+
+                return view('front.test', compact(['total_products_count', 'total_price']));
+
+
 
         });
 

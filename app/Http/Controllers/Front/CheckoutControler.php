@@ -78,10 +78,7 @@ class CheckoutControler extends Controller
             DB::beginTransaction();
 
             $cart = $this->myCart(); // service class
-
             $products = $cart->getProducts();
-
-
             $total_price =  (int) $cart->getTotalProductsPrice();  //total amount
 
             // return $cart->getProducts();
@@ -99,7 +96,6 @@ class CheckoutControler extends Controller
             //---------check if the payment suces or not by check charge id is return
 
             if (!isset($charge['id'])) {
-
                 $error_message = "لقد حدث خطأ برجاء المحاوله مره اخر";
                 return redirect()->route('front.checkout.index')->with(['error' => $error_message]);
             }
@@ -113,15 +109,11 @@ class CheckoutControler extends Controller
                 'amount' => $total_price,
                 // 'note',
                 'created_at' => now(),
-
             ]);
-
-
 
 
             //---------------save order products---------
             $order_products = [];
-
 
             foreach ($products as $product) {
 
@@ -154,16 +146,16 @@ class CheckoutControler extends Controller
                     ];
 
 
-                    //---------increment the quantity-------------
+                    //---------decrement the quantity-------------
                     $product->attribute->decrement('qty', $check_quantity);
                 }
             } //---end of foreach
 
 
 
-            //--------save order products ------ in database----
-            OrderProduct::insert($order_products);
+            //--------save order products in database----
 
+            OrderProduct::insert($order_products);
 
             //forget the session
 
@@ -178,7 +170,7 @@ class CheckoutControler extends Controller
         } catch (\Throwable $th) {
 
             DB::rollback();
-            $error_message = "لقد حدث خطأ برجاء المحاوله مره اخر";
+            $error_message = "لقد حدث خطأ برجاء المحاوله مره أخري";
             return redirect()->route('front.checkout.index')->with(['error' => $error_message]);
         }
     }
