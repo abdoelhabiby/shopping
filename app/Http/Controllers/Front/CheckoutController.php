@@ -11,7 +11,7 @@ use App\Models\OrderProduct;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 
 
-class CheckoutControler extends Controller
+class CheckoutController extends Controller
 {
     //
 

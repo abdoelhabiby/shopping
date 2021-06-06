@@ -77,8 +77,4 @@ class HomeController extends Controller
         ];
         return view('front.home.index', compact($compacts));
     }
-
-
-
-
 }

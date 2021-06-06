@@ -29,7 +29,7 @@
                                                     <!-- ---- main categories-----------  -->
 
                                                     <li class="item  parent group">
-                                                        <a href="#" class="p-0 m-0" title="{{ $main_category->name }}">
+                                                        <a href="{{route('front.main_category',$main_category->slug)}}" class="p-0 m-0" title="{{ $main_category->name }}">
 
                                                             {{-- <i class="hasicon nov-icon"
                                                                 style=""></i> --}}
@@ -83,10 +83,14 @@
                                                                                         <ul class="">
                                                                                             @foreach ($subategory->chields as $subategory2)
 
-                                                                                                <li>
-                                                                                                    <a class="d-flex justify-content-start"
-                                                                                                        href="#">{{ $subategory2->name }}</a>
-                                                                                                </li>
+                                                                                                @if($subategory2->products->count() > 0)
+                                                                                                    <li>
+                                                                                                        <a class="d-flex justify-content-start"
+                                                                                                            href="#">{{ $subategory2->name }}</a>
+                                                                                                    </li>
+
+                                                                                                @endif
+
 
                                                                                             @endforeach
 

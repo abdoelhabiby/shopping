@@ -29,8 +29,10 @@ class FrontViewServiceProvider extends ServiceProvider
 
 
         $main_categories_home = Category::mainCategory()->with(['chields' => function($q){
-            return $q->select(['parent_id','slug','id'])->whereHas('chields');
-        }])->select(['slug','id'])->get();
+            return $q->select(['parent_id','slug','id'])->whereHas('chields',function($chield){
+                return $chield->whereHas('products');
+            });
+        }])->active()->select(['slug','id'])->get();
 
         view()->share('main_categories_home', $main_categories_home);
 

@@ -1,16 +1,10 @@
 <?php
 
 use App\Cart\Cart;
-use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Mywishlist;
-use App\Models\Order;
-use App\Models\ProductAttribute;
-use App\Models\ProductReview;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -27,9 +21,11 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 */
 
 
+
+
 Route::group(
     [
-        // 'prefix' => LaravelLocalization::setLocale(),
+        //  'prefix' => LaravelLocalization::setLocale(),
         //------for unit testing stop redirect set language------
         'prefix' => !App::runningUnitTests() ? LaravelLocalization::setLocale(null) : config('app.locale'),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
@@ -60,7 +56,7 @@ Route::group(
             Route::get('product-reviews/{product_slug}', 'ProductReviewController@index')->name('product.reviews.index');
 
 
-            //-----------------------routes auth----------------------------
+            //-----------------------routes with auth----------------------------
 
             Route::group(['middleware' => 'auth'], function () {
 
@@ -85,13 +81,18 @@ Route::group(
 
                 //----------------------checkout----------------------
 
-                // Route::get('checkout/{amount}','CheckoutControler@index')->name('front.checkout.index');
+                // Route::get('checkout/{amount}','CheckoutController@index')->name('front.checkout.index');
 
-                Route::get('checkout','CheckoutControler@index')->name('front.checkout.index');
-                Route::post('charge','CheckoutControler@charge')->name('front.checkout.charge');
+                Route::get('checkout','CheckoutController@index')->name('front.checkout.index');
+                Route::post('charge','CheckoutController@charge')->name('front.checkout.charge');
 
 
             });
+            //---------------------end routes with auth------------
+
+            //-----------------------start routes categories---------
+            Route::get('m/{category:slug}',"CategoryController@mainCategory")->name('front.main_category');
+            //-------------------------------------------------------
             //-------------------------------------------------------
             //-------------------------------------------------------
             //-------------------------------------------------------
@@ -104,21 +105,36 @@ Route::group(
 
         Route::get('test', function () {
 
+            // http://127.0.0.1:8000/ar/m/category-name
+            // get the main category
 
-            if (session()->has('cart')) {
+            //return $category =  Category::mainCategory()->where('slug','clothes')->firstOrFail();
 
-                $cart = new Cart(session('cart'));
-            } else {
-                $cart = new Cart();
-            }
+             // http://127.0.0.1:8000/ar/s/category-name
+             // get subcategory
+
+            // return $category =  Category::mainCategory()->where('slug','clothes')->firstOrFail();
+
+             $category =  Category::mainCategory()->where('slug','clothes')->firstOrFail();
+
+             $chields_id =  $category->chields()->pluck('id');
 
 
 
-                $total_products_count = (int) $cart->getTotalProductsQuanityt();
 
-                $total_price =  $cart->getTotalProductsPrice();
 
-                return view('front.test', compact(['total_products_count', 'total_price']));
+             //----------------get relation by custom join------
+                $products = DB::table('products')
+                ->join('product_categories',function($join) use ($chields_id){
+                   $join->on('products.id', '=', 'product_categories.product_id')
+                        ->whereIn('product_categories.category_id',$chields_id);
+                })
+                ->select('products.*','product_categories.category_id')
+                ->get();
+
+
+                 return $products;
+
 
 
 
