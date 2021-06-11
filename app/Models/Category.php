@@ -79,6 +79,12 @@ public function scopeActive($q)
         return $this->hasMany(self::class, 'parent_id', 'id');
     }
 
+    //----------------get sub gategories chield-----------
+    public function chield()
+    {
+        return $this->hasOne(self::class, 'parent_id', 'id');
+    }
+
     //----------------get main category parent-----------
 
     public function parent()

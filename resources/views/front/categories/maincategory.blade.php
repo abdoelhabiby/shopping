@@ -43,6 +43,10 @@
 
 @section('content')
 
+
+
+
+
     <div id="main">
 
 
@@ -63,20 +67,22 @@
 
                             <div class="row">
                                 <div class="nov-row spacing-30 mt-15 col-lg-12 col-xs-12">
-                                    <div class="alert alert-success w-100 text-center">{{ $subcategory->name }}</div>
+                                    <div class="alert alert-primary w-100 text-center " role="alert" style="font-size:21px ;background:#21a2fd;color:white">
+                                        {{ $subcategory->name }}</div>
+
                                     <div class="nov-row-wrap row">
 
 
                                         {{-- start forecah chileds of subcategory --}}
                                         @foreach ($subcategory->chields as $category)
 
-                                            <div class="nov-image col-lg-3 col-md-3">
+                                            <div class="nov-image col-lg-2 col-md-2">
                                                 <div class="block">
                                                     <div class="block_content">
                                                         <div class="effect">
-                                                            <a href="#">
+                                                            <a href="{{route('front.category.show',[$subcategory->slug,$category->slug])}}">
                                                                 @if ($category->image && fileExist($category->image))
-                                                                    <div style="height: 155px;width:270px">
+                                                                    <div style="height: 185px;width:185px">
                                                                         <img class="img-fluid"
                                                                             src="{{ asset($category->image) }}"
                                                                             alt="{{ $category->name }}"
@@ -87,7 +93,7 @@
 
                                                                 @else
 
-                                                                    <div style="height: 155px;width:270px">
+                                                                    <div style="height: 185px;width:185px">
                                                                         <img class="img-fluid"
                                                                             src="{{ asset('/images/noImage.jpg') }}"
                                                                             alt="{{ $category->name }}"
@@ -102,9 +108,59 @@
 
                                                         </div>
                                                     </div>
-                                                    <div class="text-center mt-2">{{ $category->name }}</div>
+                                                    <div class="text-center mt-2 ">
+                                                        {{ $category->name }}
+                                                    </div>
+
+
                                                 </div>
+
+
+
                                             </div>
+
+
+                                            <!--
+                                            {{-- how some products to evrey subcategory by his chileds --}}
+
+                                            {{-- @if ($loop->last) --}}
+
+
+
+                                                <div class="nov-row spacing-30 mt-15 col-lg-12 col-xs-12">
+                                                    <div class="alert alert-success w-100 text-center "
+                                                        style="font-size:21px">
+                                                        show some products</div>
+
+                                                    <div class="nov-row-wrap row">
+
+
+                                                        {{-- start forecah chileds of subcategory --}}
+
+
+                                                        <div class="nov-image col-lg-2 col-md-2">
+                                                            <div class="block">
+                                                                <div class="block_content">
+                                                                    <div class="effect">
+
+                                                                        <a href="#">
+                                                                        </a>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+
+                                            {{-- @endif --}}
+                                            -->
+                                            {{-- check loop if the last --}}
 
                                         @endforeach
                                         {{-- end forecah chileds of subcategory --}}
@@ -122,6 +178,8 @@
                         @endif
                         {{-- end check if subcategory has chileds --}}
 
+
+
                     @endforeach
                     {{-- end forecah chileds of maincategory --}}
 
@@ -132,8 +190,14 @@
 
 
 
+
             </div>
         </section>
+
+
+
+
+
 
 
     </div>

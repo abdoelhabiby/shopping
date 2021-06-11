@@ -3,7 +3,7 @@
 <div class="product-miniature js-product-miniature item-one first_item"
 data-id-product="{{ $product->id }}"
 data-id-product-attribute="{{ $product->attribute->id }}" itemscope=""
-itemtype="http://schema.org/Product">
+itemtype="">
 
 
 

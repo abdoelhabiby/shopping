@@ -22,7 +22,7 @@
                     <div class="block_content">
                         <div id="productlist893645890" class="product_list grid owl-carousel owl-theme multi-row"
                             data-autoplay="false" data-autoplaytimeout="6000" data-loop="false" data-margin="0"
-                            data-dots="false" data-nav="true" data-items="3" data-items_large="3" data-items_tablet="3"
+                            data-dots="false" data-nav="true" data-items="4" data-items_large="4" data-items_tablet="3"
                             data-items_mobile="2">
 
                             @foreach ($best_sellers->chunk(2) as $index => $products_best_sellers)

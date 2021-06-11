@@ -201,7 +201,7 @@
                         <div class="block_content">
                             <div id="productlist303857090" class="product_list grid owl-carousel owl-theme multi-row"
                                 data-autoplay="false" data-autoplaytimeout="6000" data-loop="false" data-margin="30"
-                                data-dots="false" data-nav="true" data-items="2" data-items_large="2" data-items_tablet="3"
+                                data-dots="false" data-nav="true" data-items="{{$products_offer->count() > 0 ? '2' : '3'}}" data-items_large="3" data-items_tablet="3"
                                 data-items_mobile="1">
 
 

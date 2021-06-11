@@ -111,9 +111,9 @@ class Product extends Model
     //---------------------get product active--------------------------
 
     /**
-     * get products ative by categories and has attributeactive
+     * get products active by categories and has attributeactive
      * used in front views
-     * neeeeed to upgrade
+     * neeeeed to upgrade  // ----- important------
      */
 
     public function scopeActive($product)
