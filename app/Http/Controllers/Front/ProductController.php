@@ -77,6 +77,8 @@ class ProductController extends Controller
             abort(404);
         }
 
+
+
         $user_product_review = null;
         if (user()) {
             $user_product_review = ProductReview::where('product_id', $product->id)->where('user_id', user()->id)->first();

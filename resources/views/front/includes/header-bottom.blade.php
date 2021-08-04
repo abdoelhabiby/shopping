@@ -86,7 +86,7 @@
                                                                                                 @if($category->products->count() > 0)
                                                                                                     <li>
                                                                                                         <a class="d-flex justify-content-start"
-                                                                                                            href="{{route('front.category.show',[$subcategory->slug,$category->slug])}}">{{ $category->name }}</a>
+                                                                                                            href="{{route('front.category.show',[$subcategory->slug,$category->slug])}}">{{ $category->name }} </a>
                                                                                                     </li>
 
                                                                                                 @endif

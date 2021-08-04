@@ -39,7 +39,7 @@ itemtype="">
         @else
 
             <img class="img-fluid image-cover"
-                src="{{ asset('/images/noImage.jpg') }}" alt="" width="600"
+                src="{{ getLinkImageNoImage() }}" alt="" width="600"
                 height="600">
 
         @endif

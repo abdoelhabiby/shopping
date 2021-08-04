@@ -29,8 +29,15 @@
 
                     <div class="product row no-gutters">
                         <div class="product-image col-4">
-                            <img class="img-fluid" src="{{ $product->images->first()->name }}" height="" width=""
+                            @if($product->images->first() )
+                            <img class="img-fluid" src="{{  $product->images->first()->name }}" height="" width=""
                                 alt="{{ $product->name }}">
+                             @else
+                             <img class="img-fluid" src="{{ getLinkImageNoImage() }}" height="" width=""
+                             alt="{{ $product->name }}">
+
+
+                             @endif
                         </div>
                         <div class="product_desc col-8">
                             <p class="product_name">

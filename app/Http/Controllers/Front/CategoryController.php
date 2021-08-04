@@ -83,9 +83,9 @@ class CategoryController extends Controller
         $category = $subcategory->chield;
          $category_products = $category->products()->active()->paginate(2);
 
-        if (!$category_products->count() > 0) {
-            abort('404');
-        }
+        // if (!$category_products->count() > 0) {
+        //     abort('404');
+        // }
 
 
         return view('front.categories.category', compact(['category', 'category_products']));

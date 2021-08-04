@@ -23,6 +23,34 @@
                         </a>
                         <meta itemprop="position" content="1">
                     </li>
+
+
+                    @if ($category->parent->parent)
+
+
+
+                        <li itemprop="itemListElement" itemscope="">
+                            <a itemprop="item"
+                                href="{{ route('front.main_category.show', $category->parent->parent->slug) }}">
+                                <span itemprop="name">
+                                    {{ $category->parent->parent->name }}
+                                </span>
+                            </a>
+                            <meta itemprop="position" content="1">
+                        </li>
+                    @endif
+
+                    @if ($category->parent)
+                        <li itemprop="itemListElement" itemscope="">
+                            <a itemprop="item" href="{{ route('front.subcategory.show', $category->parent->slug) }}">
+                                <span itemprop="name">
+                                    {{ $category->parent->name }}
+                                </span>
+                            </a>
+                            <meta itemprop="position" content="1">
+                        </li>
+                    @endif
+
                     <li itemprop="itemListElement" itemscope="">
                         <a itemprop="item"
                             href="{{ route('front.category.show', [$category->parent->slug, $category->slug]) }}">
@@ -99,12 +127,12 @@
 
 
 
-                                @foreach ($category_products as $key => $product)
+                            @foreach ($category_products as $key => $product)
                                 <div class="item col-12 col-sm-6 col-md-4 col-lg-3">
 
 
-                                        @include('front.includes.section_product',$product)
-                                    </div>
+                                    @include('front.includes.section_product',$product)
+                                </div>
 
                             @endforeach
 
@@ -149,42 +177,32 @@
 
 @section('scripts')
 
-@if (session()->has('success'))
+    @if (session()->has('success'))
 
-    <script>
+        <script>
+            swal({
+                title: "{{ session('success') }}",
+                type: "success",
+                timer: 3000,
+            });
+        </script>
 
-        swal({
-            title: "{{ session('success') }}",
-            type: "success",
-            timer: 3000,
-        });
+    @endif
+    @if (session()->has('error'))
 
-    </script>
+        <script>
+            swal({
+                title: "{{ session('error') }}",
+                type: "error",
+                timer: 3000,
+            });
+        </script>
 
-@endif
-@if (session()->has('error'))
-
-    <script>
-        swal({
-            title: "{{ session('error') }}",
-            type: "error",
-            timer: 3000,
-        });
-
-    </script>
-
-@endif
+    @endif
 
 
     <script>
-
-
-
-
-
-
-
-// mywishlist.store
+        // mywishlist.store
 
         $.ajaxSetup({
             headers: {
@@ -206,14 +224,14 @@
                 url,
                 success: function(response) {
 
-                    if(response.cart_products_count && parseInt(response.cart_products_count) > 0){
-                       $(".cart-products-count").text(response.cart_products_count);
+                    if (response.cart_products_count && parseInt(response.cart_products_count) > 0) {
+                        $(".cart-products-count").text(response.cart_products_count);
 
                     }
 
 
                     swal({
-                        title: '{{ __("front.success_add_product") }}',
+                        title: '{{ __('front.success_add_product') }}',
                         type: "success",
                         timer: 2000,
                     });
@@ -280,8 +298,6 @@
         $(document).on('click', '.close', function() {
             $(this).closest('.quickview').remove();
         });
-
     </script>
 
 @stop
-

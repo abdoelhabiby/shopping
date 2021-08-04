@@ -14,6 +14,7 @@ return [
       'other_options' => 'other options',
       'availability' => 'availability',
       'havent_saved_aproduct' => "You haven't saved a product",
+      'wishlist_products' => 'products wishlist',
 
 
     ];

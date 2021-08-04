@@ -1,149 +1,165 @@
-@extends('layouts.front')
-
-
-
-@section('content')
-
-    <div id="main">
-
-
-
-
-        <div class="container">
-
-
-            <section id="content" class="page-content mt-15 mb-15">
-
-                <div id="jmarketplace-sellernews">
-                    <div class="product_list grid row jmarketplace-products">
-                        <div class="item col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="product-miniature js-product-miniature  first_item" data-id-product="24"
-                                data-id-product-attribute="0" itemscope="" itemtype="http://schema.org/Product">
-                                <div class="thumbnail-container">
-
-                                    <a class="product_img_link"
-                                        href="http://demo.bestprestashoptheme.com/savemart/ar/camera-photo/24-nullam-sed-sollicitudin-mauris.html"
-                                        title="Nullam sed sollicitudin mauris" itemprop="url">
-                                        <img class="img-fluid image-cover"
-                                            src="http://demo.bestprestashoptheme.com/savemart/137-home_default/nullam-sed-sollicitudin-mauris.jpg"
-                                            alt="Nullam sed sollicitudin mauris" title="Nullam sed sollicitudin mauris"
-                                            data-full-size-image-url="http://demo.bestprestashoptheme.com/savemart/137-large_default/nullam-sed-sollicitudin-mauris.jpg">
-                                    </a>
-
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-groups">
-
-                                        <div class="product-title" itemprop="name"><a
-                                                href="http://demo.bestprestashoptheme.com/savemart/ar/camera-photo/24-nullam-sed-sollicitudin-mauris.html">Nullam
-                                                sed sollicitudin mauris</a></div>
-
-                                        <div class="product-comments">
-                                            <div class="star_content">
-                                                <div class="star"></div>
-                                                <div class="star"></div>
-                                                <div class="star"></div>
-                                                <div class="star"></div>
-                                                <div class="star"></div>
-                                            </div>
-                                            <span>0 review</span>
-                                        </div>
-                                        <p class="seller_name">
-                                            <a title="View seller profile"
-                                                href="http://demo.bestprestashoptheme.com/savemart/ar/jmarketplace/1_david-james/">
-                                                <i class="fa fa-user"></i>
-                                                David James
-                                            </a>
-                                        </p>
-
-                                        <div class="product-group-price">
-
-
-                                            <span class="old-price product-price">
-                                                12.00&nbsp;UK£
-                                            </span>
-
-                                            <span class="price-percent-reduction">-20%</span>
-                                            <span class="price product-price">
-                                                9.60&nbsp;UK£ </span>
-
-
-
-                                        </div>
-                                        <div class="info-stock">
-                                            <span class=" label-success">
-                                                in stock </span>
-                                        </div>
-                                        <div class="product-desc" itemprop="desciption">In porta magna et sem facilisis
-                                            porttitor. Vestibulum erat est, finibus sit amet tempor sit amet, cursus ut leo.
-                                            Phasellus nec dolor...</div>
-                                    </div>
-                                    <div class="product-buttons d-flex justify-content-center" itemprop="offers"
-                                        itemscope="" itemtype="http://schema.org/Offer">
-                                        <form action="http://demo.bestprestashoptheme.com/savemart/ar/عربة التسوق"
-                                            method="post" class="formAddToCart">
-                                            <input type="hidden" name="token" value="28add935523ef131c8432825597b9928">
-                                            <input type="hidden" name="id_product" value="24">
-                                            <a class="add-to-cart" href="#" data-button-action="add-to-cart"><i
-                                                    class="novicon-cart"></i><span>أضف للسلة</span></a>
-                                        </form>
-
-                                        <a class="addToWishlist wishlistProd_24" href="#" data-rel="24"
-                                            onclick="WishlistCart('wishlist_block_list', 'add', '24', false, 1); return false;">
-                                            <i class="fa fa-heart"></i>
-                                            <span>Add to Wishlist</span>
-                                        </a>
-                                        <a href="#" class="quick-view hidden-sm-down" data-link-action="quickview">
-                                            <i class="fa fa-search"></i><span> نظرة سريعة</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-
-
-                <ul class="footer_links_ja list-inline">
-                    <li class="list-inline-item">
-                        <a class="btn btn-secondary" href="javascript: history.go(-1)">
-                            <span>
-                                <i class="fa fa-chevron-left"></i>
-                                Go back
-                            </span>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="btn btn-secondary" href="http://demo.bestprestashoptheme.com/savemart/modules/">
-                            <span>
-                                <i class="fa fa-chevron-left"></i>
-                                Home
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-
-
-            </section>
-
+<!DOCTYPE html>
+<html>
+<head>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script  defer src="https://maps.googleapis.com/maps/api/js?libraries=places&language=en&key=AIzaSyBUtnGzrMS7PmKN6SH9unAyoBr9SpxhHnw"  type="text/javascript"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<style>
+.alert {
+  padding: 20px;
+  background-color: #2196F3;
+  color: white;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+}
+</style>
+	<title></title>
+</head>
+<body>
+	<div class="container">
+		<form id="distance_form "action="###" method="post">
+        	<center><label><i class="icon-lock"></i> <b>Choose Destination</b></label></center>
+        <div class="form-group">
+			Transport Costs :<input id="textbox1" readonly class="form-control"/>
+			<input type="text" id="in_kilo" name="in_kilo" class="form-control" value="Distance In kilo" disabled>
+			<input type="hidden" id="dprice" name="dprice" class="form-control">
+        	<input type="text" id="to_places" name="location" style="margin-bottom: 10px;" class="form-control col-md-7 col-xs-12"
+        	required />
+        	<div id="dvMap" style="width: 100%; height: 300px;"></div>
         </div>
+        	<button type="button" id="calpr" name="calpr" class="btn btn-primary" >Submit</button>
+		</form>
 
+		<div id="result"></div>
 
+	<div class="alert">
+		<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <strong>Formula</strong> Formula **First 20 Kilometres = 200 Thai Baht after that 60 Baht per 10 Kilometres.
 
+	</div>
+	</div>
+<script>
+    $(function() {
+        // add input listeners
+        google.maps.event.addDomListener(window, 'load', function () {
+            var to_places = document.getElementById('to_places').value;
+        });
 
+        // calculate distance
+        function calculateDistance() {
 
-    </div>
+			var input = document.getElementById('to_places').value;
+			var latlngStr = input.split(',', 2);
+			var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+			var origin = new google.maps.LatLng(18.806648,98.971026); //origin Address
+			var destination = new google.maps.LatLng(latlng);
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+                {
+                    origins: [origin],
+                    destinations: [destination],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.IMPERIAL, // miles and feet.
+                    // unitSystem: google.maps.UnitSystem.metric, // kilometers and meters.
+                    avoidHighways: false,
+                    avoidTolls: false
+                }, callback);
+        }
+        // get distance results
+        function callback(response, status) {
+            if (status != google.maps.DistanceMatrixStatus.OK) {
+                $('#result').html(err);
+            } else {
+                var origin = response.originAddresses[0];
+                var destination = response.destinationAddresses[0];
+                if (response.rows[0].elements[0].status === "ZERO_RESULTS") {
+                	$
+                    $('#result').html("There are no roads between "  + origin + " and " + destination);
+                } else {
+                    var distance = response.rows[0].elements[0].distance;
+                    var duration = response.rows[0].elements[0].duration;
+                    console.log(response.rows[0].elements[0].distance);
+                    var distance_in_kilo = distance.value / 1000; // the kilometre
+                    var distance_in_mile = distance.value / 1609.34; // the mile
+                    var duration_text = duration.text;
+                    var duration_value = duration.value;
+					if(distance_in_kilo < 20){
+						var a = 200.00;
+						var textbox1 = document.getElementById('textbox1');
+						textbox1.value = a.toFixed(2) +" " + "Baht";
+						dprice.value = a.toFixed(2);
+						in_kilo.value = distance_in_kilo +" " + "Km";
+					}
+					else{
+						/*
+						Formula
+						If distance between Origin and Destination < 20 Kilo They will charged 200 Thai Baht
+						First 20 Kilometres Is 200 Baht,After that in this case  10 Kilo Per 60 Baht and plus 200 (first 20 kilo) = costs
+						Distance_in_kilo - 20(first 20 kilometres) / (10 kilo) * (60 Baht) + 200 (costs for first 20 kilo) =
+						*/
+						var a = (distance_in_kilo - 20) / (10) * (60) + 200;
+						var textbox1 = document.getElementById('textbox1');
+						textbox1.value = a.toFixed(2) +" " + "Baht";
+						dprice.value = a.toFixed(2);
+						in_kilo.value = distance_in_kilo +" " + "Km";
 
+					}
+                }
+            }
+        }
+        // print results on submit the form
+		$("#calpr").click(function(e) {
+            e.preventDefault();
+            calculateDistance();
+        });
+    });
+</script>
+<script type="text/javascript">
+    window.onload = function () {
 
-@stop
+        var mapOptions = {
+            center: new google.maps.LatLng(18.806648,98.971026), // Destination Address
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var marker;
+        var infoWindow = new google.maps.InfoWindow();
+        var latlngbounds = new google.maps.LatLngBounds();
+        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        google.maps.event.addListener(map, 'click', function (e) {
+            $("input[name='location']").val(e.latLng.lat() + "," + e.latLng.lng());
+            var myLatLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
+            if ( marker ) {
+                marker.setPosition(myLatLng);
+            } else {
+                marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Marked Point' //name of the marker
+                });
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+{{-- <script async defer
+        src="https://maps.googleapis.com/maps/api/js?keyPUTYOUAPIKEYHERE&callback=initMap">
 
+</script> --}}
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKZAuxH9xTzD2DLY2nKSPKrgRi2_y0ejs&libraries=places&callback=initAutocomplete&language=ar&region=EG
+async defer"></script>
 
-@section('scripts')
-
-
-
-@stop
+</body>
+</html>
