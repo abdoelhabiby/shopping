@@ -507,12 +507,22 @@
 
 
 
+                {{-- tabs show details and show reviews --}}
+
+
                 @include('front.product.product-detail-middle',$product)
 
                 {{-- @include('front.product.product-detail-bottom',$product) --}}
 
                 @include('front.product._product_images_modal',$product)
 
+
+                {{--
+                      * check if the user give this product review ?
+                      * if did get modal update to show and update if he need
+                      * else get modal create new review
+
+                    --}}
 
                 @auth()
                 @if($user_product_review)

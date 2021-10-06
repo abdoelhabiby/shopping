@@ -30,7 +30,6 @@ class ProductController extends Controller
                         "qty",
                         "product_id",
                         "is_active",
-                        "purchase_price",
                         "price",
                         "price_offer",
                         "start_offer_at",
@@ -44,7 +43,6 @@ class ProductController extends Controller
                         "qty",
                         "product_id",
                         "is_active",
-                        "purchase_price",
                         "price",
                         "price_offer",
                         "start_offer_at",
@@ -80,6 +78,7 @@ class ProductController extends Controller
 
 
         $user_product_review = null;
+
         if (user()) {
             $user_product_review = ProductReview::where('product_id', $product->id)->where('user_id', user()->id)->first();
         }
@@ -89,6 +88,7 @@ class ProductController extends Controller
             // \DB::raw("COALESCE( ROUND(SUM(quality) * 5 / (COUNT(id) * 5)),0)  as stars"),
             \DB::raw("COUNT(id) as total_rating"),
         )->where('product_id', $product->id)->first();
+
 
 
 

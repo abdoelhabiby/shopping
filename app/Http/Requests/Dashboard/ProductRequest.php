@@ -35,10 +35,13 @@ class ProductRequest extends FormRequest
         $rules = [
             "slug" => "required|string|" . Rule::unique('products', 'slug')->ignore($this->product),
             "sku" => "required|string|" . Rule::unique('products', 'sku')->ignore($this->product),
+
             "name" =>   "required|array|min:1|max:" . count(supportedLanguages()),
             "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('product_translations', 'name'),
+
             "description" =>   "required|array|min:1|max:" . count(supportedLanguages()),
             "description.*" =>   "required|string|min:2|max:550",
+
             "brand_id" => "sometimes|nullable|numeric|exists:brands,id",
 
             "categories" => "required|array|min:1",

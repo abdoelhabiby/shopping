@@ -195,7 +195,7 @@ if (!function_exists('fileExist')) {
 
 if (!function_exists('pathNoImage')) {
 
-    function pathNoImage($path)
+    function pathNoImage()
     {
 
         return '/images/noImage.jpg';

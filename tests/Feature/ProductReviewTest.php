@@ -17,21 +17,20 @@ class ProductReviewTest extends TestCase
             'password' => '123456789'
         ]);
         $data = [
-            // "product_id" => 13,
-            // "user_id" => 1,
+            "product_id" => 13,
+            "user_id" => 1,
             "title" => 'ewwe',
             "quality" => 1,
             "review" => 'review'
 
         ];
 
-        $response = $this->post('/en/product/tshrit-black-2/review',$data);
 
-        // $url = route('teti');
-
-
+          $response = $this->post('/en/product/tshrit-black-2/review',$data);
 
           dd($response);
+
+
 
         $response->assertStatus(200);
 

@@ -73,7 +73,7 @@
                                                     {{ $review->user->name }}
                                                 </div>
                                                 <div class="date-comment">
-                                                    {{$review->created_at ? $review->created_at->format('Y/m/d') : ''}}
+                                                    {{ $review->created_at ? $review->created_at->format('Y/m/d') : '' }}
                                                 </div>
                                             </div>
                                         </div>
@@ -88,9 +88,9 @@
 
 
                                 <div class="text-center">
-                                    <a class=" btn btn-info" href="{{route('product.reviews.index',$product->slug)}}" style="">
-                                        <i class="fa fa-eye"></i>see all
-                                        reviews
+                                    <a class=" btn btn-info" href="{{ route('product.reviews.index', $product->slug) }}"
+                                        style="">
+                                        <i class="fa fa-eye"></i> @lang('front.see_all_reviews')
                                     </a>
                                 </div>
 

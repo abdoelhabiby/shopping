@@ -7,7 +7,9 @@ use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-define('PAGINATE_COUNT', 10);
+
+if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
+
 
 Route::group(['middleware' => 'auth:admin'], function () {
 

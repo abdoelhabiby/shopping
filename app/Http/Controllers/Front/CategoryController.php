@@ -81,7 +81,7 @@ class CategoryController extends Controller
             ->firstOrFail();
 
         $category = $subcategory->chield;
-         $category_products = $category->products()->active()->paginate(2);
+         $category_products = $category->products()->active()->orderBy('id','desc')->paginate(12);
 
         // if (!$category_products->count() > 0) {
         //     abort('404');

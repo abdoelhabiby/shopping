@@ -78,11 +78,16 @@
                                                         <span class="product-image media-middle">
 
 
+
+
+
                                                             @php
-                                                                $image = $product->images->first()->name;
+                                                                 $image = $product->images->first() ? $product->images->first()->name : pathNoImage();
                                                             @endphp
                                                             <img class="img-fluid"
                                                                 src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
+
+                                                               {{-- src="{{getLinkImageNoImage()}}" --}}
                                                                 alt="{{ $product->name }}">
 
 

@@ -54,7 +54,7 @@ class HomeController extends Controller
 
         /*
          **
-         **  warning
+         **
          ** we must decide count of chields get
          ** and limit of product in this chiled to
          ** performance and how count show in page
