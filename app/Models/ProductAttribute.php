@@ -36,6 +36,7 @@ class ProductAttribute extends Model
     ];
 
 
+
     protected $appends = ['hasOffer'];
 
 

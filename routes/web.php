@@ -48,6 +48,7 @@ Route::group(
             Route::post('product-details/{product_slug}/{product_attribute_id}', 'ProductDetailsAjax@index')->name('get-product-details-modal');
 
             //----------------------------product--------------------------
+
             Route::get('product/{product_slug}/{product_attribute_id}', 'ProductController@show')->name('front.prouct.show');
 
 

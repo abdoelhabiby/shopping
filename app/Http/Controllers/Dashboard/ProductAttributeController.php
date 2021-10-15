@@ -134,6 +134,7 @@ class ProductAttributeController extends Controller
             return $this->returnRenderHtml('attributes', $html);
         }
 
+        return 'note ajax';
         return  abort(404);
     }
 

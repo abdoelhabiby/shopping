@@ -9,8 +9,7 @@
                     </span></a>
             </li>
 
-            {{-- ------------------------start nav item admins------------------------
-            --}}
+            {{-- ------------------------start nav item admins------------------------ --}}
 
             @if (admin()->hasRole('super_admin'))
 
@@ -19,10 +18,10 @@
                 <li class="nav-item {{ isActive('admins') }}">
 
                     @php
-                    $module_name = 'admins';
+                        $module_name = 'admins';
                     @endphp
 
-                    <a href=""><i class="la la-users"></i>
+                    <a href=""><i class="las la-users-cog"></i>
                         <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
                         <span
                             class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Admin::role('admin')->count() }}</span>
@@ -40,15 +39,14 @@
                 </li>
             @endif
 
-            {{-- ------------------------end nav item admins------------------------
-            --}}
+            {{-- ------------------------end nav item admins------------------------ --}}
 
 
-            {{-- -----start nav users ----------}}
+            {{-- -----start nav users -------- --}}
             <li class="nav-item {{ isActive('users') }}">
 
                 @php
-                $module_name = 'users';
+                    $module_name = 'users';
                 @endphp
 
                 <a href=""><i class="la la-users"></i>
@@ -61,25 +59,26 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
                 </ul>
             </li>
-            {{-- ------end nav users -----------}}
+            {{-- ------end nav users --------- --}}
 
 
 
 
 
             {{-- -----start nav item
-            main-categories----------}}
+            main-categories-------- --}}
 
             <li class="nav-item {{ isActive('main-categories') }}">
 
                 @php
-                $module_name = 'main-categories';
+                    $module_name = 'main-categories';
                 @endphp
 
                 <a href=""><i class="la la-list"></i>
@@ -92,7 +91,8 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
@@ -100,15 +100,15 @@
             </li>
 
 
-            {{-- ------end nav item categories-----------}}
+            {{-- ------end nav item categories--------- --}}
 
             {{-- -----start nav item
-            sub-categories----------}}
+            sub-categories-------- --}}
 
             <li class="nav-item {{ isActive('sub-categories') }}">
 
                 @php
-                $module_name = 'sub-categories';
+                    $module_name = 'sub-categories';
                 @endphp
 
                 <a href=""><i class="la la-list"></i>
@@ -121,7 +121,8 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
@@ -129,16 +130,16 @@
             </li>
 
 
-            {{-- ------end nav item categories-----------}}
+            {{-- ------end nav item categories--------- --}}
 
 
 
 
 
-            {{-- -----start nav item barnds----------}}
+            {{-- -----start nav item barnds-------- --}}
 
             @php
-            $module_name = 'brands';
+                $module_name = 'brands';
             @endphp
 
             <li class="nav-item {{ isActive($module_name) }}">
@@ -153,18 +154,19 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
                 </ul>
             </li>
-            {{-- ------end nav item barnds-----------}}
+            {{-- ------end nav item barnds--------- --}}
 
-            {{-- -----start nav item tags----------}}
+            {{-- -----start nav item tags-------- --}}
 
             @php
-            $module_name = 'tags';
+                $module_name = 'tags';
             @endphp
 
             <li class="nav-item {{ isActive($module_name) }}">
@@ -179,23 +181,24 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
                 </ul>
             </li>
-            {{-- ------end nav item tags-----------}}
+            {{-- ------end nav item tags--------- --}}
 
-            {{-- -----start nav item products----------}}
+            {{-- -----start nav item products-------- --}}
 
             @php
-            $module_name = 'products';
+                $module_name = 'products';
             @endphp
 
             <li class="nav-item {{ isActive($module_name) }}">
 
-                <a href=""><i class="la la-connectdevelop"></i>
+                <a href=""><i class="las la-tshirt"></i>
                     <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
                     <span
                         class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Product::count() }}</span>
@@ -205,35 +208,61 @@
                             data-i18n="nav.dash.ecommerce">show all </a>
                     </li>
                     <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}" data-i18n="nav.dash.crypto">
+                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
+                            data-i18n="nav.dash.crypto">
                             add
                         </a>
                     </li>
                 </ul>
             </li>
-            {{-- ------end nav item products-----------}}
+            {{-- ------end nav item products--------- --}}
 
 
 
-            {{-- -----start nav item ----------}}
-            {{-- ------end nav item -----------}}
-            {{-- -----start nav item ----------}}
-            {{-- ------end nav item -----------}}
-            {{-- -----start nav item ----------}}
-            {{-- ------end nav item -----------}}
-            {{-- -----start nav item ----------}}
-            {{-- ------end nav item -----------}}
+            {{-- -----start nav orders -------- --}}
+
+            @php
+                $module_name = 'orders';
+            @endphp
+
+            <li class="nav-item {{ isActive($module_name) }}">
+
+                <a href="">
+                    {{-- <i class="la la-cart"></i> --}}
+                    <i class="las la-shopping-bag"></i>
+                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
+                    <span
+                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Order::count() }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="active"><a class="menu-item"
+                            href="{{ route('dashboard.' . $module_name . '.index') }}"
+                            data-i18n="nav.dash.ecommerce">show all </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            {{-- ------end nav orders --------- --}}
+
+
+            {{-- -----start nav item -------- --}}
+            {{-- ------end nav item --------- --}}
+            {{-- -----start nav item -------- --}}
+            {{-- ------end nav item --------- --}}
+            {{-- -----start nav item -------- --}}
+            {{-- ------end nav item --------- --}}
 
 
 
 
 
 
-            {{-- -----start nav item settings----------}}
+            {{-- -----start nav item settings-------- --}}
             <li class="nav-item {{ isActive('users') }}">
 
                 @php
-                $module_name = 'settings';
+                    $module_name = 'settings';
                 @endphp
 
                 <a href=""><i class="la la-cog"></i>
@@ -241,7 +270,8 @@
                 </a>
                 <ul class="menu-content">
                     <li class="">
-                    <a class="menu-item" href="{{route('admin.homepage_slider.index')}}" data-i18n="nav.dash.ecommerce">Home Page slider </a>
+                        <a class="menu-item" href="{{ route('admin.homepage_slider.index') }}"
+                            data-i18n="nav.dash.ecommerce">Home Page slider </a>
                     </li>
                     <li class="">
                         <a class="menu-item" href="" data-i18n="nav.dash.ecommerce">sett 2 </a>
@@ -251,7 +281,7 @@
 
                 </ul>
             </li>
-            {{-- ------end nav item settings-----------}}
+            {{-- ------end nav item settings--------- --}}
 
 
 

@@ -79,7 +79,7 @@ class CheckoutController extends Controller
 
             $cart = $this->myCart(); // service class
             $products = $cart->getProducts();
-            $total_price =  (int) $cart->getTotalProductsPrice();  //total amount
+            $total_price =  $cart->getTotalProductsPrice();  //total amount
 
             // return $cart->getProducts();
 

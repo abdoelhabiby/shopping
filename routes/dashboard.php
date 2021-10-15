@@ -1,12 +1,25 @@
 <?php
 
+use App\Cart\Cart;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\ProductAttribute;
-use Illuminate\Support\Facades\Route;
+use App\Models\OrderProduct;
 use Illuminate\Http\Request;
+use App\Models\ProductAttribute;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
+
+/*
+
+ ** comment at 9/10/2021.
+ ** we have some mistakes...
+ ** routes name dosent have same name start like (dashbord).
+ ** fixxxxxxxxxxxxxxxx it....
+
+*/
 
 if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
@@ -16,12 +29,46 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('test', function () {
 
 
+        if (session()->has('cart')) {
 
-        return Product::withTranslation()->first();
+            $cart = new Cart(session('cart'));
+        } else {
+            $cart = new Cart();
+        }
 
-        return view('dashboard.test');
 
-        return "test";
+        return (int) $cart->getTotalProductsPrice();
+
+
+        $pr = 4999.22;
+        $qt = 1;
+
+        return $pr * $qt;
+
+
+        // $order_product = OrderProduct::with([
+        //     'product'
+        // ])
+        //     ->where('order_id', 21)
+        //     ->get();
+
+        // return $order_product;
+
+
+        $order = Order::with([
+            'orderProducts' => function($q){
+                return $q->with(['product','attribute']);
+            },
+            'user' => function($q){
+                return $q->select(['id','name','email']);
+            }
+        ])->where('id',38)->first();
+
+        return $order;
+
+
+
+
     });
 
     Route::post('test', function (Request $request) {
@@ -94,6 +141,17 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
     //----------------------end settings-----------------------
 
+
+    //----------------------start orders---------------------
+
+    Route::resource(
+        'orders',
+        OrderController::class,
+        ['as' => 'dashboard', 'except' => ['create', 'store']]
+    );
+
+    //----------------------end orders-----------------------
+
     // ------------------------------------------------------------
 
 
@@ -105,7 +163,3 @@ Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/login', 'Auth\LoginController@showFormLogin')->name('dashboard.form_login');
     Route::post('/login', 'Auth\LoginController@login')->name('dashboard.login');
 });
-
-
-
-
