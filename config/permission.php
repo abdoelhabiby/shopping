@@ -28,6 +28,31 @@ return [
 
     ],
 
+
+    //------------------------------------------------
+
+    // added by me
+
+    'roles_oshastore' => [
+        'admin',
+        'user',
+        'brand',
+        'category',
+        'wishlist',
+        'order',
+        'product',
+        'slider',
+        'tag',
+
+    ],
+
+    'permissions_map_oshastore' => [
+        'create', 'read', 'update', 'delete'
+    ],
+
+    // end by me added here
+    //------------------------------------------------
+
     'table_names' => [
 
         /*

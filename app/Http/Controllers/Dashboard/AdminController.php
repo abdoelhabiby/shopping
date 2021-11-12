@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Dashboard\AdminRequest;
@@ -28,6 +29,19 @@ class AdminController extends Controller
 
     public function create()
     {
+
+        $permissions = Role::whereNotIn('name',['super_admin','admin'])
+                             ->where('guard_name' , 'admin')
+                             ->with(['permissions' => function($q){
+                                 return $q->select('name');
+                             }])
+                             ->select(['id','name'])
+                             ->get();
+
+        $collect =  collect($permissions[0]->permissions);
+
+        return $collect->pluck('name');
+
         return view('dashboard.admins.create');
     }
 

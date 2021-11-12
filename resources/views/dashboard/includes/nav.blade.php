@@ -159,7 +159,7 @@
                     <li class="dropdown dropdown-user nav-item ">
                         <a class="dropdown-toggle nav-link dropdown-user-link " href="#" data-toggle="dropdown">
                             <span class="mr-1">
-                                <span class=" text-bold-700 "> osah</span>
+                                <span class=" text-bold-700 "> {{admin()->name}}</span>
                             </span>
                             <span class="avatar avatar-online">
                                 <img style="height: 35px;" alt="avatar"

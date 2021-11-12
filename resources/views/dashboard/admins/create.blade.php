@@ -25,7 +25,7 @@ $model_name = 'admins';
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">home </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ route( $model_name .'.index') }}">
+                                <li class="breadcrumb-item"><a href="{{ route($model_name . '.index') }}">
                                         {{ $model_name }} </a>
                                 </li>
                                 <li class="breadcrumb-item active"> add
@@ -59,8 +59,8 @@ $model_name = 'admins';
 
                                 <div class="card-content collapse show">
                                     <div class="card-body">
-                                        <form class="form" action="{{ route( $model_name .'.store') }}" method="POST"
-                                            enctype="multipart/form-data">
+                                        <form class="form" action="{{ route($model_name . '.store') }}"
+                                            method="POST" enctype="multipart/form-data">
                                             @csrf
 
                                             <div class="form-body">
@@ -74,16 +74,17 @@ $model_name = 'admins';
                                                     <div class="col-md-6">
 
                                                         @php
-                                                        $input = 'name';
+                                                            $input = 'name';
                                                         @endphp
 
                                                         <div class="form-group">
                                                             <label for="name"> {{ $input }} </label>
-                                                            <input type="text" value="{{ old($input) }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}   "
+                                                            <input type="text" value="{{ old($input) }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input {{ $input }}   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }}</span>
+                                                                <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -91,15 +92,16 @@ $model_name = 'admins';
 
                                                     <div class="col-md-6">
                                                         @php
-                                                        $input = 'email';
+                                                            $input = 'email';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
                                                             <input type="email" value="{{ old($input) }}"
                                                                 id="{{ $input }}" class="form-control"
-                                                                placeholder="input {{ $input }}   " name="{{ $input }}">
+                                                                placeholder="input {{ $input }}   "
+                                                                name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -111,15 +113,17 @@ $model_name = 'admins';
                                                     <div class="col-md-6">
 
                                                         @php
-                                                        $input = 'password';
+                                                            $input = 'password';
                                                         @endphp
 
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="password" id="{{ $input }}" class="form-control"
-                                                                placeholder="input {{ $input }}   " name="{{ $input }}">
+                                                            <input type="password" id="{{ $input }}"
+                                                                class="form-control"
+                                                                placeholder="input {{ $input }}   "
+                                                                name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
 
                                                         </div>
@@ -129,16 +133,17 @@ $model_name = 'admins';
 
                                                     <div class="col-md-6">
                                                         @php
-                                                        $input = 'password_confirmation';
+                                                            $input = 'password_confirmation';
                                                         @endphp
                                                         <div class="form-group">
-                                                            <label for="{{ $input }}"> password confermation </label>
+                                                            <label for="{{ $input }}"> password confermation
+                                                            </label>
                                                             <input type="password" id="password_confirmation"
                                                                 class="form-control"
                                                                 placeholder="input password confermation   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
 
                                                         </div>
@@ -146,11 +151,64 @@ $model_name = 'admins';
 
                                                 </div>
 
+                                                {{-- ----------permissions ------------ --}}
+
+
+                                                <div class="row">
+                                                    <div class="card" style="height: 305px;">
+                                                        <div class="card-header">
+                                                            <h4 class="card-title">Admin Permisions</h4>
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+
+                                                                <ul class="nav nav-tabs">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link active" id="base-tab1"
+                                                                            data-toggle="tab" aria-controls="tab1"
+                                                                            href="#tab1" aria-expanded="true">Tab 1</a>
+                                                                    </li>
+
+                                                                </ul>
+
+                                                                <div class="tab-content px-1 pt-1">
+
+                                                                    <div role="tabpanel" class="tab-pane active" id="tab1"
+                                                                        aria-expanded="true" aria-labelledby="base-tab1">
+
+                                                                        <div class="">
+                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox1">
+                                                                              <label class="custom-control-label" for="checkbox1">Unchecked custom checkbox</label>
+                                                                            </div>
+                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" checked="" id="checkbox2">
+                                                                              <label class="custom-control-label" for="checkbox2">Checked custom checkbox</label>
+                                                                            </div>
+                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox3" >
+                                                                              <label class="custom-control-label" for="checkbox3"> custom checkbox</label>
+                                                                            </div>
+                                                                             <div class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox4" >
+                                                                              <label class="custom-control-label" for="checkbox4"> custom checkbox</label>
+                                                                            </div>
+                                                                          </div>
+
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
 
 
 
 
+                                            {{--  -------------- buttons submit and back --}}
                                                 <div class="form-actions">
                                                     <button type="button" class="btn btn-warning mr-1"
                                                         onclick="history.back();">

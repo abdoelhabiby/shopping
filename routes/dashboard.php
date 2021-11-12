@@ -26,50 +26,7 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
-    Route::get('test', function () {
-
-
-        if (session()->has('cart')) {
-
-            $cart = new Cart(session('cart'));
-        } else {
-            $cart = new Cart();
-        }
-
-
-        return (int) $cart->getTotalProductsPrice();
-
-
-        $pr = 4999.22;
-        $qt = 1;
-
-        return $pr * $qt;
-
-
-        // $order_product = OrderProduct::with([
-        //     'product'
-        // ])
-        //     ->where('order_id', 21)
-        //     ->get();
-
-        // return $order_product;
-
-
-        $order = Order::with([
-            'orderProducts' => function($q){
-                return $q->with(['product','attribute']);
-            },
-            'user' => function($q){
-                return $q->select(['id','name','email']);
-            }
-        ])->where('id',38)->first();
-
-        return $order;
-
-
-
-
-    });
+    Route::get('test',  "TestControler@test");
 
     Route::post('test', function (Request $request) {
 
