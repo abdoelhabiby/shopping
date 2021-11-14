@@ -154,80 +154,162 @@ $model_name = 'admins';
                                                 {{-- ----------permissions ------------ --}}
 
 
-                                                <div class="row">
-                                                    <div class="card" style="height: 305px;">
-                                                        <div class="card-header">
-                                                            <h4 class="card-title">Admin Permisions</h4>
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <div class="card-body">
 
-                                                                <ul class="nav nav-tabs">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link active" id="base-tab1"
-                                                                            data-toggle="tab" aria-controls="tab1"
-                                                                            href="#tab1" aria-expanded="true">Tab 1</a>
-                                                                    </li>
 
-                                                                </ul>
 
-                                                                <div class="tab-content px-1 pt-1">
 
-                                                                    <div role="tabpanel" class="tab-pane active" id="tab1"
-                                                                        aria-expanded="true" aria-labelledby="base-tab1">
 
-                                                                        <div class="">
-                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
-                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox1">
-                                                                              <label class="custom-control-label" for="checkbox1">Unchecked custom checkbox</label>
-                                                                            </div>
-                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
-                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" checked="" id="checkbox2">
-                                                                              <label class="custom-control-label" for="checkbox2">Checked custom checkbox</label>
-                                                                            </div>
-                                                                            <div class="d-inline-block custom-control custom-checkbox mr-1">
-                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox3" >
-                                                                              <label class="custom-control-label" for="checkbox3"> custom checkbox</label>
-                                                                            </div>
-                                                                             <div class="d-inline-block custom-control custom-checkbox mr-1">
-                                                                              <input type="checkbox" class="custom-control-input" name="colorCheck" id="checkbox4" >
-                                                                              <label class="custom-control-label" for="checkbox4"> custom checkbox</label>
-                                                                            </div>
-                                                                          </div>
+
+                                                @if (isset($roles_permissions) && $roles_permissions->count() > 0)
+
+                                                    <div class="row">
+                                                        <div class="card" style="height: 305px;">
+                                                            <div class="card-header">
+                                                                <h4 class="card-title">Admin Permisions</h4>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+
+                                                                    @error('permissions.*')
+                                                                        <div class="alert alert-danger">
+                                                                            {{ $message }}
+                                                                        </div>
+
+                                                                    @enderror
+
+
+                                                                    <ul class="nav nav-tabs">
+
+                                                                        @foreach ($roles_permissions as $role)
+
+
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                                                                    id="base-tab{{ $role->id }}"
+                                                                                    data-toggle="tab"
+                                                                                    aria-controls="tab{{ $role->id }}"
+                                                                                    href="#tab{{ $role->id }}"
+                                                                                    aria-expanded="true">{{ $role->name }}</a>
+                                                                            </li>
+
+
+
+                                                                        @endforeach
+
+                                                                    </ul>
+
+                                                                    <div class="tab-content px-1 pt-1">
+
+                                                                        @foreach ($roles_permissions as $role)
+
+
+                                                                            <div role="tabpanel"
+                                                                                class="tab-pane {{ $loop->first ? 'active' : '' }}"
+                                                                                id="tab{{ $role->id }}"
+                                                                                aria-expanded="true"
+                                                                                aria-labelledby="base-tab{{ $role->id }}">
+                                                                                <div class="permissions-checkbox">
+                                                                                    <div
+                                                                                        class="checkbox_all  custom-control custom-checkbox mr-1">
+
+                                                                                        <input type="checkbox"
+                                                                                            class="custom-control-input select_all_permissions"
+                                                                                            name="select_all_permissions"
+                                                                                            id="checkbox_{{ $role->name }}">
+
+                                                                                        <label class="custom-control-label"
+                                                                                            for="checkbox_{{ $role->name }}">Select
+                                                                                            All </label>
+
+                                                                                    </div>
+
+                                                                                    @foreach (collect($role->permissions)->pluck('name')->toArray() as $permission)
+
+                                                                                        <div
+                                                                                            class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                                            <input type="checkbox"
+                                                                                                class="custom-control-input checkbox_permission"
+                                                                                                name="permissions[]"
+                                                                                                value="{{ $permission }}"
+                                                                                                id="checkbox_{{ $permission }}"
+                                                                                                @if (old('permissions'))
+                                                                                            @if (in_array($permission, old('permissions')))
+                                                                                                {{ 'checked' }}
+                                                                                            @endif
+
+                                                                                    @endif
+                                                                                    >
+                                                                                    <label class="custom-control-label"
+                                                                                        for="checkbox_{{ $permission }}">
+                                                                                        {{ $permission }} </label>
+                                                                                </div>
+
+                                                                        @endforeach
+
+
+
 
                                                                     </div>
-
-
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
 
 
 
 
-                                            {{--  -------------- buttons submit and back --}}
-                                                <div class="form-actions">
-                                                    <button type="button" class="btn btn-warning mr-1"
-                                                        onclick="history.back();">
-                                                        <i class="ft-x"></i> back
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="la la-check-square-o"></i> save
-                                                    </button>
-                                                </div>
-                                        </form>
+
+                                                @endforeach
+
+
+                                            </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        @endif
+
+
+
+
+
+
+                        {{-- -------------- buttons submit and back --}}
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-warning mr-1" onclick="history.back();">
+                                <i class="ft-x"></i> back
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="la la-check-square-o"></i> save
+                            </button>
+                        </div>
+                        </form>
                     </div>
-                </section>
-                <!-- // Basic form layout section end -->
             </div>
         </div>
     </div>
+    </div>
+    </section>
+    <!-- // Basic form layout section end -->
+    </div>
+    </div>
+    </div>
+
+@endsection
+
+@section('js')
+
+    <script>
+
+        $(document).on('change', '.select_all_permissions', function() {
+            let get_inputs_permissions = $(this).parent('div').parent('.permissions-checkbox').find(
+                '.checkbox_permission');
+            $(get_inputs_permissions).prop('checked', this.checked);
+
+        });
+
+    </script>
+
+
+
 
 @endsection

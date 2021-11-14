@@ -125,14 +125,17 @@ function isActive($module, $number = 2)
    order number of rows page pagination count
 */
 
-function orderNumberOfRows()
+function orderNumberOfRows($paginate_count = null)
 {
+    $paginate_count = $paginate_count ?? PAGINATE_COUNT;
+
     $start = 0;
     $page = request()->page ? (int) request()->page : 0;
 
     if ($page && $page > 0) {
 
-        $start = ($page * PAGINATE_COUNT) - PAGINATE_COUNT;
+        $start = ($page * $paginate_count) - $paginate_count;
+        // $start = ($page * PAGINATE_COUNT) - PAGINATE_COUNT;
     }
 
     return $start;

@@ -53,7 +53,6 @@ class UserController extends Controller
                 $path = imageUpload($image, 'users');
 
                 $validated['image'] = $path;
-
             }
 
             User::create($validated);
@@ -122,8 +121,6 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return catchErro('users.index', $th);
         }
-
-
     }
 
 

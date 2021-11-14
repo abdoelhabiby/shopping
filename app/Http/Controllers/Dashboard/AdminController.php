@@ -7,20 +7,31 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Dashboard\AdminRequest;
+use Illuminate\Support\Facades\App;
 
 class AdminController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('role:super_admin');
+        // $this->middleware('role:super_admin');
+
+        $this->middleware('permission:read_admin')->only('index');
+        $this->middleware('permission:create_admin')->only(['create', 'store']);
+        $this->middleware('permission:update_admin')->only(['edit', 'update']);
+        $this->middleware('permission:delete_admin')->only('delete');
     }
 
     //-------------------index-----------------
     public function index()
     {
-        $rows = Admin::role('admin')->paginate(10);
+
+
+        $ids_super_admin =  Admin::role('super_admin')->get()->pluck('id');
+
+        $rows = Admin::with(['roles.permissions'])->whereNotIn('id', $ids_super_admin)->paginate(10);
 
         return view('dashboard.admins.index', compact('rows'));
     }
@@ -30,19 +41,10 @@ class AdminController extends Controller
     public function create()
     {
 
-        $permissions = Role::whereNotIn('name',['super_admin','admin'])
-                             ->where('guard_name' , 'admin')
-                             ->with(['permissions' => function($q){
-                                 return $q->select('name');
-                             }])
-                             ->select(['id','name'])
-                             ->get();
 
-        $collect =  collect($permissions[0]->permissions);
+        $roles_permissions = $this->getRolesWithPermissionsCanAdminTake();
 
-        return $collect->pluck('name');
-
-        return view('dashboard.admins.create');
+        return view('dashboard.admins.create', compact('roles_permissions'));
     }
 
     //-----------------show create form------------------
@@ -61,19 +63,28 @@ class AdminController extends Controller
 
             $validated = $request->validated();
 
+
             $validated['password'] = Hash::make($validated['password']);
+            $data = [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => $validated['password']
+            ];
 
-            $admin =  Admin::create($validated);
+            $admin =  Admin::create($data);
 
-            $admin->assignRole('admin');
+            $validated['permissions'] = $request->permissions && count($request->permissions) > 0 ? $validated['permissions'] : [];
+            $permissions = $validated['permissions'];
+
+            if (count($permissions) > 0) {
+                $admin->givePermissionTo($permissions);
+            }
+
 
             return redirect()->route('admins.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
-            return catchErro('admins.index',$th);
-
+            return catchErro('admins.index', $th);
         }
-
-
     }
 
 
@@ -83,8 +94,11 @@ class AdminController extends Controller
     public function edit(Admin $admin)
     {
         $row =  $admin;
+        $admin_permissions = $row->permissions->pluck('name')->toArray();
+        $roles_permissions = $this->getRolesWithPermissionsCanAdminTake();
 
-        return view('dashboard.admins.edit', compact('row'));
+
+        return view('dashboard.admins.edit', compact(['row', 'admin_permissions', 'roles_permissions']));
     }
     //------------------------show form edit ---------------
 
@@ -97,8 +111,9 @@ class AdminController extends Controller
      * @param  \App\Models\Admin  $Admin
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminRequest $request, Admin $Admin)
+    public function update(AdminRequest $request, Admin $admin)
     {
+
 
 
         try {
@@ -114,15 +129,19 @@ class AdminController extends Controller
             }
 
 
+            $validated['permissions'] = $request->permissions && count($request->permissions) > 0 ? $validated['permissions'] : [];
+            $permissions = $validated['permissions'];
 
-            $Admin->update($validated);
+            unset($validated['permissions']);
+
+            $admin->update($validated);
+            $admin->syncPermissions($permissions);
 
 
             return redirect()->route('admins.index')->with(['success' => "success update"]);
         } catch (\Throwable $th) {
 
-            return catchErro('admins.index',$th);
-
+            return catchErro('admins.index', $th);
         }
     }
 
@@ -135,12 +154,29 @@ class AdminController extends Controller
 
             $admin->delete();
             return redirect()->route('admins.index')->with(['success' => "success delete"]);
-
         } catch (\Throwable $th) {
 
-            return catchErro('admins.index',$th);
+            return catchErro('admins.index', $th);
         }
     }
 
     //-----------------------------delete admin------------------------------
-}
+
+
+
+    protected function getRolesWithPermissionsCanAdminTake()
+    {
+
+        $roles_permissions = Role::whereNotIn('name', ['super_admin', 'admin'])
+            ->where('guard_name', 'admin')
+            ->whereHas('permissions')
+            ->with(['permissions' => function ($q) {
+                return $q->select('name');
+            }])
+            ->select(['id', 'name'])
+            ->get();
+
+        return $roles_permissions;
+    } // end of calss get roles with permissions
+
+} // end of class

@@ -82,7 +82,7 @@ $model_name = 'admins';
                                                     @foreach ($rows as $index => $row)
 
                                                         <tr>
-                                                            <td> {{ orderNumberOfRows() + $index + 1 }}</td>
+                                                            <td> {{ orderNumberOfRows($rows->perPage()) + $index + 1 }}</td>
                                                             <td>{{ $row->name }}</td>
                                                             <td>{{ $row->email }}</td>
                                                             <td>

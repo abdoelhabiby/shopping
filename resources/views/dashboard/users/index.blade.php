@@ -67,7 +67,7 @@ $model_name = 'users';
                                         <table class="table display nowrap table-striped table-bordered ">
                                             <thead>
                                                 <tr>
-                                                    <th>Id</th>
+                                                    <th>#</th>
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Image</th>
@@ -83,7 +83,7 @@ $model_name = 'users';
                                                     @foreach ($rows as $index => $row)
 
                                                         <tr>
-                                                            <td> {{ orderNumberOfRows() + $index + 1 }}</td>
+                                                            <td> {{ orderNumberOfRows($rows->perPage()) + $index + 1 }}</td>
                                                             <td>{{ $row->name }}</td>
                                                             <td>{{ $row->email }}</td>
                                                         <td><img src="{{asset($row->image )}}" class="rounded-circle" width="50" height="50" alt=""></td>

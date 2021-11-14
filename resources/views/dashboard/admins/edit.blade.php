@@ -28,7 +28,7 @@ $model_name = 'admins';
                                     <a href="{{ route('dashboard.home') }}">home </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route( $model_name . '.index') }}">
+                                    <a href="{{ route($model_name . '.index') }}">
                                         {{ $model_name }}
                                     </a>
                                 </li>
@@ -66,8 +66,8 @@ $model_name = 'admins';
                                 <div class="card-content collapse show">
                                     <div class="card-body">
                                         <form class="form"
-                                            action="{{ route( $model_name . '.update', $row->id) }}"
-                                            method="post" enctype="multipart/form-data">
+                                            action="{{ route($model_name . '.update', $row->id) }}" method="post"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             @method('put')
 
@@ -77,30 +77,32 @@ $model_name = 'admins';
                                                 <div class="row">
 
                                                     @php
-                                                    $input = 'name';
+                                                        $input = 'name';
                                                     @endphp
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="text" value="{{ $row->name }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}   "
+                                                            <input type="text" value="{{ $row->name }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input {{ $input }}   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }}</span>
+                                                                <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
                                                     @php
-                                                    $input = 'email';
+                                                        $input = 'email';
                                                     @endphp
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="email" value="{{ $row->email }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}   "
+                                                            <input type="email" value="{{ $row->email }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input {{ $input }}   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -109,32 +111,36 @@ $model_name = 'admins';
                                                 <div class="row">
 
                                                     @php
-                                                    $input = 'password';
+                                                        $input = 'password';
                                                     @endphp
 
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="password" id="{{ $input }}" class="form-control"
-                                                                placeholder="input {{ $input }}   " name="{{ $input }}">
+                                                            <input type="password" id="{{ $input }}"
+                                                                class="form-control"
+                                                                placeholder="input {{ $input }}   "
+                                                                name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
 
                                                         </div>
                                                     </div>
                                                     @php
-                                                    $input = 'password_confirmation';
+                                                        $input = 'password_confirmation';
                                                     @endphp
 
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="{{ $input }}"> password confermation </label>
-                                                            <input type="password" id="{{ $input }}" class="form-control"
+                                                            <label for="{{ $input }}"> password confermation
+                                                            </label>
+                                                            <input type="password" id="{{ $input }}"
+                                                                class="form-control"
                                                                 placeholder="input password confermation   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
 
                                                         </div>
@@ -142,6 +148,126 @@ $model_name = 'admins';
 
                                                 </div>
 
+
+
+                                                {{-- ----------permissions ------------ --}}
+
+
+
+
+
+
+
+
+                                                @if (isset($roles_permissions) && $roles_permissions->count() > 0)
+
+                                                    <div class="row">
+                                                        <div class="card" style="height: 305px;">
+                                                            <div class="card-header">
+                                                                <h4 class="card-title">Admin Permisions</h4>
+                                                            </div>
+                                                            <div class="card-content">
+                                                                <div class="card-body">
+
+                                                                    @error('permissions.*')
+                                                                        <div class="alert alert-danger">
+                                                                            {{ $message }}
+                                                                        </div>
+
+                                                                    @enderror
+
+
+                                                                    <ul class="nav nav-tabs">
+
+                                                                        @foreach ($roles_permissions as $role)
+
+
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                                                                    id="base-tab{{ $role->id }}"
+                                                                                    data-toggle="tab"
+                                                                                    aria-controls="tab{{ $role->id }}"
+                                                                                    href="#tab{{ $role->id }}"
+                                                                                    aria-expanded="true">{{ $role->name }}</a>
+                                                                            </li>
+
+
+
+                                                                        @endforeach
+
+                                                                    </ul>
+
+                                                                    <div class="tab-content px-1 pt-1">
+
+                                                                        @foreach ($roles_permissions as $role)
+
+                                                                        @php
+                                                                            $role_permissions = collect($role->permissions)->pluck('name')->toArray();
+                                                                        @endphp
+
+                                                                            <div role="tabpanel"
+                                                                                class="tab-pane {{ $loop->first ? 'active' : '' }}"
+                                                                                id="tab{{ $role->id }}"
+                                                                                aria-expanded="true"
+                                                                                aria-labelledby="base-tab{{ $role->id }}">
+                                                                                <div class="permissions-checkbox">
+                                                                                    <div
+                                                                                        class="checkbox_all  custom-control custom-checkbox mr-1">
+
+                                                                                        <input type="checkbox"
+                                                                                            class="custom-control-input select_all_permissions"
+                                                                                            name="select_all_permissions"
+                                                                                            id="checkbox_{{ $role->name }}"
+
+                                                                                            @if(count(array_intersect($admin_permissions,$role_permissions)) == count($role_permissions))
+                                                                                              checked='true'
+
+                                                                                            @endif
+
+                                                                                            >
+
+                                                                                        <label class="custom-control-label"
+                                                                                            for="checkbox_{{ $role->name }}">Select
+                                                                                            All </label>
+
+                                                                                    </div>
+
+                                                                                    @foreach ($role_permissions as $permission)
+
+                                                                                        <div
+                                                                                            class="d-inline-block custom-control custom-checkbox mr-1">
+                                                                                            <input type="checkbox"
+                                                                                                class="custom-control-input checkbox_permission"
+                                                                                                name="permissions[]"
+                                                                                                value="{{ $permission }}"
+                                                                                                id="checkbox_{{ $permission }}"
+                                                                                                @if (in_array($permission, $admin_permissions))
+                                                                                            {{ 'checked' }}
+                                                                                    @endif
+
+                                                                                    >
+                                                                                    <label class="custom-control-label"
+                                                                                        for="checkbox_{{ $permission }}">
+                                                                                        {{ $permission }} </label>
+                                                                                </div>
+
+                                                                        @endforeach
+
+
+
+
+                                                                    </div>
+                                                                </div>
+
+
+
+
+
+
+                                                @endforeach
+
+
+                                                @endif
 
 
 
@@ -167,5 +293,25 @@ $model_name = 'admins';
             </div>
         </div>
     </div>
+
+@endsection
+
+
+
+@section('js')
+
+    <script>
+
+        $(document).on('change', '.select_all_permissions', function() {
+            let get_inputs_permissions = $(this).parent('div').parent('.permissions-checkbox').find(
+                '.checkbox_permission');
+            $(get_inputs_permissions).prop('checked', this.checked);
+
+        });
+
+    </script>
+
+
+
 
 @endsection

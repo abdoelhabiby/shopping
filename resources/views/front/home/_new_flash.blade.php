@@ -91,7 +91,8 @@
                                                         <a title="View seller profile"
                                                             href="jmarketplace/3_harry-makle/index.htm">
                                                             <i class="fa fa-user"></i>
-                                                            {{ $product->vendor->name }}
+                                                            {{ $product->vendor ? $product->vendor->name : '' }}
+
                                                         </a>
                                                     </p>
 
@@ -278,7 +279,7 @@
                                                                 <a title="View seller profile"
                                                                     href="jmarketplace/1_david-james/index.htm">
                                                                     <i class="fa fa-user"></i>
-                                                                    {{ $product->vendor->name }}
+                                                                    {{ $product->vendor ? $product->vendor->name : '' }}
                                                                 </a>
                                                             </p>
 

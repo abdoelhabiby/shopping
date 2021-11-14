@@ -88,7 +88,7 @@ itemtype="">
             <a title="View seller profile"
                 href=">
                 <i class="fa fa-user"></i>
-                {{ $product->vendor->name }}
+                {{ $product->vendor ? $product->vendor->name : '' }}
             </a>
         </p>
 
