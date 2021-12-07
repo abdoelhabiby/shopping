@@ -77,7 +77,8 @@ $model_name = 'orders';
                                                             <tr>
                                                                 <th>Username</th>
                                                                 <th>Email</th>
-                                                                <th>Amount</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Total Products Quantity</th>
                                                                 <th>Created at</th>
                                                             </tr>
                                                         </thead>
@@ -86,6 +87,7 @@ $model_name = 'orders';
                                                                 <td> {{ $order->user->name }}</td>
                                                                 <td> {{ $order->user->email }}</td>
                                                                 <td> {{ $order->amount }}</td>
+                                                                <td> {{  $order->orderProducts->sum('quantity')}}</td>
                                                                 <td> {{ $order->created_at }}</td>
 
 
@@ -94,6 +96,20 @@ $model_name = 'orders';
 
                                                         </tbody>
                                                     </table>
+
+
+                                                    @if ($order->note)
+
+
+                                                        <div class="note">
+                                                            <div
+                                                                class="bs-callout-primary callout-border-left callout-transparent p-1">
+                                                                <h4 class="primary">Note</h4>
+                                                                <p>{{ $order->note }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                    @endif
 
 
 
@@ -149,18 +165,18 @@ $model_name = 'orders';
                                                                             </td>
                                                                             <td>
                                                                                 <a href="">
-                                                                                    {{$order_product->product->name}}
+                                                                                    {{ $order_product->product->name }}
 
                                                                                 </a>
                                                                             </td>
                                                                             <td>
-                                                                                {{$order_product->attribute->name}}
+                                                                                {{ $order_product->attribute->name }}
                                                                             </td>
                                                                             <td>
-                                                                                {{$order_product->price}}
+                                                                                {{ $order_product->price }}
                                                                             </td>
                                                                             <td>
-                                                                                {{$order_product->quantity}}
+                                                                                {{ $order_product->quantity }}
                                                                             </td>
 
                                                                         </tr>

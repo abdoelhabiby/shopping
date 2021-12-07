@@ -29,6 +29,8 @@ class AdminController extends Controller
     {
 
 
+
+
         $ids_super_admin =  Admin::role('super_admin')->get()->pluck('id');
 
         $rows = Admin::with(['roles.permissions'])->whereNotIn('id', $ids_super_admin)->paginate(10);

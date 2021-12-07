@@ -23,8 +23,17 @@
 
                     <a href=""><i class="las la-users-cog"></i>
                         <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
+
+                        @php
+                        //get count fo admins without superadmins
+                            $ids_super_admin = App\Models\Admin::role('super_admin')
+                                ->get()
+                                ->pluck('id');
+
+                            $count_admins = App\Models\Admin::whereNotIn('id', $ids_super_admin)->count();
+                        @endphp
                         <span
-                            class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Admin::role('admin')->count() }}</span>
+                            class="badge badge badge-info badge-pill float-right mr-2">{{ $count_admins }}</span>
                     </a>
                     <ul class="menu-content">
                         <li class="active"><a class="menu-item" href="{{ route('admins.index') }}"
