@@ -166,6 +166,9 @@
                                                                                     echo hundelProductReviewsStars($stars);
                                                                                 @endphp
                                                                             </div>
+                                                                            @if($product->vendor)
+
+
                                                                             <p class="seller_name">
                                                                                 <a title="View seller profile"
                                                                                     href="jmarketplace/1_david-james/index.htm">
@@ -173,6 +176,8 @@
                                                                                     {{ $product->vendor->name }}
                                                                                 </a>
                                                                             </p>
+                                                                            @endif
+
 
 
                                                                             <div class="product-title" itemprop="name"><a

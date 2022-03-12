@@ -43,7 +43,7 @@ class HomeRepository implements HomeRepositoryInterface
                 return $rev->select(
                     'product_id',
                     \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                    \DB::raw("COUNT(product_id) as total_rating"),
+                    \DB::raw("COUNT(product_id) as total_rating")
                 )->groupBy('product_id');
             }
         ])
@@ -84,7 +84,7 @@ class HomeRepository implements HomeRepositoryInterface
                         return $rev->select(
                             'product_id',
                             \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating"),
+                            \DB::raw("COUNT(product_id) as total_rating")
                         )->groupBy('product_id');
                     }
 
@@ -121,7 +121,7 @@ class HomeRepository implements HomeRepositoryInterface
                         return $rev->select(
                             'product_id',
                             \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating"),
+                            \DB::raw("COUNT(product_id) as total_rating")
                         )->groupBy('product_id');
                     }
 
@@ -157,7 +157,7 @@ class HomeRepository implements HomeRepositoryInterface
                         return $rev->select(
                             'product_id',
                             \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating"),
+                            \DB::raw("COUNT(product_id) as total_rating")
                         )->groupBy('product_id');
                     }
 
@@ -172,6 +172,12 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3, int $products_count = 4)
     {
+
+
+
+
+
+
         $categories = Category::mainCategory()
             ->active()
             ->whereHas('chields', function ($chi) {
@@ -194,6 +200,9 @@ class HomeRepository implements HomeRepositoryInterface
         foreach ($categories as $key => $main_categories) {
 
             foreach ($main_categories->chields as $subcategory) {
+
+
+
                 if ($subcategory->products->count() > 0) {
                     $groups[$key]['name'] = $main_categories->name;
 
@@ -205,10 +214,11 @@ class HomeRepository implements HomeRepositoryInterface
                             return $rev->select(
                                 'product_id',
                                 \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                                \DB::raw("COUNT(product_id) as total_rating"),
+                                \DB::raw("COUNT(product_id) as total_rating")
                             )->groupBy('product_id');
                         }
                     ])->whereHas('attribute')->latest()->take($products_count)->get();
+
 
                     foreach ($get_poducts as $product) {
                         $groups[$key]['products'][] = $product;

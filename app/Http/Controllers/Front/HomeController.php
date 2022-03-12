@@ -64,7 +64,9 @@ class HomeController extends Controller
         */
 
 
-        $three_main_categories = $home_repository->getThreeMainCategoriesWithChieldsProducts(3, 4);
+         $three_main_categories = $home_repository->getThreeMainCategoriesWithChieldsProducts(3, 4);
+
+
 
         // ---------------------------------------------------
         $compacts = [

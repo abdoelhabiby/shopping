@@ -10,7 +10,8 @@
 
 
                 @foreach ($three_main_categories as $key => $main_category)
-
+                @isset($main_category['products'])
+               
 
                     <div class="nov-productlist   productlist-liststyle    col-xl-4 col-lg-4 col-md-4 col-xs-12 col-md-12">
 
@@ -26,8 +27,10 @@
                                     data-items_tablet="2" data-items_mobile="1">
 
 
+                                  
 
                                     @foreach (array_chunk($main_category['products'], 3) as $index => $products)
+
 
                                         <div class="item  text-center ">
 
@@ -51,13 +54,13 @@
                                                                 --}}
 
                                                                 @if ($product->images->count() > 0)
-                                                                    @foreach ($product->images as $index => $image)
+                                                                    @foreach ($product->images as $offset => $image)
 
-                                                                        @if ($index == 0 && fileExist($image->name))
+                                                                        @if ($offset == 0 && fileExist($image->name))
                                                                             <img class="img-fluid image-cover"
                                                                                 src="{{ asset($image->name) }}" alt=""
                                                                                 width="600" height="600">
-                                                                        @elseif($index == 1 && fileExist($image->name))
+                                                                        @elseif($offset == 1 && fileExist($image->name))
 
                                                                             <img class="img-fluid image-secondary"
                                                                                 src="{{ asset($image->name) }}" alt=""
@@ -151,6 +154,8 @@
                                         </div>
                                         <!-- - end foreach products paginate -->
                                     @endforeach
+                                    
+
 
 
 
@@ -160,6 +165,7 @@
                         </div>
 
                     </div>
+                    @endisset
 
                     <!-- - end foreach main categoies -->
                 @endforeach
