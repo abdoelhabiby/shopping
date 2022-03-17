@@ -114,85 +114,9 @@ class ProductImageController extends Controller
 
     //-----------------------store images relation product in database-----------------
 
-    public function storeDatabase(Request $request, Product $product)
-    {
 
 
-        $get_count_can_upload = $this->max_images_upload - $product->images()->count();
 
-
-        $request->validate([
-            'images' => 'required|array|min:1|max:' . $get_count_can_upload,
-            'images.*' => 'required|string|max:150'
-        ], [
-            'images.required' => 'please upload images',
-            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images',
-        ]);
-
-
-        try {
-
-            DB::beginTransaction();
-
-            $images = $request->images;
-
-            foreach ($images as $image) {
-
-                if (File::exists(public_path($image))) {
-                    $add_image = new ProductImage(['name' => $image]);
-                    $product->images()->save($add_image);
-                }
-            }
-
-            //-----------clean folder from images not appended in database---------
-            $path = public_path('images/products/' . $product->id);
-
-            $all_images = [];
-
-            foreach (File::allFiles($path) as $file) {
-                $all_images[] = str_replace(public_path(), '', $file);
-            }
-
-            $product_images_database = $product->images()->pluck('name')->toArray();
-
-            if (count($all_images) > 0) {
-                foreach ($all_images as $file) {
-                    if (!in_array($file, $product_images_database)) {
-                        deleteFile($file);
-                    }
-                }
-            }
-
-
-            DB::commit();
-
-            return redirect()->back()->with(['success' => "success save"]);
-        } catch (\Throwable $th) {
-            DB::rollback();
-            Log::alert($th);
-            return redirect()->back()->with(['error' => 'some errors happend please try agian alatarererewer']);
-        }
-    }
-
-
-    //-------------delete image ----------------
-
-    public function dropZoneDeleteImage(Product $product, Request $request)
-    {
-        $image = $request->has('image_name') ? $request->image_name : false;
-
-        $check_image = File::exists(public_path($image)) ? true : false;
-
-
-        if (!isset($image) || !$check_image) {
-
-            return response('not found 404 ', 404);
-        }
-
-        File::delete(public_path($image));
-
-        return true;
-    }
 
     public function destroy(Product $product, ProductImage $image)
     {

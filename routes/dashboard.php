@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
             Route::get('/', 'HomepageSlider@index')->name('admin.homepage_slider.index');
             Route::post('store', "HomepageSlider@store")->name('admin.homepage_slider.store');
-            Route::post('/', "HomepageSlider@storeDatabase")->name('admin.homepage_slider.store_database'); //store into databse
+            // Route::post('/', "HomepageSlider@storeDatabase")->name('admin.homepage_slider.store_database'); //store into databse
             Route::get('fetch', "HomepageSlider@fetchImages")->name('admin.homepage_slider.fetch');
             Route::delete('{slider}', "HomepageSlider@destroy")->name('admin.homepage_slider.delete');
         });

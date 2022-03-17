@@ -117,68 +117,7 @@ class HomepageSlider extends Controller
 
     //-----------------------store images relation product in database-----------------
 
-    public function storeDatabase(Request $request)
-    {
 
-
-        $slider_count = Slider::count();
-
-        $get_count_can_upload = $this->max_images_upload - $slider_count;
-
-
-        $request->validate([
-            'images' => 'required|array|min:1|max:' . $get_count_can_upload,
-            'images.*' => 'required|string|max:150'
-        ], [
-            'images.required' => 'please upload images',
-            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images'
-        ]);
-
-
-        try {
-
-            DB::beginTransaction();
-
-            $images = $request->images;
-
-            foreach ($images as $image) {
-
-                if (File::exists(public_path($image))) {
-
-                    Slider::create(['image' => $image]);
-                }
-            }
-
-            //-----------clean folder from images not appended in database---------
-            $path = public_path('images/sliders');
-
-            $all_images = [];
-
-            foreach (File::allFiles($path) as $file) {  //get all images in folder
-                $all_images[] = str_replace(public_path(), '', $file);
-            }
-
-            $slider_images_in_database = Slider::pluck('image')->toArray();
-
-            //delete image not saved in database
-            if (count($all_images) > 0) {
-                foreach ($all_images as $file) {
-                    if (!in_array($file, $slider_images_in_database)) {
-                        deleteFile($file);
-                    }
-                }
-            }
-
-
-            DB::commit();
-
-            return redirect()->back()->with(['success' => "success save"]);
-        } catch (\Throwable $th) {
-            DB::rollback();
-            Log::alert($th);
-            return redirect()->back()->with(['error' => 'some errors happend please try agian later']);
-        }
-    }
 
 
     //-------------delete image ----------------
