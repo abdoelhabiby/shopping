@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Dashboard\Settings;
 
 use App\Models\Slider;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use App\Http\Traits\AjaxResponseTrait;
 
 class HomepageSlider extends Controller
@@ -20,6 +22,7 @@ class HomepageSlider extends Controller
     //----------------------index-------------------
     public function index()
     {
+
 
         $sliders = Slider::latest()->limit(10)->get();
         return view('dashboard.settings.home_page_slider.index', compact('sliders'));
@@ -41,33 +44,73 @@ class HomepageSlider extends Controller
     public function store(Request $request)
     {
 
-        if ($request->ajax()) {
+        // add validation files count before save
 
-
-            if ($request->hasFile('image') && $request->image != null) {
-
-                $request->validate([
-                    'image' => [
-                        'image',
-                        'mimes:png,jpg,jpeg',
-                    ]
-                ]);
-
-
-                $image = $request->file('image');
-                $path = imageUpload($image, 'sliders');
-                $original_name = $image->getClientOriginalName();
-                $name = $path;
-
-                return response()->json([
-                    'name'          => $name,
-                    'original_name' => $original_name,
-                ]);
-            }
+        if (!$request->ajax()) {
+            return $this->notfound();
         }
 
-        return $this->response();
+
+        $request->validate([
+            'image' =>  'required|image|mimes:jpg,png,jpeg|max:2048'
+
+        ]);
+
+
+        try {
+
+
+            DB::beginTransaction();
+
+
+            $folder_path = public_path('images/sliders');
+
+            if (!File::exists($folder_path)) {
+                File::makeDirectory($folder_path, 0775, true);
+            }
+
+            $get_count_can_upload = $this->max_images_upload - Slider::count();
+
+
+
+            if (!max($get_count_can_upload, 0) > 0) {
+                $message = "sorry sliders can add just {$this->max_images_upload} images";
+                $error = ['image' => [$message]];
+                return response(['errors' => $error], 400);
+            }
+
+
+            //max 2mb
+
+
+            $image = $request->file('image');
+            $original_name = $image->getClientOriginalName();
+
+            $path = 'images/sliders/' . $image->hashName();
+
+            $resize = Image::make($image)
+                ->fit(600, 350, function ($constraint) {
+                    $constraint->upsize();
+                })->encode('png', 100)->save(public_path($path));
+
+
+            //insert to database
+            Slider::create(['image' => $path]);
+
+            DB::commit();
+
+            return response()->json([
+                'name'          => $path,
+                'original_name' => $original_name,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Log::alert($th);
+            $er_mes = 'some errors happend please try agian alatarererewer';
+            return response(['error' => $er_mes], 400);
+        }
     }
+
 
 
 
@@ -88,7 +131,7 @@ class HomepageSlider extends Controller
             'images.*' => 'required|string|max:150'
         ], [
             'images.required' => 'please upload images',
-            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images',
+            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images'
         ]);
 
 
@@ -151,16 +194,12 @@ class HomepageSlider extends Controller
                 deleteFile($slider->image);
                 $slider->delete();
                 return $this->successMessage('ok');
-
             } catch (\Throwable $th) {
                 Log::alert($th);
                 abort(404);
             }
-
         }
 
         abort(404);
     }
-
-
 } //end of class

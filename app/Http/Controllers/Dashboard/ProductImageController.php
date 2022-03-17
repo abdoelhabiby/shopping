@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Product;
+use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Rules\CheckCountImageProduct;
+use Intervention\Image\Facades\Image;
 use App\Http\Traits\AjaxResponseTrait;
 
 class ProductImageController extends Controller
@@ -40,41 +42,72 @@ class ProductImageController extends Controller
     }
 
     //--------------------------store image in folder product using dropzone-----------------
-    public function store(Request $request, $id)
+    public function store(Product $product, Request $request)
     {
 
-        if ($request->ajax()) {
-
-            $product = Product::find($id);
-
-            if (!$product) {
-                return response('not found 404 ', 404);
-            }
-
-            if ($request->hasFile('image') && $request->image != null) {
-
-                $request->validate([
-                    'image' => [
-                        'image',
-                        'mimes:png,jpg,jpeg',
-                    ]
-                ]);
-
-
-                $image = $request->file('image');
-                $path = imageUpload($image, 'products/' . $product->id);
-                $original_name = $image->getClientOriginalName();
-                $name = $path;
-
-                return response()->json([
-                    'name'          => $name,
-                    'original_name' => $original_name,
-                ]);
-            }
+        if (!$request->ajax()) {
+            return $this->notfound();
         }
 
-        return $this->response();
-    }
+
+        $request->validate([
+            'image' =>  'required|image|mimes:jpg,png,jpeg|max:2048'
+
+        ]);
+
+        try {
+
+
+            DB::beginTransaction();
+
+
+            $folder_path = public_path('images/products/' . $product->id);
+
+            if (!File::exists($folder_path)) {
+                File::makeDirectory($folder_path, 0775, true);
+            }
+
+
+            $get_count_can_upload = $this->max_images_upload - $product->images()->count();
+
+            if (!max($get_count_can_upload, 0) > 0) {
+                $message = "sorry product can take just {$this->max_images_upload} images";
+                $error = ['image' => [$message]];
+                return response(['errors' => $error], 400);
+            }
+
+
+            //max 2mb
+
+
+            $image = $request->file('image');
+            $original_name = $image->getClientOriginalName();
+
+            $path ='images/products/' . $product->id . '/' . $image->hashName();
+
+            $resize = Image::make($image)
+                ->fit(900, 800, function ($constraint) {
+                    $constraint->upsize();
+                })->encode('png', 100)->save(public_path($path));
+
+
+            //insert to database
+            $product->images()->create(['name' => $path]);
+
+            DB::commit();
+
+            return response()->json([
+                'name'          => $path,
+                'original_name' => $original_name,
+            ]);
+
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Log::alert($th);
+            $er_mes = 'some errors happend please try agian alatarererewer';
+            return response(['error' => $er_mes],400);
+        }
+    } // end of method storre
 
 
 
@@ -144,16 +177,35 @@ class ProductImageController extends Controller
 
     //-------------delete image ----------------
 
+    public function dropZoneDeleteImage(Product $product, Request $request)
+    {
+        $image = $request->has('image_name') ? $request->image_name : false;
+
+        $check_image = File::exists(public_path($image)) ? true : false;
+
+
+        if (!isset($image) || !$check_image) {
+
+            return response('not found 404 ', 404);
+        }
+
+        File::delete(public_path($image));
+
+        return true;
+    }
+
     public function destroy(Product $product, ProductImage $image)
     {
-        if (request()->ajax()) {
+        $check_image = File::exists(public_path($image->name)) ? true : false;
+
+        if (request()->ajax() && $product->id == $image->product_id && $check_image) {
 
             try {
 
-                deleteFile($image->name);
+                File::delete(public_path($image->name));
                 $image->delete();
-                return $this->successMessage('ok');
 
+                return $this->successMessage('ok');
             } catch (\Throwable $th) {
                 Log::alert($th);
                 abort(404);

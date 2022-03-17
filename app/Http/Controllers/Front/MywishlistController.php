@@ -43,7 +43,7 @@ class MywishlistController extends Controller
                         return $rev->select(
                             'product_id',
                             \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating"),
+                            \DB::raw("COUNT(product_id) as total_rating")
                         )->groupBy('product_id');
                     }
 

@@ -89,14 +89,9 @@
                                             <p class="card-text float-left">Upload images</p>
 
                                             <div class="float-right">
-                                                <form id="form-images"
-                                                    action="{{ route('admin.homepage_slider.store_database') }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-primary btn-xs">Save
-                                                        Images</button>
-                                                </form>
-
+                                                <button type="submit" id="applay_changes" class="btn btn-primary btn-xs">
+                                                    Apllay Changes
+                                                </button>
 
                                             </div>
 
@@ -153,7 +148,9 @@
 
                                         <div class="show-images">
 
-                                            @include('dashboard.settings.home_page_slider._fetch_images')
+                                            @include(
+                                                'dashboard.settings.home_page_slider._fetch_images'
+                                            )
 
                                         </div>
 
@@ -176,10 +173,14 @@
 
 @section('js')
     <script>
-        // fetch();
+        $(document).on('click', '#applay_changes', function(e) {
+            e.preventDefault();
+            Dropzone.forElement('#dpz-multiple-files').removeAllFiles(true);
+            fetch();
+        });
 
 
-        var url = "{{ route('admin.homepage_slider.store', ) }}";
+        var url = "{{ route('admin.homepage_slider.store') }}";
 
         var uploadedDocumentMap = {}
         Dropzone.options.dpzMultipleFiles = {
@@ -189,40 +190,52 @@
             addRemoveLinks: true,
             paramName: 'image',
             acceptedFiles: ".jpeg,.jpg,.png",
-         //   dictRemoveFile: "Remove file",
+            //   dictRemoveFile: "Remove file",
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
             },
             success: function(file, response) {
 
                 //this.removeAllFiles();  // if i want use real time
+                fetch();
 
-                $('#form-images').append('<input type="hidden" data-name="' + response.original_name +
-                    '" name="images[]" value="' + response.name + '">')
-                uploadedDocumentMap[file.name] = response.name
             },
-            error: function(file, response) {
+            error: function(file, response, xhr) {
+
+                if (xhr && xhr.status == 422) {
+                    swal({
+                        title: response.errors.image[0],
+                        type: "error",
+                        timer: 6000,
+                    });
+                }
 
 
-                swal({
-                    title: response.errors.image[0],
-                    type: "error",
-                    timer: 6000,
-                });
+
+                if ( typeof(response.errors) != "undefined" && response.errors !== null) {
+                    swal({
+                        title: response.errors.image[0],
+                        type: "error",
+                        timer: 6000,
+                    });
+
+                }
+
+
+
 
             },
 
             removedfile: function(file) {
-                file.previewElement.remove()
-                var name = ''
+                file.previewElement.remove();
+                var name = '';
                 if (typeof file.name !== 'undefined') {
-                    name = file.name
+                    name = file.name;
                 } else {
-                    name = uploadedDocumentMap[file.name]
+                    name = uploadedDocumentMap[file.name];
                 }
-                $('#form-images').find('input[name="images[]"][data-name="' + name + '"]').remove()
-            },
 
+            },
             init: function() {
 
             }
@@ -313,7 +326,7 @@
                 },
                 success: function(response) {
                     $('.show-images').html(response.images);
-                    console.log(response);
+
 
                 },
                 error: function(response) {}
@@ -321,6 +334,5 @@
 
 
         }
-
     </script>
 @stop

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Models\Slider;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 
 class TestControler extends Controller
@@ -16,37 +18,25 @@ class TestControler extends Controller
     public function test()
     {
 
+        $folder_path = public_path('images/products/410');
 
-        $admin =Admin::where('name','yosef')->first();
-        $admin_permissions = $admin->permissions->pluck('name')->toArray(); //25
+        if (!File::exists($folder_path)) {
+            File::makeDirectory($folder_path, 0777, true, true);
+        }
 
-        $permissions_can = $this->getAdminPermissionsCanTake(); //32
-
-        $role_permissions = Role::findByName('category','admin')->permissions->pluck('name')->toArray();
-
-        // return count($admin_permissions);
+        return  "check";
 
 
-        $the_diffrent =  array_values(array_diff($permissions_can,$admin_permissions));
 
+        return dd(request()->getClientIp());
 
-        return count(array_intersect($admin_permissions,$role_permissions)) == count($role_permissions);
-
-
-        return count(array_intersect($role_permissions,$admin_permissions)) == count($admin_permissions);
-
-
-        return $the_diffrent;
-
-
-        return admin()->roles()->pluck('name');
-
+        phpinfo();
     } //end of method test
 
 
 
 
-    protected function getAdminPermissionsCanTake() : array
+    protected function getAdminPermissionsCanTake(): array
     {
         // get all permission can take
         $roles_permissions = Role::whereNotIn('name', ['super_admin', 'admin'])
@@ -67,9 +57,4 @@ class TestControler extends Controller
 
         return $permissions;
     }
-
-
-
-
-
 } //end of class

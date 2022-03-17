@@ -86,7 +86,7 @@ class ProductController extends Controller
         $calculate_reviews = ProductReview::select(
             \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
             // \DB::raw("COALESCE( ROUND(SUM(quality) * 5 / (COUNT(id) * 5)),0)  as stars"),
-            \DB::raw("COUNT(id) as total_rating"),
+            \DB::raw("COUNT(id) as total_rating")
         )->where('product_id', $product->id)->first();
 
 

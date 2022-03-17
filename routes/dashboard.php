@@ -63,9 +63,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
         Route::get('{product:slug}', "ProductImageController@index")->name('product.images.index');
         Route::post('{product}/store', "ProductImageController@store")->name('product.images.store');
-        Route::post('{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
+        // Route::post('{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
         Route::get('{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
         Route::delete('{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
+        // Route::post('dropzone/{product}', "ProductImageController@dropZoneDeleteImage")->name('product.images.dropzone.delete');
     });
 
     //-------------------------product attributes-----------------------------
