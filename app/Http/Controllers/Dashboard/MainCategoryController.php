@@ -6,14 +6,19 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
 use App\DataTables\MainCategoryDataTable;
 use App\Http\Requests\Dashboard\MainCategoryRequest;
+use App\Http\Services\FileService;
 
 class MainCategoryController extends Controller
 {
     use AjaxResponseTrait;
     protected $view_model = 'dashboard.main_categories';
+
+
+
 
 
     /**
@@ -57,8 +62,19 @@ class MainCategoryController extends Controller
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
+                $folder_path = public_path('images/categories');
+
+                if (!File::exists($folder_path)) {
+                    File::makeDirectory($folder_path, 0775, true);
+                }
+
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
+
                 $validated['image'] = $path;
             }
 
@@ -79,11 +95,12 @@ class MainCategoryController extends Controller
             DB::rollback();
             return catchErro('main-categories.index', $th);
         }
-
-
     }
 
 
+    // -----------------------------------
+
+    // -----------------------------------
 
     /**
      * Show the form for editing the specified category.
@@ -93,10 +110,9 @@ class MainCategoryController extends Controller
      */
     public function edit(Category $main_category)
     {
-         $row = $main_category;
+        $row = $main_category;
 
-        return view($this->view_model . '.edit',compact('row'));
-
+        return view($this->view_model . '.edit', compact('row'));
     }
 
     /**
@@ -116,14 +132,20 @@ class MainCategoryController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-              //-------------uploade image if found-----------
+            //-------------uploade image if found-----------
 
-              if ($request->hasFile('image') && $request->image != null) {
+            if ($request->hasFile('image') && $request->image != null) {
+
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
 
-                deleteFile($main_category->image);
+                FileService::deleteFile(public_path($main_category->image));
+
 
             }
 
@@ -140,7 +162,6 @@ class MainCategoryController extends Controller
             DB::commit();
 
             return redirect()->route('main-categories.index')->with(['success' => "success update"]);
-
         } catch (\Throwable $th) {
             DB::rollback();
 
@@ -158,13 +179,14 @@ class MainCategoryController extends Controller
     public function destroy(Category $main_category)
     {
         if (request()->ajax()) {
+
+            FileService::deleteFile(public_path($main_category->image));
+
             $main_category->delete();
 
             return $this->successMessage('ok');
         }
 
         return $this->notfound();
-
-
     }
 }

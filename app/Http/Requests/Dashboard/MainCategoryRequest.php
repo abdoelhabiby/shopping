@@ -37,7 +37,7 @@ class MainCategoryRequest extends FormRequest
             "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('category_translations', 'name'),
             "meta_keywords" => "sometimes|nullable|string|max:100",
             "meta_description" => "sometimes|nullable|string|max:500",
-            "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg|max:8000",
+            "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg|max:2048",
             "is_active" => "sometimes|nullable|",
 
         ];

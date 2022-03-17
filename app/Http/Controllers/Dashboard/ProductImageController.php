@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\File;
 use App\Rules\CheckCountImageProduct;
 use Intervention\Image\Facades\Image;
@@ -85,11 +86,8 @@ class ProductImageController extends Controller
 
             $path ='images/products/' . $product->id . '/' . $image->hashName();
 
-            $resize = Image::make($image)
-                ->fit(900, 800, function ($constraint) {
-                    $constraint->upsize();
-                })->encode('png', 100)->save(public_path($path));
 
+            FileService::reszeImageAndSave($image, public_path(), $path);
 
             //insert to database
             $product->images()->create(['name' => $path]);
@@ -126,7 +124,8 @@ class ProductImageController extends Controller
 
             try {
 
-                File::delete(public_path($image->name));
+                FileService::deleteFile(public_path($image->name));
+
                 $image->delete();
 
                 return $this->successMessage('ok');

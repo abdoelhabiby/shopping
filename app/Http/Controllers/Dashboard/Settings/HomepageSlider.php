@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard\Settings;
 use App\Models\Slider;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -88,10 +89,7 @@ class HomepageSlider extends Controller
 
             $path = 'images/sliders/' . $image->hashName();
 
-            $resize = Image::make($image)
-                ->fit(600, 350, function ($constraint) {
-                    $constraint->upsize();
-                })->encode('png', 100)->save(public_path($path));
+            FileService::reszeImageAndSave($image, public_path(), $path,600,350);
 
 
             //insert to database
@@ -130,7 +128,8 @@ class HomepageSlider extends Controller
 
             try {
 
-                deleteFile($slider->image);
+                FileService::deleteFile(public_path($slider->image));
+
                 $slider->delete();
                 return $this->successMessage('ok');
             } catch (\Throwable $th) {

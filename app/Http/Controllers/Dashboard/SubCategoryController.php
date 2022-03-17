@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
 use App\DataTables\SubCategoryDataTable;
 use App\Http\Requests\Dashboard\SubCategoryRequest;
@@ -59,8 +61,20 @@ class SubCategoryController extends Controller
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
+
+                $folder_path = public_path('images/categories');
+
+                if (!File::exists($folder_path)) {
+                    File::makeDirectory($folder_path, 0775, true);
+                }
+
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
             }
 
@@ -126,11 +140,15 @@ class SubCategoryController extends Controller
               //-------------uploade image if found-----------
 
               if ($request->hasFile('image') && $request->image != null) {
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
 
-                deleteFile($sub_category->image);
+                FileService::deleteFile(public_path($sub_category->image));
 
             }
 
@@ -164,6 +182,7 @@ class SubCategoryController extends Controller
     public function destroy(Category $sub_category)
     {
         if (request()->ajax()) {
+            FileService::deleteFile(public_path($sub_category->image));
 
             $sub_category->delete();
 
