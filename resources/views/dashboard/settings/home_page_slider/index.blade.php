@@ -149,7 +149,7 @@
 
                 var append_image_swiper = ` <figure class="col-lg-3 col-md-6 col-12 image-section-galary-${response.data.id}"   itemprop="associatedMedia" itemscope itemtype="">
 
-                            <a href="${response.data.image_url}" itemprop="contentUrl" data-size="500x360">
+                            <a href="${response.data.image_url}" itemprop="contentUrl" data-size="700x560">
                             <img class="img-thumbnail img-fluid" src="${response.data.image_url}"
                             itemprop="thumbnail" alt="Image description" style="height: 200px !important" />
                             </a>
@@ -158,7 +158,7 @@
 
 
                 var append_image = `<div class="col-md-3 mb-1 image-section-${response.data.id}">
-                        <img src="${response.data.image_url}" width="155" height="155"
+                        <img src="${response.data.image_url}" width="90" height="100"
                         alt="">
                         <div class="">
                         <button id="delete-image" data-id="${response.data.id}"

@@ -29,7 +29,7 @@
                     <figure class="col-lg-3 col-md-6 col-12 image-section-galary-{{ $image->id }}"
                         itemprop="associatedMedia" itemscope itemtype="">
 
-                        <a href="{{ asset($image->name) }}" itemprop="contentUrl" data-size="500x360">
+                        <a href="{{ asset($image->name) }}" itemprop="contentUrl" data-size="700x560">
                             <img class="img-thumbnail img-fluid" src="{{ asset($image->name) }}"
                                 itemprop="thumbnail" alt="Image description"
                                 style="height: 200px !important" />

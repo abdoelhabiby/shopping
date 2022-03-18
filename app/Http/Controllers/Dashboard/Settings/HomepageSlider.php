@@ -29,18 +29,6 @@ class HomepageSlider extends Controller
         return view('dashboard.settings.home_page_slider.index', compact('sliders'));
     }
 
-    //--------------get all product images----------------------------
-
-    public function fetchImages()
-    {
-
-        $sliders = Slider::latest()->limit(10)->get();
-
-        $html = view('dashboard.settings.home_page_slider._fetch_images', compact('sliders'))->render();
-
-        return $this->returnRenderHtml('images', $html);
-    }
-
     //--------------------------store image in folder product using dropzone-----------------
     public function store(Request $request)
     {
