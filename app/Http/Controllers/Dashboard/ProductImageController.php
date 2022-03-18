@@ -6,14 +6,15 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Services\FileService;
 use Illuminate\Support\Facades\File;
 use App\Rules\CheckCountImageProduct;
 use Intervention\Image\Facades\Image;
 use App\Http\Traits\AjaxResponseTrait;
+use App\Http\Resources\ProductImagesCollection;
 
 class ProductImageController extends Controller
 {
@@ -36,10 +37,15 @@ class ProductImageController extends Controller
     public function fetchImages(Product $product)
     {
 
+        if(!request()->ajax()){
+            return $this->notfound();
+        }
 
-        $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
+        return  ProductImagesCollection::collection($product->images);
 
-        return $this->returnRenderHtml('images', $html);
+        // $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
+
+        // return $this->returnRenderHtml('images', $html);
     }
 
     //--------------------------store image in folder product using dropzone-----------------
@@ -74,7 +80,7 @@ class ProductImageController extends Controller
             if (!max($get_count_can_upload, 0) > 0) {
                 $message = "sorry product can take just {$this->max_images_upload} images";
                 $error = ['image' => [$message]];
-                return response(['errors' => $error], 400);
+                return response(['errors' => $error], 422);
             }
 
 
@@ -82,22 +88,19 @@ class ProductImageController extends Controller
 
 
             $image = $request->file('image');
-            $original_name = $image->getClientOriginalName();
-
             $path ='images/products/' . $product->id . '/' . $image->hashName();
-
-
+            //save images in folder
             FileService::reszeImageAndSave($image, public_path(), $path);
 
             //insert to database
-            $product->images()->create(['name' => $path]);
+            $image = $product->images()->create(['name' => $path]);
+
 
             DB::commit();
 
-            return response()->json([
-                'name'          => $path,
-                'original_name' => $original_name,
-            ]);
+
+            return new ProductImagesCollection($image);
+
 
         } catch (\Throwable $th) {
             DB::rollback();

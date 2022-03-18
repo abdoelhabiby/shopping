@@ -6,11 +6,13 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderProduct;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\ProductImagesCollection;
 
 /*
 
@@ -26,11 +28,32 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
-    Route::get('test',  "TestControler@test");
+    Route::get('test', function(){
+
+        $product = Product::with('images')->find(5);
+
+        // return $product->images;
+
+        $images = ProductImage::where('product_id',5)->get();
+
+        $users = User::all();
+
+        // dd(collect(ProductImage::all()));
+
+        // return ProductImage::first();
+
+         return  ProductImagesCollection::collection($product->images);
+
+
+    });
 
     Route::post('test', function (Request $request) {
 
-        return $request;
+        $product = Product::find(5);
+
+        return $product->images;
+
+        // return new ProductImagesCollection();
     });
 
 
@@ -63,10 +86,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
         Route::get('{product:slug}', "ProductImageController@index")->name('product.images.index');
         Route::post('{product}/store', "ProductImageController@store")->name('product.images.store');
-        // Route::post('{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
-        Route::get('{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
         Route::delete('{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
-        // Route::post('dropzone/{product}', "ProductImageController@dropZoneDeleteImage")->name('product.images.dropzone.delete');
     });
 
     //-------------------------product attributes-----------------------------

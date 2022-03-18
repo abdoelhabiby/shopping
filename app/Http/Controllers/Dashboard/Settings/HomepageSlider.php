@@ -77,7 +77,7 @@ class HomepageSlider extends Controller
             if (!max($get_count_can_upload, 0) > 0) {
                 $message = "sorry sliders can add just {$this->max_images_upload} images";
                 $error = ['image' => [$message]];
-                return response(['errors' => $error], 400);
+                return response(['errors' => $error], 422);
             }
 
 
@@ -89,17 +89,20 @@ class HomepageSlider extends Controller
 
             $path = 'images/sliders/' . $image->hashName();
 
-            FileService::reszeImageAndSave($image, public_path(), $path,600,350);
+            FileService::reszeImageAndSave($image, public_path(), $path, 600, 350);
 
 
             //insert to database
-            Slider::create(['image' => $path]);
+            $slider =  Slider::create(['image' => $path]);
 
             DB::commit();
 
             return response()->json([
-                'name'          => $path,
-                'original_name' => $original_name,
+                'data' => [
+                    'id'          => $slider->id,
+                    'image_url' => asset( $slider->image),
+                    'image_url_delete' => route('admin.homepage_slider.delete', $slider->id)
+                ]
             ]);
         } catch (\Throwable $th) {
             DB::rollback();

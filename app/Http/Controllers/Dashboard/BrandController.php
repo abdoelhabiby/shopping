@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\DataTables\BrandDataTable;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
 use App\Http\Requests\Dashboard\BrandRequest;
 
@@ -55,13 +57,22 @@ class BrandController extends Controller
             $validated = $request->validated();
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
+            $folder_path = public_path('images/brands');
+
+            if (!File::exists($folder_path)) {
+                File::makeDirectory($folder_path, 0775, true);
+            }
+
 
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
                 $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
+                $path = 'images/sliders/' . $image->hashName();
+                FileService::reszeImageAndSave($image, public_path(), $path,600,350);
                 $validated['image'] = $path;
+
             }
 
             //----------customize the translation-------------------
@@ -125,11 +136,17 @@ class BrandController extends Controller
               //-------------uploade image if found-----------
 
               if ($request->hasFile('image') && $request->image != null) {
+
+
                 $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
+                $path = 'images/brands/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
 
-                deleteFile($brand->image);
+                FileService::deleteFile(public_path($brand->image));
+
 
             }
 
@@ -164,6 +181,7 @@ class BrandController extends Controller
     {
         if (request()->ajax()) {
 
+            FileService::deleteFile(public_path($brand->image));
             $brand->delete();
 
             return $this->successMessage('ok');

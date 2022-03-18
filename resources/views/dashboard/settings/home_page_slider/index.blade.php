@@ -37,6 +37,17 @@
                 @include('dashboard.includes.alerts.success')
                 @include('dashboard.includes.alerts.errors')
 
+
+
+                {{-- ----------------show images with gallery --}}
+
+                @include(
+                    'dashboard.settings.home_page_slider._fetch_images'
+                )
+
+                {{-- ------------------------------------------ --}}
+                {{-- ------------------------------------------ --}}
+                {{-- ------------------------------------------ --}}
                 <!-- DOM - jQuery events table -->
                 <section id="dom">
                     <div class="row">
@@ -44,7 +55,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title ">
-                                        home page slider
+                                        Upload images
                                     </h4>
 
 
@@ -85,20 +96,7 @@
 
 
 
-                                        <div class="mb-2">
-                                            <p class="card-text float-left">Upload images</p>
 
-                                            <div class="float-right">
-                                                <button type="submit" id="applay_changes" class="btn btn-primary btn-xs">
-                                                    Apllay Changes
-                                                </button>
-
-                                            </div>
-
-                                            <div class="clearfix"></div>
-
-
-                                        </div>
 
 
 
@@ -115,52 +113,9 @@
                         </div>
                     </div>
                 </section>
-                <section id="">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">
-                                        images
-                                    </h4>
 
 
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                    <div class="heading-elements">
-                                        <ul class="list-inline mb-0">
 
-                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
-
-                                        </ul>
-
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="card-content collapse show">
-                                    <div class="card-body card-dashboard">
-
-
-                                        <div class="show-images">
-
-                                            @include(
-                                                'dashboard.settings.home_page_slider._fetch_images'
-                                            )
-
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </div>
         </div>
 
@@ -173,11 +128,7 @@
 
 @section('js')
     <script>
-        $(document).on('click', '#applay_changes', function(e) {
-            e.preventDefault();
-            Dropzone.forElement('#dpz-multiple-files').removeAllFiles(true);
-            fetch();
-        });
+
 
 
         var url = "{{ route('admin.homepage_slider.store') }}";
@@ -196,29 +147,46 @@
             },
             success: function(file, response) {
 
-                //this.removeAllFiles();  // if i want use real time
-                fetch();
+                var append_image_swiper = ` <figure class="col-lg-3 col-md-6 col-12 image-section-galary-${response.data.id}"   itemprop="associatedMedia" itemscope itemtype="">
+
+                            <a href="${response.data.image_url}" itemprop="contentUrl" data-size="500x360">
+                            <img class="img-thumbnail img-fluid" src="${response.data.image_url}"
+                            itemprop="thumbnail" alt="Image description" style="height: 200px !important" />
+                            </a>
+
+                            </figure>`;
+
+
+                var append_image = `<div class="col-md-3 mb-1 image-section-${response.data.id}">
+                        <img src="${response.data.image_url}" width="155" height="155"
+                        alt="">
+                        <div class="">
+                        <button id="delete-image" data-id="${response.data.id}"
+                        data-action="${response.data.image_delete_url}"
+                        class="btn btn-danger  btn-sm "
+                        style="margin-top: 3px;padding: 1px;"><i
+                            class="la la-trash"></i></button>
+
+                        </div>
+                        <hr>
+                        </div>`;
+
+                $(".my-gallery-row").append(append_image_swiper);
+                $(".show-images-row").append(append_image);
+
+
+                file.previewElement.remove();
 
             },
             error: function(file, response, xhr) {
 
-                if (xhr && xhr.status == 422) {
+                if (typeof(xhr) !== 'undefined' && typeof(xhr.status) !== 'undefined' && xhr.status == 422) {
+
                     swal({
                         title: response.errors.image[0],
                         type: "error",
                         timer: 6000,
                     });
-                }
-
-
-
-                if ( typeof(response.errors) != "undefined" && response.errors !== null) {
-                    swal({
-                        title: response.errors.image[0],
-                        type: "error",
-                        timer: 6000,
-                    });
-
                 }
 
 
@@ -247,9 +215,13 @@
 
         //----------delete image-----------------------
 
+        //----------delete image-----------------------
+
         $(document).on('click', '#delete-image', function() {
             var url = $(this).data('action');
             var token = "{{ csrf_token() }}";
+            var image_id = $(this).data('id');
+            var that = $(this);
 
 
             swal({
@@ -274,7 +246,9 @@
                         },
                         success: function(response) {
 
-                            fetch();
+                            // fetch();
+                            $(document).find(".image-section-" + image_id).remove();
+                            $(document).find(".image-section-galary-" + image_id).remove();
 
                             swal({
                                 title: 'succes delete',
@@ -307,32 +281,9 @@
         });
 
 
+
+
+
         //------------ fetch images----------------------
-
-        function fetch() {
-            var url = "{{ route('admin.homepage_slider.fetch') }}";
-            var div_images = $('.show-images'); // to append images to parrent element
-            var token = "{{ csrf_token() }}";
-
-
-            $.ajax({
-                url: url,
-                method: 'get',
-                data: {
-                    _token: token
-                },
-                beforeSend: function() {
-
-                },
-                success: function(response) {
-                    $('.show-images').html(response.images);
-
-
-                },
-                error: function(response) {}
-            })
-
-
-        }
     </script>
 @stop
