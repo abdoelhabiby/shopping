@@ -52,8 +52,8 @@ class ProductReviewController extends Controller
 
 
         $quality = [];
-        for($i=5;$i > 0;$i--){
-             $quality[$i] = ProductReview::where('product_id', $product->id)->where('quality',$i)->count();
+        for ($i = 5; $i > 0; $i--) {
+            $quality[$i] = ProductReview::where('product_id', $product->id)->where('quality', $i)->count();
         }
 
         $reviews = $product->reviews()->paginate(10);
@@ -67,8 +67,7 @@ class ProductReviewController extends Controller
         ];
 
 
-        return view('front.product.reviews.index', compact(['product', 'reviews', 'calculate_reviews','evaluations']));
-
+        return view('front.product.reviews.index', compact(['product', 'reviews', 'calculate_reviews', 'evaluations']));
     }
 
     //-------------store review---------------
@@ -82,35 +81,43 @@ class ProductReviewController extends Controller
 
         try {
 
-            $product = Product::where('id', $request->validated()['product_id'])->active()->first();
+
+            $product_id = $request->validated()['product_id'];
+
+            $product = Product::where('id', $product_id)
+                ->select(['id', 'slug'])
+                ->active()->first();
 
             if (!$product) {
                 return $this->notfound();
             }
+
+
+              $product->image = asset($product->images()->first()->name);
+              $product->description = stringLength($product->description, 200);
+
 
             $validated = $request->validated();
             $validated = array_merge(['user_id' => user()->id], $validated);
 
             $review = ProductReview::create($validated);
 
+            $review->created_at_diff =  $review->created_at->diffForHumans();
 
-            $modal_html = view(
-                'front.product._update_comment_form',
-                ['product' => $product, 'user_product_review' => $review]
-            )->render();
+            $review->user_name = user()->name;
+
 
             $calculate_reviews = ProductReview::select(
                 DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
                 DB::raw("COUNT(id) as total_rating")
             )->where('product_id', $product->id)->first();
 
-            return response()->json([
-                'append_modal' => $modal_html,
-                'calculate_reviews' => $calculate_reviews
-            ]);
-            // return $this->returnRenderHtml('append_modal', $modal_html);
+            return response(['data' => ['review' => $review, 'calculate_reviews' => $calculate_reviews,'product' => $product]], 201);
+
 
         } catch (\Throwable $th) {
+
+            return $th->getMessage();
             return $this->notfound();
         }
     }
@@ -142,19 +149,11 @@ class ProductReviewController extends Controller
 
             $review->update($validated);
 
-            $modal_html = view(
-                'front.product._update_comment_form',
-                ['product' => $review->product, 'user_product_review' => $review]
-            )->render();
 
             $calculate_reviews = $this->getCalculateReviews($review->product->id);
 
-            return response()->json([
-                'append_modal' => $modal_html,
-                'calculate_reviews' => $calculate_reviews
-            ]);
+            return response()->json(['calculate_reviews' => $calculate_reviews  ]);
 
-            // return $this->returnRenderHtml('append_modal', $modal_html);
         } catch (\Throwable $th) {
             return $this->notfound();
         }

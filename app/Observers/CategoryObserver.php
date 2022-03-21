@@ -28,21 +28,22 @@ class CategoryObserver
     {
         $changes = $category->getChanges();
 
-        if (isset($changes['is_active'])) {
-            $active = $changes['is_active'];
+        // if (isset($changes['is_active'])) {
+        //     $active = $changes['is_active'];
 
 
-            try {
-                DB::beginTransaction();
+        //     try {
+        //         DB::beginTransaction();
 
-                $category->chields()->update(['is_active' => $active]);
+        //         $category->chields()->update(['is_active' => $active]);
 
 
-                DB::commit();
-            } catch (\Throwable $th) {
-                DB::rollback();
-            }
-        }
+        //         DB::commit();
+        //     } catch (\Throwable $th) {
+        //         DB::rollback();
+        //     }
+        // }
+
     }
 
     /**

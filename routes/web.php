@@ -1,10 +1,15 @@
 <?php
 
 use App\Cart\Cart;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductImage;
+use App\Models\ProductReview;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Builder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -16,9 +21,23 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 
-{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}
 |
 */
+
+
+
+
+Route::get('test', function () {
+
+
+ return   $calculate_reviews = ProductReview::select(
+        DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+        DB::raw("COUNT(id) as total_rating")
+    )->where('product_id', 6)->first();
+
+
+});
+
 
 
 
@@ -99,7 +118,7 @@ Route::group(
             Route::get('s/{category:slug}', "CategoryController@subCategory")->name('front.subcategory.show');
 
             //-----route category-------------
-             Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');
+            Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');
 
             //-------------------------------------------------------
             //-------------------------------------------------------
@@ -111,10 +130,6 @@ Route::group(
 
 
 
-        Route::get('test', function () {
-           return "test";
-
-        });
 
 
 

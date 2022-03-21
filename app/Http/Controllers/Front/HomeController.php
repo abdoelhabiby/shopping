@@ -50,22 +50,15 @@ class HomeController extends Controller
 
         $slider_images = Slider::select('image')->latest()->limit(10)->get();
 
-        //-----------get 3 main categories with his chileds products-------
-
-        /*
-         **
-         **
-         ** we must decide count of chields get
-         ** and limit of product in this chiled to
-         ** performance and how count show in page
-         ** the chield get = 3 * 4 products = 12 to every category
-         **
-
-        */
 
 
-         $three_main_categories = $home_repository->getThreeMainCategoriesWithChieldsProducts(3, 4);
 
+
+         /**
+          * get Main Categories With Nested subcategories Products
+          */
+
+         $maincategories_products = $home_repository->getMainCategoriesWithNestedSubcategoriesProducts();
 
 
         // ---------------------------------------------------
@@ -74,8 +67,8 @@ class HomeController extends Controller
             'new_poducts',
             'trending',
             'best_sellers',
-            'three_main_categories',
-            'slider_images'
+            'slider_images',
+            'maincategories_products'
         ];
         return view('front.home.index', compact($compacts));
     }

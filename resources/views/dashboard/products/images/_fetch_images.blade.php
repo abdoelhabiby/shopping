@@ -150,10 +150,7 @@
 
                                     @endforeach
 
-                                @else
-                                    <div class="col-md-12 text-center">
-                                        product dosent have images
-                                    </div>
+
                                 @endif
 
 

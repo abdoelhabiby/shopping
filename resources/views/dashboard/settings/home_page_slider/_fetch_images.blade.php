@@ -141,10 +141,7 @@
                                             <hr>
                                         </div>
                                     @endforeach
-                                @else
-                                    <div class="col-md-12 text-center">
-                                        slider dosent have images
-                                    </div>
+
                                 @endif
 
 

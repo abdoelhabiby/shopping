@@ -36,16 +36,8 @@ class HomeRepository implements HomeRepositoryInterface
                     "end_offer_at",
                 ]);
             },
-            'images' => function ($im) {
-                return $im->select(['name', 'product_id']);
-            },
-            'reviews' => function ($rev) {
-                return $rev->select(
-                    'product_id',
-                    \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                    \DB::raw("COUNT(product_id) as total_rating")
-                )->groupBy('product_id');
-            }
+            'images',
+            'reviewsRating'
         ])
             ->limit($limit)->get()->map(function ($album) {
                 $album->setRelation('images', $album->images->take(2));
@@ -60,7 +52,7 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getNewProducts($limit)
     {
-        return $this->product->active()
+        return  $this->product->active()
 
             ->with(
                 [
@@ -80,16 +72,14 @@ class HomeRepository implements HomeRepositoryInterface
                             "end_offer_at",
                         ])->where('is_active', true);
                     },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+                    'images',
+                    'reviewsRating'
 
                 ]
-            )->active()->latest()->limit(18)->get();
+            )->active()->latest()->limit($limit)->get()->map(function ($product) {
+                $product->setRelation('images', $product->images->take(2));
+                return $product;
+            });
     }
 
     //----------------get  products best sellers---------
@@ -117,16 +107,14 @@ class HomeRepository implements HomeRepositoryInterface
                             "end_offer_at",
                         ])->where('is_active', true);
                     },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+                    'images',
+                    'reviewsRating'
 
                 ]
-            )->latest()->limit(18)->get();
+            )->latest()->limit($limit)->get()->map(function ($product) {
+                $product->setRelation('images', $product->images->take(2));
+                return $product;
+            });
     }
 
     //----------------get  products trending---------
@@ -153,16 +141,15 @@ class HomeRepository implements HomeRepositoryInterface
                             "end_offer_at",
                         ])->where('is_active', true);
                     },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+                    'images',
+                    'reviewsRating'
+
 
                 ]
-            )->latest()->limit($limit)->get();
+            )->latest()->limit($limit)->get()->map(function ($product) {
+                $product->setRelation('images', $product->images->take(2));
+                return $product;
+            });
     }
 
 
@@ -170,72 +157,72 @@ class HomeRepository implements HomeRepositoryInterface
     //------------------get 3 main categories wsi his chields with products products ----
 
 
-    public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3, int $products_count = 4)
+    public function getMainCategoriesWithNestedSubcategoriesProducts(int $main_categories_limit = 3, int $products_limit = 10,int $image_count = 2)
     {
 
-
-
-
-
-
-        $categories = Category::mainCategory()
-            ->active()
-            ->whereHas('chields', function ($chi) {
-                return $chi->whereHas('products');
-            })
+        $category = Category::mainCategory()
+            ->whereHas('chields.chields')
             ->with([
-                'chields'
-            ])
-            ->inRandomOrder()
-            ->take(3)
-            ->get()
-            ->map(function ($main) use ($chields_count) {
-                $main->setRelation('chields', $main->chields->take($chields_count)); // limit of chields
-                return $main;
-            });
-
-
-        $groups = [];
-
-        foreach ($categories as $key => $main_categories) {
-
-            foreach ($main_categories->chields as $subcategory) {
-
-
-
-                if ($subcategory->products->count() > 0) {
-                    $groups[$key]['name'] = $main_categories->name;
-
-                    //------ add limit of products get in chiled------
-                    //-------i dont like it need to upgrade !!!!------
-                    $get_poducts = $subcategory->products()->active()->with([
-                        'attribute',
-                        'reviews' => function ($rev) {
-                            return $rev->select(
-                                'product_id',
-                                \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                                \DB::raw("COUNT(product_id) as total_rating")
-                            )->groupBy('product_id');
-                        }
-                    ])->whereHas('attribute')->latest()->take($products_count)->get();
-
-
-                    foreach ($get_poducts as $product) {
-                        $groups[$key]['products'][] = $product;
-                    }
+                'chields' => function ($query) {
+                    $query->active()->select(['id', 'parent_id', 'slug']);
+                },
+                'chields.chields' => function ($query) {
+                    $query->active()->select(['id', 'parent_id', 'slug'])->whereHas('products.attributes');
                 }
+            ])
+            ->select(['id', 'parent_id', 'slug'])
+            ->inRandomOrder()
+            ->active()
+            ->limit($main_categories_limit)->get();
+
+
+        $main_category_with_las_chields_id = $category->mapWithKeys(function ($main) {
+            return [$main->slug => $main->chields->map(function ($lastchield) {
+                return  $lastchield->chields->map(function ($map) {
+                    return  $map->id;
+                });
+            })->collapse()];
+        })->toArray();
+
+        $ids = $main_category_with_las_chields_id['clothes'];
+
+        $category_products = [];
+
+        foreach ($main_category_with_las_chields_id as $category => $chields_id) {
+            if ($category && is_array($chields_id) && count($chields_id) > 0) {
+
+                $category_products[$category] = Product::whereHas('categories', function ($query) use ($chields_id) {
+                    $query->whereIn('product_categories.category_id', $chields_id);
+                })
+                    ->with([
+                        'categories' => function ($query) use ($chields_id) {
+                            $query->whereIn('product_categories.category_id', $chields_id);
+                        },
+                        'vendor' => function ($vend) {
+                            return $vend->select(['name', 'id']);
+                        },
+                        'attribute' => function ($attr) {
+                            return $attr->where('is_active', true);
+                        },
+                        'images',
+                        'reviewsRating'
+                    ])
+                    ->active()
+                    ->orderBy('created_at', 'desc')
+                    ->limit($products_limit)
+                    ->get()->map(function ($product) use($image_count) {
+                        $product->setRelation('images', $product->images->take($image_count));
+                        return $product;
+                    });
             }
         }
 
-
-
-        return   collect($groups);
+        return  $category_products;
     }
 
 
+    // --------------------------------------------
 
-
-    //--------------------------------------
 
 
 

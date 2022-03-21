@@ -30,7 +30,7 @@
                     <div class="product row no-gutters">
                         <div class="product-image col-4">
                             @if($product->images->first() )
-                            <img class="img-fluid" src="{{  $product->images->first()->name }}" height="" width=""
+                            <img class="img-fluid" src="{{ asset($product->images->first()->name )}}" height="" width=""
                                 alt="{{ $product->name }}">
                              @else
                              <img class="img-fluid" src="{{ getLinkImageNoImage() }}" height="" width=""
@@ -92,7 +92,7 @@
                                     aria-label="Close" class="btn btn-primary" name="submitMessage"
                                     type="submit">@lang('front.send')</button> --}}
 
-                                <button id="submitNewMessage" class="btn btn-primary" name="submitMessage"
+                                <button id="submitNewReview" class="btn btn-primary" name="submitMessage"
                                     type="submit">@lang('front.send')</button>
                             </div>
                         </div>

@@ -31,7 +31,7 @@
 
 
                     {{-- ------ section new and flash deals --}}
-                    @include('front.home._new_flash')
+                    @include('front.home._new_flash',[$products_offer,$new_poducts])
                     {{-- ------------------------- --}}
 
 
@@ -47,7 +47,7 @@
                     {{-- ------ section trending now and best saller
                     --}}
 
-                    @include('front.home._trending_best_seller')
+                    @include('front.home._trending_best_seller',[$trending,$best_sellers])
 
                     {{-- ------------------------- --}}
 
@@ -103,7 +103,7 @@
                     {{-- ------ section bottom sho 3categories with his products
                     --}}
 
-                    @include('front.home._bottom_category_wis_his_products')
+                    @include('front.home._bottom_category_wis_his_products',[$maincategories_products])
 
 
                     {{-- ------------------------- --}}

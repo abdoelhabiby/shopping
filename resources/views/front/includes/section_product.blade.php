@@ -1,13 +1,13 @@
 @if($product)
 
-<div class="product-miniature js-product-miniature item-one first_item"
+<div class="product-miniature js-product-miniature item-one first_item "
 data-id-product="{{ $product->id }}"
 data-id-product-attribute="{{ $product->attribute->id }}" itemscope=""
 itemtype="">
 
 
 
-<div class="thumbnail-container">
+<div class="thumbnail-container d-flex ">
 
 
 
@@ -23,14 +23,14 @@ itemtype="">
             @foreach ($product->images as $index => $image)
 
                 @if ($index == 0 && fileExist($image->name))
-                    <img class="img-fluid image-cover"
-                        src="{{ asset($image->name) }}" alt=""
-                        title="{{ $product->name }}" width="600" height="600">
+                    <img class="img-fluid image-cover w-100"
+                        src="{{ asset($image->name) }}" alt="" style="height: 250px"
+                        title="{{ $product->name }}" >
                 @elseif($index == 1 && fileExist($image->name))
 
-                    <img class="img-fluid image-secondary"
-                        src="{{ asset($image->name) }}" alt=""
-                        title="{{ $product->name }}" width="600" height="600">
+                    <img class="img-fluid image-secondary w-100"
+                        src="{{ asset($image->name) }}" alt=""  style="height: 250px"
+                        title="{{ $product->name }}" >
                 @else
                     @break
                 @endif
@@ -38,9 +38,8 @@ itemtype="">
 
         @else
 
-            <img class="img-fluid image-cover"
-                src="{{ getLinkImageNoImage() }}" alt="" width="600"
-                height="600">
+            <img class="img-fluid image-cover w-100"
+                src="{{ getLinkImageNoImage() }}" alt=""  style="height: 250px">
 
         @endif
         {{-- ------------
@@ -68,16 +67,18 @@ itemtype="">
 
 
 
+
         <div class="category-title">
             <a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">product
-                name</a>
+                name
+            </a>
         </div>
 
         <div class="product-comments">
 
             {{-- --- helper function tooo append stars --}}
             @php
-            $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+            $stars =  $product->reviewsRating->first() ? $product->reviewsRating->first()->stars :  0;
             echo hundelProductReviewsStars($stars);
         @endphp
 

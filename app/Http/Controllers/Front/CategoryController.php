@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -65,30 +66,26 @@ class CategoryController extends Controller
 
     //----------------------------------------------
 
-    public function category($subcategory, $category)
+    public function category($subcategory,Category $category)
     {
-        $subcategory =  Category::subCategory()->active()->where('slug', $subcategory)
-            ->whereHas('chield', function ($chiled) use ($category) {
-                return $chiled->where('is_active', true)->where('slug', $category);
-            })
-            ->with(['chield' => function ($chiled) use ($category) {
-                // return $chiled->active()->where('slug', $category)->whereHas('products')->with(['products' => function($p){
-                //     return $p->active()->paginate(1);
-                // }]);
-                return $chiled->active()->where('slug', $category)->whereHas('products');
-            }])
-            //
-            ->firstOrFail();
 
-        $category = $subcategory->chield;
-         $category_products = $category->products()->active()->orderBy('id','desc')->paginate(12);
+        Category::where('slug',$subcategory)->firstOrFail();
 
-        // if (!$category_products->count() > 0) {
-        //     abort('404');
-        // }
+        $products = Product::whereHas('categories' , function($query) use($category) {
+            $query->where('product_categories.category_id',$category->id);
+        })
+        ->with([
+            'attribute',
+            'reviewsRating',
+            'images'
+        ])
+        ->active()
+        ->orderBy('id','desc')
+        ->paginate(12);
+
+        return view('front.categories.category', compact(['category', 'products']));
 
 
-        return view('front.categories.category', compact(['category', 'category_products']));
     }
     //----------------------------------------------
     //----------------------------------------------

@@ -32,10 +32,17 @@
 
                     <div class="product row no-gutters">
                         <div class="product-image col-4">
-                            <img class="img-fluid" src="{{ $product->images->first()->name }}" height="" width=""
-                                alt="{{ $product->name }}">
+                            @if($product->images->first())
+                            <img class="img-fluid" src="{{ asset($product->images->first()->name) }}" height="" width=""
+                            alt="{{ $product->name }}">
+                            @else
+
+                            <img class="img-fluid" src="{{ pathNoImage() }}" height="" width=""
+                            alt="{{ $product->name }}">
+                            @endif
+
                         </div>
-                        <div class="product_desc col-8">
+                        <div class="product_desc col-8 p-2">
                             <p class="product_name">
                                 {{ $product->name }}
                             </p>
@@ -86,7 +93,7 @@
                             </div>
                             <div class="fr">
 
-                                <a id="delete-review" class="btn btn-danger" style="font-size: 1.2rem;
+                                <a id="delete-review" data-review-id="{{$user_product_review->id}}" class="btn btn-danger" style="font-size: 1.2rem;
                                 font-weight: 400;
                                 color:aliceblue;
                                 padding: 9px 32px;
@@ -95,7 +102,7 @@
                                 </a>
 
 
-                                <button id="submitNewMessage" class="btn btn-primary" name="submitMessage"
+                                <button id="submitUpdateReview" data-review-id="{{$user_product_review->id}}"  class="btn btn-primary" name="submitMessage"
                                     type="submit">@lang('front.update')
                                 </button>
 

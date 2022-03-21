@@ -6,7 +6,7 @@
             <div class="modal-body">
                 <figure>
                     <img class="js-modal-product-cover product-cover-modal" width="600"
-                        src="{{$product->images->first()->name}}"
+                        src="{{asset($product->images->first()->name)}}"
                         alt="" title="" itemprop="image">
                 </figure>
                 <aside id="thumbnails" class="thumbnails js-thumbnails text-xs-center">
@@ -15,10 +15,11 @@
                         <ul class="product-images js-modal-product-images">
 
                             @foreach($product->images as $image)
+                            {{-- {{ dd($product->images) }} --}}
                             <li class="thumb-container">
-                                <img data-image-large-src="{{$image->name}}"
+                                <img data-image-large-src="{{asset($image->name)}}"
                                     class="thumb js-modal-thumb"
-                                    src="{{$image->name}}"
+                                    src="{{asset($image->name)}}"
                                     alt="" title="{{$product->name}}" width="125" itemprop="image">
                             </li>
 
