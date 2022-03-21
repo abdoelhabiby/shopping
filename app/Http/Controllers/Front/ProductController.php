@@ -67,7 +67,7 @@ class ProductController extends Controller
                     $query->limit(7);
 
                 },'reviews' => function($query){
-                    $query->limit(5)->orderBy('id','desc');
+                    $query->where('user_id',"!=",user()->id)->limit(5)->orderBy('id','desc');
                 },
 
 
@@ -76,8 +76,11 @@ class ProductController extends Controller
 
             if(user()){
                 $product->load('authReview');
-            }
 
+                if($product->authReview ){
+                    $product->reviews->prepend($product->authReview);
+                }
+            }
 
 
 

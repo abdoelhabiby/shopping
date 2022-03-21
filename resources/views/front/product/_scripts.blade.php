@@ -28,6 +28,7 @@
     var lang_update = " {{ __('front.update') }}";
     var lang_required = " {{ __('front.required_fields') }}";
     var lang_write_revie = "{{ ucfirst(__('front.write_review')) }}";
+    var lang_send = "{{ __('front.send') }}"
 
     //---------------heper function to handel nnew action in product review------
 
@@ -58,10 +59,10 @@
 
     // -------------------modal review-------------------
     //------------close modal form add review------------
-    $(".close_modal_review").click(function() {
+    $(document).on('click',".close_modal_review",function(e) {
 
-        $('#id_new_comment_form')[0].reset();
-        $('#id_new_comment_form').find(".display-errors").empty().addClass('d-none');
+      $(document).find('#id_update_comment_form .display-errors').empty().addClass('d-none');
+
 
     });
 
@@ -77,6 +78,8 @@
         var token = "{{ csrf_token() }}";
         var product_id = "{{ $product->id }}";
         var review_id = $(this).data('review-id');
+        var myform = $(this).closest('form');
+
 
 
 
@@ -114,12 +117,37 @@
 
                         $(document).find(".poduct_reviews #review_id_" + review_id) .remove();
 
-                        $('#id_new_comment_form')[0].reset();
+                        $(document).find('#id_new_comment_form')[0].reset();
 
                         //----------------------------add new review---------------
+
+                        setTimeout(() => {
                         $('#new_comment_form').modal('hide');
 
+                        }, 1000);
 
+                        var append_button = ` `;
+
+                                    var url_new_review = "{{ route('product.review.store') }}";
+
+                                    // ------------append footer---------------
+                                    var model_foter = ` <div id="new_comment_form_footer">
+                                                                <div class="fl">
+                                                                    <sup class="required">*</sup>
+                                                                    ${lang_required}
+                                                                </div>
+                                                                <div class="fr">
+                                                                    <button id="submitNewReview" class="btn btn-primary" name="submitMessage"
+                                                                    type="submit">${lang_send}</button>
+                                                                </div>
+                                                        </div>`;
+
+
+                    $(document).find('#id_new_comment_form').attr('action', url_new_review)
+                    myform.find('#new_comment_form_footer').remove();
+                    myform.find('.new_comment_form_content').append(model_foter);
+
+                                    // --------------------------------------------
                         //set timeout because the modal to fix background  e..e.
 
 
@@ -202,18 +230,8 @@
 
 
                 var stars = data_un.quality;
-                var rating_stars = '';
-                for (i = 0; i < stars; i++) {
-                    rating_stars += '<div class="star star_on"></div>';
-                }
-                var minus = 5 - stars;
 
-                if (minus > 0) {
-                    for (i = 0; i < minus; i++) {
-                        rating_stars += ' <div class="star "></div>';
-                    }
-                }
-
+                var rating_stars = getStarsStyle(stars);
 
 
                 $(document).find('#review_id_' + review_id + ' .comment_details').empty().append(
@@ -359,19 +377,7 @@
         var modal = `<a class="open-comment-form" data-toggle="modal" data-target="#new_comment_form" href="#"><i class="fa fa-edit"></i>
 
              </a>`;
-        var rating_stars = '<div class="star_content">';
-        for (i = 0; i < stars; i++) {
-            rating_stars += '<div class="star star_on"></div>';
-        }
-        var minus = 5 - stars;
-
-        if (minus > 0) {
-            for (i = 0; i < minus; i++) {
-                rating_stars += ' <div class="star "></div>';
-            }
-        }
-
-        rating_stars += '</div>';
+        var rating_stars = '<div class="star_content">' + getStarsStyle(stars) + '</div>';
 
 
 
@@ -408,6 +414,26 @@
 
         $(document).find("#product_comments_block_tab .poduct_reviews").prepend(section_html);
 
+
+    }
+
+
+    function getStarsStyle(stars){
+
+        var star_element = '';
+
+        for (i = 0; i < stars; i++) {
+            star_element += '<div class="star star_on"></div>';
+        }
+        var minus = 5 - stars;
+
+        if (minus > 0) {
+            for (i = 0; i < minus; i++) {
+                star_element += ' <div class="star "></div>';
+            }
+        }
+
+        return star_element;
 
     }
 

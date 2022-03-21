@@ -17,9 +17,9 @@ class ProductReview extends Model
 
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d h:i:s'
-    ];
+    // protected $casts = [
+    //     'created_at' => 'datetime:Y-m-d h:i:s'
+    // ];
 
     protected $hidden = ['updated_at'];
 
@@ -33,6 +33,7 @@ class ProductReview extends Model
     {
         return $this->belongsTo(Product::class,'product_id','id');
     }
+
 
 
 

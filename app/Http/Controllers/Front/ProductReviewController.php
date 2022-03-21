@@ -43,18 +43,23 @@ class ProductReviewController extends Controller
         ])
             ->firstOrFail();
 
-        // $evaluations = ProductReview::select(
-        //     'quality',
-        //     \DB::raw("COUNT(id) as total_rating"),
-        // )
-        //     ->groupBy('quality')
-        //     ->where('product_id', $product->id)->get();
+
+
+        // $ttt = ProductReview::where('product_id', $product->id)
+
+        // ->select('quality', DB::raw('count(*) as total'))
+        // ->groupBy('quality')
+        // ->orderBy('quality','desc')
+        // ->get();
 
 
         $quality = [];
+
         for ($i = 5; $i > 0; $i--) {
             $quality[$i] = ProductReview::where('product_id', $product->id)->where('quality', $i)->count();
         }
+
+
 
         $reviews = $product->reviews()->paginate(10);
         $calculate_reviews = $this->getCalculateReviews($product->id);
@@ -107,10 +112,7 @@ class ProductReviewController extends Controller
             $review->user_name = user()->name;
 
 
-            $calculate_reviews = ProductReview::select(
-                DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                DB::raw("COUNT(id) as total_rating")
-            )->where('product_id', $product->id)->first();
+            $calculate_reviews = $product->reviewsRating()->first();
 
             return response(['data' => ['review' => $review, 'calculate_reviews' => $calculate_reviews,'product' => $product]], 201);
 
@@ -133,7 +135,21 @@ class ProductReviewController extends Controller
             return $this->notfound();
         }
 
+
+
         try {
+
+            $product_id = $request->validated()['product_id'];
+
+            $product = Product::where('id', $product_id)
+                ->select(['id', 'slug'])
+                ->active()->first();
+
+            if (!$product) {
+                return $this->notfound();
+            }
+
+
 
             $review =  ProductReview::whereHas('product', function ($pro) use ($request) {
                 return $pro->where('id', $request->product_id)->active();
@@ -150,7 +166,7 @@ class ProductReviewController extends Controller
             $review->update($validated);
 
 
-            $calculate_reviews = $this->getCalculateReviews($review->product->id);
+            $calculate_reviews = $product->reviewsRating()->first();
 
             return response()->json(['calculate_reviews' => $calculate_reviews  ]);
 
@@ -185,15 +201,10 @@ class ProductReviewController extends Controller
 
             $review->delete();
 
-            $modal_html = view(
-                'front.product._new_comment_form',
-                ['product' => $product]
-            )->render();
 
             $calculate_reviews = $this->getCalculateReviews($review->product->id);
 
             return response()->json([
-                'append_modal' => $modal_html,
                 'calculate_reviews' => $calculate_reviews
             ]);
 
