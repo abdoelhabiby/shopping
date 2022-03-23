@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\DataTables\ProductDataTable;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
-use App\Http\Requests\Dashboard\ProductRequest;
 use Illuminate\Database\Query\Builder;
+use App\Http\Requests\Dashboard\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -290,7 +291,15 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
+            DB::beginTransaction();
+
+            $product->images()->delete();
+
+            File::deleteDirectory(public_path('images/products/' . $product->id));
+
             $product->delete();
+
+            DB::commit();
             return redirect()->route($this->model . '.index')->with(['success' => "success delete"]);
         } catch (\Throwable $th) {
             DB::rollback();

@@ -23,6 +23,7 @@ class OrderController extends Controller
     public function index(OrderDataTable $datatable)
     {
 
+        // return Order::latest()->first();
         return $datatable->render($this->view_model . '.index');
     }
 

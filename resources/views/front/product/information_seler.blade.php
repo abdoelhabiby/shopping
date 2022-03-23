@@ -1,51 +1,62 @@
 <div class="productbuttons">
     <div class="tabs">
         <h4 class="buttons_bottom_block">
-            Information of seller
+            {{ __('front.information_seller') }}
         </h4>
         <div class="seller_info">
             <span class="seller_name">
-                Taylor Jonson
+                {{ $product->vendor->name }}
+
             </span>
             <div class="average_rating">
-                <a href="http://demo.bestprestashoptheme.com/savemart/en/jmarketplace/2_taylor-jonson/comments"
-                    title="View comments about Taylor Jonson">
+                {{-- <a href="http://demo.bestprestashoptheme.com/savemart/en/jmarketplace/2_taylor-jonson/comments"
+                    title="View comments about Taylor Jonson">  </a> --}}
+
+
+
+
+
+                    <div class="star star_on"></div>
+                    <div class="star star_on"></div>
+                    <div class="star star_on"></div>
+                    <div class="star star_on"></div>
                     <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    <div class="star"></div>
-                    (0)
-                </a>
+                    <br>
+
+
+
             </div>
         </div>
         <div class="seller_links">
-            <p class="link_seller_profile">
+
+            {{-- <p class="link_seller_profile">
                 <a title="View seller profile"
-                    href="http://demo.bestprestashoptheme.com/savemart/en/jmarketplace/2_taylor-jonson/">
+                    href="">
                     <i class="icon-user fa fa-user"></i>
                     View seller profile
                 </a>
-            </p>
-            <p class="link_contact_seller">
+            </p> --}}
+
+            {{-- <p class="link_contact_seller">
                 <a title="Contact seller"
-                    href="http://demo.bestprestashoptheme.com/savemart/en/module/jmarketplace/contactseller?id_seller=2&amp;id_product=3">
+                    href="">
                     <i class="fa fa-comment"></i>
                     Contact seller
                 </a>
-            </p>
-            <p class="link_seller_favorite">
+            </p> --}}
+            {{-- <p class="link_seller_favorite">
                 <a title="Add to favorite seller"
-                    href="http://demo.bestprestashoptheme.com/savemart/en/module/jmarketplace/favoriteseller?id_seller=2&amp;id_product=3">
+                    href="">
                     <i class="icon-heart fa fa-heart"></i>
                     Add to favorite seller
                 </a>
-            </p>
+            </p> --}}
             <p class="link_seller_products">
-                <a title="View more products of this seller"
-                    href="http://demo.bestprestashoptheme.com/savemart/en/jmarketplace/2_taylor-jonson/products">
+                <a title=" {{ __('front.more_seller_products') }}"
+                    href="{{ route('front.seller.products',$product->vendor->id) }}">
                     <i class="icon-list fa fa-list"></i>
-                    View more products of this seller
+                    {{ __('front.more_seller_products') }}
+
                 </a>
             </p>
         </div>

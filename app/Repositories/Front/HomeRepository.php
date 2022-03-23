@@ -176,28 +176,37 @@ class HomeRepository implements HomeRepositoryInterface
             ->limit($main_categories_limit)->get();
 
 
+
+
         $main_category_with_las_chields_id = $category->mapWithKeys(function ($main) {
-            return [$main->slug => $main->chields->map(function ($lastchield) {
+            return [$main->slug => [ 'chields' =>  $main->chields->map(function ($lastchield) {
                 return  $lastchield->chields->map(function ($map) {
                     return  $map->id;
                 });
-            })->collapse()];
+            })->collapse(),'category_trans' => $main->name]];
         })->toArray();
 
-        $ids = $main_category_with_las_chields_id['clothes'];
+
+        $ids = $main_category_with_las_chields_id['clothes']['chields'];
+
+
 
         $category_products = [];
 
-        foreach ($main_category_with_las_chields_id as $category => $chields_id) {
+        foreach ($main_category_with_las_chields_id as $category => $data) {
+
+            // dd(($chields_id['chields']->toArray()));
+
+            $chields_id = $data['chields']->toArray();
+
             if ($category && is_array($chields_id) && count($chields_id) > 0) {
 
-                $category_products[$category] = Product::whereHas('categories', function ($query) use ($chields_id) {
+
+                $products = Product::whereHas('categories', function ($query) use ($chields_id) {
                     $query->whereIn('product_categories.category_id', $chields_id);
                 })
                     ->with([
-                        'categories' => function ($query) use ($chields_id) {
-                            $query->whereIn('product_categories.category_id', $chields_id);
-                        },
+
                         'vendor' => function ($vend) {
                             return $vend->select(['name', 'id']);
                         },
@@ -214,8 +223,15 @@ class HomeRepository implements HomeRepositoryInterface
                         $product->setRelation('images', $product->images->take($image_count));
                         return $product;
                     });
+
+                    $category_products[$category]['products'] = $products;
+
+                    $category_products[$category]['category_name'] = $data['category_trans'] ?? $category;
+
             }
         }
+
+        // dd($category_products);
 
         return  $category_products;
     }

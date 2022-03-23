@@ -6,8 +6,8 @@
 
 
 
-                @foreach ($maincategories_products as $category => $products)
-                    @if (isset($maincategories_products[$category]) && count($maincategories_products[$category]) > 0)
+                @foreach ($maincategories_products as $category => $data)
+                    @if (isset($maincategories_products[$category]['products']) && count($maincategories_products[$category]['products']) > 0)
 
 
 
@@ -17,7 +17,7 @@
 
                             <div class="block block-product clearfix">
                                 <h2 class="title_block">
-                                    {{ $category }}
+                                    {{ $data['category_name'] }}
                                 </h2>
 
                                 <div class="block_content">
@@ -29,7 +29,7 @@
 
 
 
-                                        @foreach ($products->chunk(3) as $index => $products)
+                                        @foreach ($data['products']->chunk(3) as $index => $products)
                                             <div class="item  text-center ">
 
                                                 @foreach ($products as $key => $product)

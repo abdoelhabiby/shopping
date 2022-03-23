@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Product;
-use App\Models\ProductReview;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 
 class ProductController extends Controller
 {
@@ -63,27 +66,77 @@ class ProductController extends Controller
                     return $brand->where('is_active', true)->select(['id', 'slug']);
                 },
                 'reviewsRating',
-                'images' => function($query){
+                'images' => function ($query) {
                     $query->limit(7);
-
-                },'reviews' => function($query){
-                    $query->where('user_id',"!=",user()->id)->limit(5)->orderBy('id','desc');
                 },
+                'reviews' => function ($query) {
+                    $query->where('user_id', "!=", user()->id)->limit(5)->orderBy('id', 'desc');
+                },
+                'vendor:id,name,email'
+
 
 
             ])
             ->firstOrFail();
 
-            if(user()){
-                $product->load('authReview');
+        if (user()) {
+            $product->load('authReview');
 
-                if($product->authReview ){
-                    $product->reviews->prepend($product->authReview);
-                }
+            if ($product->authReview) {
+                $product->reviews->prepend($product->authReview);
             }
+        }
+
+
+
+
+        $sess_id = request()->getSession()->getId();
+        $key = 'products_views_' . $sess_id;
+
+        if (!Cache::has($key)) {
+            Cache::add($key, [], (60 * 60 * 24) ); // 1 minute
+        }
+
+        $latest = (array) Cache::get($key);
+
+        if (!in_array($product->id, $latest)) {
+            array_push($latest, $product->id);
+            $product->increment('views');
+            Cache::put($key, $latest,(60 * 60 * 24));
+        }
 
 
 
         return view('front.product.index', compact(['product']));
     }
+
+
+
+    // ------------------------------------------------------------
+
+    public function sellerProdcts(Admin $seller)
+    {
+
+
+
+        $products =  $seller->products()->whereHas('vendor')
+            ->with([
+                'attribute',
+                'reviewsRating',
+                'images'
+            ])
+            ->active()
+            ->orderBy('id', 'desc')
+            ->paginate(12);
+
+
+        if (!$products->count() > 0) {
+            abort(404);
+        }
+
+        return view('front.seller.products', compact(['seller', 'products']));
+    }
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
 }

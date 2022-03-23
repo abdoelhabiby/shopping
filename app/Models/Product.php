@@ -13,6 +13,7 @@ class Product extends Model
 
     use Translatable, SoftDeletes, GlobalMethodUesdInModels;
 
+
     protected $translatedAttributes = ['name', 'description'];
     protected $hidden = ['pivot', 'translations'];
 

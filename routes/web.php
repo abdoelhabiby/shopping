@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
+use Illuminate\Http\Request;
 use App\Models\ProductReview;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
@@ -27,15 +28,38 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 
-Route::get('test', function () {
+Route::get('test', function (Request $request) {
+
+    $search = $request->search;
 
 
- return   $calculate_reviews = ProductReview::select(
-        DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-        DB::raw("COUNT(id) as total_rating")
-    )->where('product_id', 6)->first();
+
+    $products = Product::when($search, function ($query) use ($search) {
+
+        $query->whereTranslationLike('name', '%' . $search . '%')
+            ->orWhere('slug', 'like', '%' . $search . '%')
+            ->orWhere('sku', 'like', '%' . $search . '%')
+            ->orWhereHas('categories', function ($query) use ($search) {
+                $query->whereTranslationLike('name', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%');
+            });
+    })
+        ->with([
+            'attribute',
+            'reviewsRating',
+            'images'
+        ])
+        ->active()
+        ->orderBy('id', 'desc')
+        ->paginate(12);
 
 
+
+
+
+     return view('front.catalog.search', compact( 'products'));
+
+    return   $products;
 });
 
 
@@ -75,7 +99,14 @@ Route::group(
 
             Route::get('product-reviews/{product_slug}', 'ProductReviewController@index')->name('product.reviews.index');
 
+            // ------------Route seller products---------------------
 
+            Route::get('seller/products/{seller}', 'ProductController@sellerProdcts')->name('front.seller.products');
+
+            // -------------------search-------------------
+            Route::get('catalog', 'FrontSearchController@search')->name('front.catalog.search');
+            // ------------------------------------------
+            // ------------------------------------------
             //-----------------------routes with auth----------------------------
 
             Route::group(['middleware' => 'auth'], function () {
@@ -105,6 +136,15 @@ Route::group(
 
                 Route::get('checkout', 'CheckoutController@index')->name('front.checkout.index');
                 Route::post('charge', 'CheckoutController@charge')->name('front.checkout.charge');
+
+                // --------------------------------------------------
+
+                Route::get('profile', "ProfileController@index")->name('front.profile');
+
+                Route::get('profile/edit', "Auth\UpdateController@edit")->name('front.profile.edit');
+                Route::put('profile/edit', "Auth\UpdateController@update")->name('front.profile.update');
+                Route::get('profile/change-password', "Auth\UpdateController@changePassword")->name('front.profile.change_password');
+                Route::put('profile/change-password', "Auth\UpdateController@updateChangePassword")->name('front.profile.update_change_password');
             });
             //---------------------end routes with auth------------
 
@@ -120,25 +160,24 @@ Route::group(
             //-----route category-------------
             Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');
 
+            //----------------routes user---------------------------
+
+
+
+
+
+
+
             //-------------------------------------------------------
-            //-------------------------------------------------------
+            //------------routes default auth-----------------
+
+            Auth::routes();
+
+
             //-------------------------------------------------------
         });
-
-
-
-
-
-
-
-
-
-        //------------routes default auth-----------------
-        Auth::routes();
     }
 ); // end group packege LaravelLocalization
-
-
 
 
 

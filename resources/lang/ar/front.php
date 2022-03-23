@@ -63,7 +63,27 @@ return [
       'no_products_in_cart' => 'لم يتم اضافه منتجات للسله',
       'checkout' => 'اتمام الطلب',
       'details' => 'ألتفاصيل',
-      'see_all_reviews' => 'قرأة كل المراجعات '
+      'see_all_reviews' => 'قرأة كل المراجعات ',
+      'profile' => 'الحساب الشخصي',
+      'about_profile' => 'تفاصيل الحساب ',
+      'change_password' => 'تغيير كلمة المرور',
+      'edit_profile' => 'تعديل الحساب الشخصي',
+      'name' => 'الاسم',
+      'message_succ_update_profile' =>  'تم تعديل الحساب',
+      'current_password' => 'كلمة المرور الحالية',
+      'new_password' => 'كلمة مرور جديدة ',
+      'confirm_password' => 'إعادة كتابة كلمة المرور الجديدة',
+      'save' => 'حفظ',
+      'exception_current_password' => 'كلمه المرورو الحاليه غير صحيحه',
+      'more_seller_products' => 'عرض المزيد من منتجات البائع',
+      'information_seller' => 'معلومات البائع',
+      'seller' => 'البائع',
+      'search_product_and_category' => "البحث عن منتجات ,والأقسام",
+      'search' => 'ابحث',
+      'no_search_for' => 'لا توجد نتائج بحث عن ',
+      'message_for_better_search' => '- تحقق من أخطاء الكتابة
+      - حاول البحث باستخدام كلمات قصيرة وسهلة
+      - حاول البحث عن مصطلحات عامة - يمكنك بعد ذلك فلترة نتائج البحث',
 
 
 

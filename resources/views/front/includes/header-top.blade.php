@@ -26,8 +26,8 @@
 
 
                         <div class="register-sign">
-                            <a class="account" href="http://demo.bestprestashoptheme.com/savemart/ar/الحساب الشخصي"
-                                title="" rel="nofollow"><span>{{auth()->user()->name}}</span></a>
+                            <a class="account" href="{{ route('front.profile') }}"
+                                title="{{ __('front.profile') }}" rel="nofollow"><span>{{auth()->user()->name}}</span></a>
 
                             <a class="logout" href="{{ route('logout') }}" onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">

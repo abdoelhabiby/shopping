@@ -34,19 +34,19 @@ class ProductImageController extends Controller
 
     //--------------get all product images----------------------------
 
-    public function fetchImages(Product $product)
-    {
+    // public function fetchImages(Product $product)
+    // {
 
-        if(!request()->ajax()){
-            return $this->notfound();
-        }
+    //     if(!request()->ajax()){
+    //         return $this->notfound();
+    //     }
 
-        return  ProductImagesCollection::collection($product->images);
+    //     return  ProductImagesCollection::collection($product->images);
 
-        // $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
+    //     // $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
 
-        // return $this->returnRenderHtml('images', $html);
-    }
+    //     // return $this->returnRenderHtml('images', $html);
+    // }
 
     //--------------------------store image in folder product using dropzone-----------------
     public function store(Product $product, Request $request)
@@ -113,7 +113,7 @@ class ProductImageController extends Controller
 
 
 
-    //-----------------------store images relation product in database-----------------
+    //-----------------------destroy image-----------------
 
 
 

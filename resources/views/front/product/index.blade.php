@@ -368,7 +368,12 @@
 
                                                 {{-- ------------section information seller --}}
 
-                                                @include('front.product.information_seler'  )
+                                                @if($product->vendor)
+
+                                                    @include('front.product.information_seler'  )
+
+                                                @endif
+
                                                 {{-- ------------------------------- --}}
 
                                             </div>
