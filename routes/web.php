@@ -33,7 +33,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
 
-    return env('STRIPE_PUBLISH_KEY');
+    // return env('STRIPE_PUBLISH_KEY');
 
     Cache::flush();
 
