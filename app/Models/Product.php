@@ -19,6 +19,7 @@ class Product extends Model
     protected $translatedAttributes = ['name', 'description'];
     protected $hidden = ['pivot', 'translations'];
 
+    public $keyType = 'string';
 
     protected $fillable = [
         "sku",
