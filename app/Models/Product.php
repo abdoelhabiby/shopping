@@ -153,7 +153,7 @@ class Product extends Model
             \DB::raw("ROUND(SUM(DISTINCT quality) * 5 / (COUNT(id) * 5)) as stars"),
             \DB::raw("COUNT(product_id) as total_rating")
         )
-        ->havingRaw('SUM(quality)')
+        ->havingRaw('stars')
         ->groupBy('product_id');
     }
 
