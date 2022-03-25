@@ -102,7 +102,7 @@ class SubCategoryController extends Controller
             DB::rollback();
 
             return dd($th->getMessage());
-            return catchErro('sub-categories.index', $th);
+            // return catchErro('sub-categories.index', $th);
         }
     }
 
