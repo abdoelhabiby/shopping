@@ -100,8 +100,9 @@ class SubCategoryController extends Controller
             return redirect()->route('sub-categories.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return catchErro('sub-categories.index', $th);
+            
+dd($th->getMessage());
+//             return catchErro('sub-categories.index', $th);
         }
     }
 
