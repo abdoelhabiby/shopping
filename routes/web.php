@@ -33,7 +33,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
     
-    return Product::where('id',4)->with('images')->first()->images->first();
+    $image= Product::where('id',4)->with('images')->first()->images->first();
+    
+    return "<img src='". asset($image->name) ."'>";
 
     // return env('STRIPE_PUBLISH_KEY');
 
