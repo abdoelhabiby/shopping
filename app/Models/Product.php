@@ -150,10 +150,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
             'product_id',
-            // \DB::raw("ROUND(SUM(cast(quality)) * 5 / (COUNT(id) * 5)) as stars"),
-            \DB::raw("ROUND(SUM(cast(quality as double precision)) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+            // \DB::raw("ROUND(SUM(cast(quality as double precision)) * 5 / (COUNT(id) * 5)) as stars"),
             \DB::raw("COUNT(product_id) as total_rating")
-        )->groupBy('product_id');
+        )
+        ->havingRaw('SUM(quality)')
+        ->groupBy('product_id');
     }
 
     // raw('sum(cast(money as double precision))'))
