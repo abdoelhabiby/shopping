@@ -146,7 +146,7 @@ class Product extends Model
 
         return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
             'product_id',
-            \DB::raw("ROUND(SUM(CAST(quality as double)) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("ROUND(SUM(CAST(quality as integer)) * 5 / (COUNT(id) * 5)) as stars"),
             \DB::raw("COUNT(product_id) as total_rating")
         )->groupBy('product_id');
 
