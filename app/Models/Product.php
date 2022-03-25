@@ -34,10 +34,14 @@ class Product extends Model
 
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d h:i:s'
-    ];
+    // protected $casts = [
+    //     'created_at' => 'datetime:Y-m-d h:i:s'
+    // ];
 
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s',strtotime($value));
+    }
 
 
     //------------------get brand relation-----------

@@ -29,28 +29,26 @@ class HomeRepository implements HomeRepositoryInterface
 
         $products_offer = Cache::remember('home_products_offer', $ttl, function () use ($limit) {
 
-       return $this->product->active()->whereHas('offer')->with([
-            'offer' => function ($offer) {
-                return $offer->select([
-                    "id",
-                    "sku",
-                    "qty",
-                    "product_id",
-                    "price",
-                    "price_offer",
-                    "start_offer_at",
-                    "end_offer_at",
-                ])->withTranslation();
-            },
-            'images' => function($query){
-                $query->take(2);
-            },
-            'reviewsRating'
-        ])
-            ->withTranslation()
-            ->limit($limit)->get();
-
-
+            return $this->product->active()->whereHas('offer')->with([
+                'offer' => function ($offer) {
+                    return $offer->select([
+                        "id",
+                        "sku",
+                        "qty",
+                        "product_id",
+                        "price",
+                        "price_offer",
+                        "start_offer_at",
+                        "end_offer_at",
+                    ])->active()->withTranslation();
+                },
+                'images' => function ($query) {
+                    $query->take(2);
+                },
+                'reviewsRating'
+            ])
+                ->withTranslation()
+                ->limit($limit)->get();
         });
 
 
@@ -70,7 +68,6 @@ class HomeRepository implements HomeRepositoryInterface
         $new_products = Cache::remember('home_new_products', $ttl, function () use ($limit) {
 
             return  $this->product->active()
-
                 ->with(
                     [
                         'vendor' => function ($vend) {
@@ -87,9 +84,9 @@ class HomeRepository implements HomeRepositoryInterface
                                 "price_offer",
                                 "start_offer_at",
                                 "end_offer_at",
-                            ])->where('is_active', true)->withTranslation();
+                            ])->active()->withTranslation();
                         },
-                        'images' => function($query){
+                        'images' => function ($query) {
                             $query->take(2);
                         },
                         'reviewsRating'
@@ -113,6 +110,9 @@ class HomeRepository implements HomeRepositoryInterface
         $products_best_seller = Cache::remember('home_products_best_seller', $ttl, function () use ($limit) {
 
             return $this->product->active()
+                ->whereHas('attribute', function ($attribute) {
+                    return $attribute->active();
+                })
 
                 ->with(
                     [
@@ -132,7 +132,7 @@ class HomeRepository implements HomeRepositoryInterface
                                 "end_offer_at",
                             ])->where('is_active', true)->withTranslation();
                         },
-                        'images' => function($query){
+                        'images' => function ($query) {
                             $query->take(2);
                         },
                         'reviewsRating'
@@ -157,6 +157,7 @@ class HomeRepository implements HomeRepositoryInterface
 
 
             return $this->product->active()
+
                 ->with(
                     [
                         'vendor' => function ($vend) {
@@ -175,7 +176,7 @@ class HomeRepository implements HomeRepositoryInterface
                                 "end_offer_at",
                             ])->where('is_active', true)->withTranslation();
                         },
-                        'images' => function($query){
+                        'images' => function ($query) {
                             $query->take(2);
                         },
                         'reviewsRating'
@@ -263,7 +264,7 @@ class HomeRepository implements HomeRepositoryInterface
                                     "end_offer_at",
                                 ])->where('is_active', true)->withTranslation();
                             },
-                            'images' => function($query){
+                            'images' => function ($query) {
                                 $query->take(2);
                             },
                             'reviewsRating'

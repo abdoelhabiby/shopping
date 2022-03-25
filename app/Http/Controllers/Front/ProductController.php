@@ -67,7 +67,13 @@ class ProductController extends BaseController
                     $query->limit(7);
                 },
                 'reviews' => function ($query) {
-                    $query->where('user_id', "!=", user()->id)->limit(5)->orderBy('id', 'desc');
+                    if(user()){
+                        $query->where('user_id', "!=", user()->id)->limit(5)->orderBy('id', 'desc');
+
+                    }else{
+                        $query->limit(5)->orderBy('id', 'desc');
+
+                    }
                 },
                 'vendor:id,name,email'
 

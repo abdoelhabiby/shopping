@@ -117,14 +117,18 @@
 
                         $(document).find(".poduct_reviews #review_id_" + review_id) .remove();
 
-                        $(document).find('#id_new_comment_form')[0].reset();
+                        // $(document).find('#id_new_comment_form')[0].reset();
+
+
+                        document.getElementById('id_new_comment_form').reset()
+
 
                         //----------------------------add new review---------------
 
-                        setTimeout(() => {
-                        $('#new_comment_form').modal('hide');
+                        // setTimeout(() => {
+                          $('#new_comment_form').modal('hide');
 
-                        }, 1000);
+                        // }, 2000);
 
                         var append_button = ` `;
 

@@ -87,21 +87,26 @@ class ProductReviewController extends BaseController
             return $this->notfound();
         }
 
+        $product_id = $request->validated()['product_id'];
+
+        $product = Product::where('id', $product_id)
+
+            ->select(['id', 'slug'])
+            ->active()->first();
+
+        if (!$product) {
+            return $this->notfound();
+        }
+
+
         try {
 
 
-            $product_id = $request->validated()['product_id'];
-
-            $product = Product::where('id', $product_id)
-                ->select(['id', 'slug'])
-                ->active()->first();
-
-            if (!$product) {
-                return $this->notfound();
-            }
 
 
-              $product->image = asset($product->images()->first()->name);
+
+              $get_image = $product->images()->first() ? asset($product->images()->first()->name) : pathNoImage();
+              $product->image =$get_image;
               $product->description = stringLength($product->description, 200);
 
 
@@ -122,6 +127,7 @@ class ProductReviewController extends BaseController
 
         } catch (\Throwable $th) {
 
+            return $th->getMessage();
             return $this->notfound();
         }
     }

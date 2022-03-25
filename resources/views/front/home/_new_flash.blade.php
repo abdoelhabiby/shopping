@@ -1,3 +1,4 @@
+
 <div class="nov-row  col-lg-12 col-xs-12">
     <div class="nov-row-wrap row">
 
@@ -83,16 +84,15 @@
 
 
                                                 </div>
-                                                @if($product->vendor)
-        <p class="seller_name">
-            <a title="View seller profile"
-                href="{{ route('front.seller.products', $product->vendor->id) }}">
-                <i class="fa fa-user"></i>
-                {{ $product->vendor ? $product->vendor->name : '' }}
-            </a>
-        </p>
-
-        @endif
+                                                @if ($product->vendor)
+                                                    <p class="seller_name">
+                                                        <a title="View seller profile"
+                                                            href="{{ route('front.seller.products', $product->vendor->id) }}">
+                                                            <i class="fa fa-user"></i>
+                                                            {{ $product->vendor ? $product->vendor->name : '' }}
+                                                        </a>
+                                                    </p>
+                                                @endif
 
                                                 <div class="product-group-price">
 
@@ -142,7 +142,7 @@
 
                                                 <a href="#" class="quick-view hidden-sm-down"
                                                     data-product-id="{{ $product->id }}"
-                                                    data-url="{{ route('get-product-details-modal', [$product->slug, $product->attribute->id]) }}">
+                                                    data-url="{{ route('get-product-details-modal', [$product->slug, $product->offer->id]) }}">
                                                     <i class="fa fa-search"></i><span> Quick view</span>
                                                 </a>
 
@@ -179,8 +179,7 @@
 
     {{-- -----------------start new -------- --}}
 
-
-    @isset($new_poducts)
+ @isset($new_poducts)
 
         @if ($new_poducts->count() > 0)
             <div
@@ -266,15 +265,14 @@
 
 
                                                     </div>
-                                                    @if($product->vendor)
-                                                    <p class="seller_name">
-                                                        <a title="View seller profile"
-                                                            href="{{ route('front.seller.products', $product->vendor->id) }}">
-                                                            <i class="fa fa-user"></i>
-                                                            {{ $product->vendor ? $product->vendor->name : '' }}
-                                                        </a>
-                                                    </p>
-
+                                                    @if ($product->vendor)
+                                                        <p class="seller_name">
+                                                            <a title="View seller profile"
+                                                                href="{{ route('front.seller.products', $product->vendor->id) }}">
+                                                                <i class="fa fa-user"></i>
+                                                                {{ $product->vendor ? $product->vendor->name : '' }}
+                                                            </a>
+                                                        </p>
                                                     @endif
 
 

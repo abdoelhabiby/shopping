@@ -14,6 +14,6 @@ class UserSeeder extends Seeder
     {
         User::truncate();
 
-        User::create(['name' => 'mohamed','email' => 'm@m.com','password' => 23456789]);
+        User::firstOrCreate(['name' => 'mohamed','email' => 'm@m.com','password' => bcrypt(123456789)]);
     }
 }

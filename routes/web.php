@@ -33,6 +33,10 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
 
+    return env('STRIPE_PUBLISH_KEY');
+
+    Cache::flush();
+
    return Product::with(['images' => function($images){
        $images->limit(2);
    }])->latest()->limit(2)->get();
