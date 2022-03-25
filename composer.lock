@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d0728d0aac57fa29bd8bf06705da94a",
+    "content-hash": "e495ff31290238a0341a353c05d81900",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1040,16 +1040,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.8.3",
+            "version": "1.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85"
+                "reference": "337e3ad8e5716c15f9657bd214d16cc5e69df268"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/337e3ad8e5716c15f9657bd214d16cc5e69df268",
+                "reference": "337e3ad8e5716c15f9657bd214d16cc5e69df268",
                 "shasum": ""
             },
             "require": {
@@ -1130,7 +1130,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.8.3"
+                "source": "https://github.com/guzzle/psr7/tree/1.8.5"
             },
             "funding": [
                 {
@@ -1146,7 +1146,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-05T13:56:00+00:00"
+            "time": "2022-03-20T21:51:18+00:00"
         },
         {
             "name": "intervention/image",
@@ -1975,16 +1975,16 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "3.1.37",
+            "version": "3.1.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SpartnerNL/Laravel-Excel.git",
-                "reference": "49ccd4142d3d7bce492d6bfb9dd9a27b12935408"
+                "reference": "dff132ce4d30b19863f4e84de1613fca99604992"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/49ccd4142d3d7bce492d6bfb9dd9a27b12935408",
-                "reference": "49ccd4142d3d7bce492d6bfb9dd9a27b12935408",
+                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/dff132ce4d30b19863f4e84de1613fca99604992",
+                "reference": "dff132ce4d30b19863f4e84de1613fca99604992",
                 "shasum": ""
             },
             "require": {
@@ -2037,7 +2037,7 @@
             ],
             "support": {
                 "issues": "https://github.com/SpartnerNL/Laravel-Excel/issues",
-                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.37"
+                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.38"
             },
             "funding": [
                 {
@@ -2049,7 +2049,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-28T10:20:04+00:00"
+            "time": "2022-03-24T16:00:29+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -8946,7 +8946,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2.5"
+        "php": "^7.2.5",
+        "ext-imagick": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"
