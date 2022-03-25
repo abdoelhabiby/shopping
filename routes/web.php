@@ -35,11 +35,13 @@ Route::get('test', function (Request $request) {
 
     // return env('STRIPE_PUBLISH_KEY');
 
-    Cache::flush();
+    // Cache::flush();
 
    return Product::with(['images' => function($images){
        $images->limit(2);
-   }])->latest()->limit(2)->get();
+   },
+   'reviewsRating'
+   ])->latest()->limit(2)->get();
 
 })->name('front.test');
 

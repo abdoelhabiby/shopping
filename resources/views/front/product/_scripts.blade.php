@@ -117,7 +117,7 @@
 
                         $(document).find(".poduct_reviews #review_id_" + review_id) .remove();
 
-                        // $(document).find('#id_new_comment_form')[0].reset();
+                        $(document).find('#id_new_comment_form')[0].reset();
 
 
                         document.getElementById('id_new_comment_form').reset()
