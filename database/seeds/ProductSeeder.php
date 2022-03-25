@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
     public function run()
     {
 
-        Product::truncate();
+        // Product::truncate();
 
         $data = [
             "sku" => 'POOI',

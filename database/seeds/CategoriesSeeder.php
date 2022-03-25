@@ -13,7 +13,7 @@ class CategoriesSeeder extends Seeder
     public function run()
     {
 
-        Category::truncate();
+        // Category::truncate();
 
 
         $m_data = [
