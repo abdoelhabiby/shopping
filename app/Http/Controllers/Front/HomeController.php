@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\Front;
 
-use Carbon\Carbon;
 use App\Models\Slider;
-use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Repositories\Front\HomeRepository;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Front\BaseController;
 use App\Interfaces\Front\HomeRepositoryInterface;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
 
 
@@ -48,7 +44,10 @@ class HomeController extends Controller
 
         //----------------------get image sliders------------------
 
-        $slider_images = Slider::select('image')->latest()->limit(10)->get();
+        $ttl = 60 * 60 * 24;
+        $slider_images = Cache::remember('home_slider_images', $ttl, function () {
+            return Slider::select('image')->latest()->limit(10)->get();
+        });
 
 
 

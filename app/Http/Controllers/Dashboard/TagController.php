@@ -18,6 +18,16 @@ class TagController extends Controller
     protected $view_model = 'dashboard.tags';
     protected $model = 'tags';
 
+    public function __construct()
+    {
+        $this->middleware('permission:read_tag')->only('index');
+        $this->middleware('permission:create_tag')->only(['create', 'store']);
+        $this->middleware('permission:update_tag')->only(['edit', 'update']);
+        $this->middleware('permission:delete_tag')->only('destroy');
+    }
+
+
+
 
     /**
      * Display a listing of the category.

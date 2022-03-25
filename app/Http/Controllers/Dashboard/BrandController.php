@@ -20,6 +20,16 @@ class BrandController extends Controller
     protected $model = 'brands';
 
 
+    public function __construct()
+    {
+        $this->middleware('permission:read_brand')->only('index');
+        $this->middleware('permission:create_brand')->only(['create', 'store']);
+        $this->middleware('permission:update_brand')->only(['edit', 'update']);
+        $this->middleware('permission:delete_brand')->only('destroy');
+    }
+
+
+
     /**
      * Display a listing of the category.
      *

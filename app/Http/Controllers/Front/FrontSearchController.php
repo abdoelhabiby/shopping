@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Front;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\BaseController;
 
-class FrontSearchController extends Controller
+class FrontSearchController extends BaseController
 {
 
 

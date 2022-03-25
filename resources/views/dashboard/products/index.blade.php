@@ -68,14 +68,17 @@ $model_name = 'products';
                                                 @if ($products->count() > 0)
                                                     <button class="btn btn-primary  printMe">Print <i
                                                             class="la la-print"></i></button>
-
                                                 @endif
 
-                                                <button class="btn btn-primary ">
-                                                    <a href="{{ route($model_name . '.create') }}" class="text-white">
-                                                        Create <i class="la la-plus"></i>
-                                                    </a>
-                                                </button>
+                                                @if (admin()->can('create_product'))
+                                                    <button class="btn btn-primary ">
+                                                        <a href="{{ route($model_name . '.create') }}"
+                                                            class="text-white">
+                                                            Create <i class="la la-plus"></i>
+                                                        </a>
+                                                    </button>
+                                                @endif
+
 
                                                 <button class="btn btn-primary ">
                                                     <a href="" class="text-white">
@@ -88,24 +91,25 @@ $model_name = 'products';
                                             </div>
 
                                             <div class="float-right  mb-1">
-                                                <form action="{{ route('products.index') }}" method="get" id="form-search">
+                                                <form action="{{ route('products.index') }}" method="get"
+                                                    id="form-search">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <button class="btn btn-primary" type="submit"><i
                                                                     class="la la-search"></i></button>
                                                         </div>
 
-                                                          @php
-                                                              $value = '';
-                                                              foreach ($search_by as $by) {
-                                                                  if(request()->query($by)){
-                                                                      $value = request()->$by;
-                                                                  }
-                                                              }
-                                                          @endphp
+                                                        @php
+                                                            $value = '';
+                                                            foreach ($search_by as $by) {
+                                                                if (request()->query($by)) {
+                                                                    $value = request()->$by;
+                                                                }
+                                                            }
+                                                        @endphp
 
                                                         <input type="text" class="form-control" placeholder="search"
-                                                            aria-label="search" name="search" value="{{$value}}">
+                                                            aria-label="search" name="search" value="{{ $value }}">
 
                                                         <div class="input-group-append">
 
@@ -113,8 +117,9 @@ $model_name = 'products';
                                                             <select name="product" class="text-white bg-primary"
                                                                 id="select-serach-type">
                                                                 @foreach ($search_by as $by)
-                                                                    <option value="{{$by}}" {{request()->query($by) ? 'selected' : ''}}>
-                                                                        {{$by}}
+                                                                    <option value="{{ $by }}"
+                                                                        {{ request()->query($by) ? 'selected' : '' }}>
+                                                                        {{ $by }}
                                                                     </option>
                                                                 @endforeach
 
@@ -141,13 +146,10 @@ $model_name = 'products';
                                                 <th>Name</th>
                                                 <th class="no-print-this">Images</th>
                                                 <th>quantity</th>
-                                                {{-- <th>brand</th>
-                                                --}}
+                                                {{-- <th>brand</th> --}}
                                                 <th>is active</th>
-                                                {{-- <th>categories</th>
-                                                --}}
-                                                {{-- <th>tags</th>
-                                                --}}
+                                                {{-- <th>categories</th> --}}
+                                                {{-- <th>tags</th> --}}
                                                 <th class="no-print-this">Attributes</th>
                                                 <th class="no-print-this">Action</th>
                                             </thead>
@@ -157,7 +159,6 @@ $model_name = 'products';
 
                                                     @if ($products->count() > 0)
                                                         @foreach ($products as $key => $product)
-
                                                             <tr>
                                                                 <td>{{ $product->id }}</td>
                                                                 <td>{{ $product->slug }}</td>
@@ -171,8 +172,7 @@ $model_name = 'products';
                                                                 <td>{{ $product->attributes->sum('qty') }}</td>
 
                                                                 {{-- <td>
-                                                                    {{ $product->brand->name }}</td>
-                                                                --}}
+                                                                    {{ $product->brand->name }}</td> --}}
                                                                 <td>{{ $product->is_active }}</td>
                                                                 {{-- <td>
                                                                     @if ($product->categories->count() > 0)
@@ -198,38 +198,41 @@ $model_name = 'products';
                                                                 </td> --}}
 
                                                                 <td class="no-print-this">
+
                                                                     <a href="{{ route('product.attibutes.index', $product->slug) }}"
                                                                         class="btn btn-outline-info btn-sm">
-                                                                        Create/Update
+                                                                        Attributes
                                                                     </a>
                                                                 </td>
+
                                                                 <td class="no-print-this">
                                                                     <div class="btn-group" role="group"
                                                                         aria-label="Basic example">
 
-                                                                        <a href="{{ route($model_name . '.edit', $product->id) }}"
-                                                                            class="">
-                                                                            <i class="la la-edit"></i>
-                                                                        </a>
-
-                                                                        <a type="button" id="button_delete"
-                                                                            data-action="{{ route($model_name . '.destroy', $product->id) }}"
-                                                                            data-name="{{ $product->name }}"
-                                                                            class="text-danger">
-                                                                            <i class="la la-trash"></i>
-                                                                        </a>
+                                                                        @if (admin()->can('update_product'))
+                                                                            <a href="{{ route($model_name . '.edit', $product->id) }}"
+                                                                                class="">
+                                                                                <i class="la la-edit"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                        @if (admin()->can('delete_product'))
+                                                                            <a type="button" id="button_delete"
+                                                                                data-action="{{ route($model_name . '.destroy', $product->id) }}"
+                                                                                data-name="{{ $product->name }}"
+                                                                                class="text-danger">
+                                                                                <i class="la la-trash"></i>
+                                                                            </a>
+                                                                        @endif
 
                                                                     </div>
 
                                                                 </td>
                                                             </tr>
                                                         @endforeach
-
                                                     @else
                                                         <tr class="text-center">
                                                             <td colspan="10">No matching records found </td>
                                                         </tr>
-
                                                     @endif
 
 
@@ -268,7 +271,6 @@ $model_name = 'products';
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('admin/js/printThis.js') }}"></script>
-
 @endpush
 
 @section('js')
@@ -287,11 +289,11 @@ $model_name = 'products';
 
             e.preventDefault();
 
-             var type_search = $("#select-serach-type").val();
-             var search = $(this).find('input[name="search"]').val();
-             var url = $(this).attr('action') + "?" + type_search + "=" + search;
+            var type_search = $("#select-serach-type").val();
+            var search = $(this).find('input[name="search"]').val();
+            var url = $(this).attr('action') + "?" + type_search + "=" + search;
 
-             window.location = url;
+            window.location = url;
 
         })
 
@@ -310,6 +312,5 @@ $model_name = 'products';
                 footer: null,
             });
         });
-
     </script>
 @stop

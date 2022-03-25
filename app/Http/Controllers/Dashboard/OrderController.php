@@ -15,6 +15,17 @@ class OrderController extends Controller
     use AjaxResponseTrait;
     protected $view_model = 'dashboard.orders';
 
+
+    public function __construct()
+    {
+        $this->middleware('permission:read_order')->only(['index','show']);
+        $this->middleware('permission:create_order')->only(['create', 'store']);
+        $this->middleware('permission:update_order')->only(['edit', 'update']);
+        $this->middleware('permission:delete_order')->only('destroy');
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *

@@ -89,13 +89,17 @@
 {{-- --------------------------------------------------------------- --}}
 {{-- --------------------------------------------------------------- --}}
 {{-- --------------------------------------------------------------- --}}
+
+@if (admin()->can('delete_slider'))
+
 <section id="">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title ">
-                        images
+                        delete images
+
                     </h4>
 
 
@@ -132,10 +136,13 @@
                                             <div class="">
 
 
-                                                <button id="delete-image" data-id="{{ $image->id }}"
-                                                    data-action="{{ route('admin.homepage_slider.delete', $image->id) }}"
-                                                    class="btn btn-danger  btn-sm " style="margin-top: 3px;"><i
-                                                        class="la la-trash"></i></button>
+                                                @if (admin()->can('delete_slider'))
+                                                    <button id="delete-image" data-id="{{ $image->id }}"
+                                                        data-action="{{ route('admin.homepage_slider.delete', $image->id) }}"
+                                                        class="btn btn-danger  btn-sm " style="margin-top: 3px;padding: 1px; "><i
+                                                            class="la la-trash"></i></button>
+                                                @endif
+
 
                                             </div>
                                             <hr>
@@ -158,3 +165,4 @@
         </div>
     </div>
 </section>
+@endif

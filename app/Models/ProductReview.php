@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class ProductReview extends Model
 {
+    use HasEagerLimit;
+
     protected $fillable = [
         "product_id",
         "user_id",

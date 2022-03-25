@@ -162,7 +162,7 @@
                                                                                 {{-- --- helper
                                                                                 function tooo append stars --}}
                                                                                 @php
-                                                                                    $stars = $product->reviews->first() ? $product->reviews->first()->stars : 0;
+                                                                                    $stars = $product->reviewsRating->first() ? $product->reviewsRating->first()->stars : 0;
                                                                                     echo hundelProductReviewsStars($stars);
                                                                                 @endphp
                                                                             </div>

@@ -1,9 +1,10 @@
-<a href="{{ route('dashboard.orders.show', $id) }}"><i class="la la-eye"></i></a>
-
-
-
-<a class="delete_log text-danger" data-url="{{route('dashboard.orders.destroy',$id)}}" data-id="{{ $id }}"><i class="la la-trash"></i></a>
-
+@if (admin()->can('update_order'))
+    <a href="{{ route('dashboard.orders.show', $id) }}"><i class="la la-eye"></i></a>
+@endif
+@if (admin()->can('delete_order'))
+    <a class="delete_log text-danger" data-url="{{ route('dashboard.orders.destroy', $id) }}"
+        data-id="{{ $id }}"><i class="la la-trash"></i></a>
+@endif
 
 
 <script>
@@ -43,21 +44,21 @@
 
                             $('#orders-table').DataTable().ajax.reload();
 
-                            swal( {
-                                title:'succes delete',
+                            swal({
+                                title: 'succes delete',
                                 type: "success",
                                 timer: 3000,
-                                });
+                            });
 
 
                         },
-                        error:function(response) {
+                        error: function(response) {
 
-                            swal( {
-                                title:'404 not found',
+                            swal({
+                                title: '404 not found',
                                 type: "error",
                                 timer: 3000,
-                                });
+                            });
 
                         }
                     })
@@ -77,7 +78,4 @@
         }); //end click
 
     })
-
 </script>
-
-

@@ -4,9 +4,13 @@ namespace App\Models;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Mywishlist extends Model
 {
+
+    use HasEagerLimit;
+
 
     protected $fillable = [
         'user_id', 'product_id'
@@ -14,6 +18,10 @@ class Mywishlist extends Model
 
 
 
+    public function products()
+    {
+        return $this->hasMany(Product::class,'product_id','id');
+    }
 
     public function product()
     {

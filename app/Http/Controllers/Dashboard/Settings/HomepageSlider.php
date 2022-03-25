@@ -16,8 +16,17 @@ use App\Http\Traits\AjaxResponseTrait;
 class HomepageSlider extends Controller
 {
 
+
+
     use AjaxResponseTrait;
     protected $max_images_upload = 10;
+
+    public function __construct()
+    {
+        $this->middleware('permission:read_slider')->only('index');
+        $this->middleware('permission:create_slider')->only('store');
+        $this->middleware('permission:delete_slider')->only('destroy');
+    }
 
 
     //----------------------index-------------------
@@ -88,7 +97,7 @@ class HomepageSlider extends Controller
             return response()->json([
                 'data' => [
                     'id'          => $slider->id,
-                    'image_url' => asset( $slider->image),
+                    'image_url' => asset($slider->image),
                     'image_url_delete' => route('admin.homepage_slider.delete', $slider->id)
                 ]
             ]);
@@ -99,14 +108,6 @@ class HomepageSlider extends Controller
             return response(['error' => $er_mes], 400);
         }
     }
-
-
-
-
-
-    //-----------------------store images relation product in database-----------------
-
-
 
 
     //-------------delete image ----------------

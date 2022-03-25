@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Front;
 
 use App\Cart\Cart;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\OrderProduct;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use App\Http\Controllers\Front\BaseController;
 
 
-class CheckoutController extends Controller
+class CheckoutController extends BaseController
 {
     //
 

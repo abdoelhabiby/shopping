@@ -85,13 +85,18 @@ itemtype="">
 
 
         </div>
+
+        @if($product->vendor)
         <p class="seller_name">
             <a title="View seller profile"
-                href=">
+                href="{{ route('front.seller.products', $product->vendor->id) }}">
                 <i class="fa fa-user"></i>
                 {{ $product->vendor ? $product->vendor->name : '' }}
             </a>
         </p>
+
+        @endif
+
 
 
         <div class="product-title" itemprop="name"><a href="{{route('front.prouct.show',[$product->slug, $product->attribute->id])}}">

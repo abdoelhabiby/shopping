@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,HasEagerLimit;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,10 @@ class User extends Authenticatable
 
 
 
+    public function myWishlistsProducts()
+    {
+        return $this->hasManyThrough(Product::class,Mywishlist::class,'user_id','id','id','product_id');
+    }
 
 
     public function mywishlists()

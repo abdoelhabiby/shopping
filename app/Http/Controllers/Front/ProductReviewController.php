@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
 use App\Http\Requests\Front\ProductReviewRequest;
+use App\Http\Controllers\Front\BaseController;
 
-class ProductReviewController extends Controller
+class ProductReviewController extends BaseController
 {
 
     use AjaxResponseTrait;
@@ -39,7 +40,8 @@ class ProductReviewController extends Controller
                         "is_active",
                         "id",
                     ]);
-            }
+            },
+            'reviewsRating'
         ])
             ->firstOrFail();
 
@@ -62,7 +64,8 @@ class ProductReviewController extends Controller
 
 
         $reviews = $product->reviews()->paginate(10);
-        $calculate_reviews = $this->getCalculateReviews($product->id);
+
+        $calculate_reviews = $product->reviewsRating->first();
 
         ///---------------this baaaaaad-----evaluations--------
         //--------It can be done in a better way----
@@ -119,7 +122,6 @@ class ProductReviewController extends Controller
 
         } catch (\Throwable $th) {
 
-            return $th->getMessage();
             return $this->notfound();
         }
     }

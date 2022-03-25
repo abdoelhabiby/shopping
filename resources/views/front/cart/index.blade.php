@@ -93,11 +93,9 @@
 
 
 
-                                                            @php
-                                                                $image = $product->images->first() ? $product->images->first()->name : pathNoImage();
-                                                            @endphp
+
                                                             <img class="img-fluid"
-                                                                src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
+                                                                src="{{ $product->image ? asset($product->image->name) : pathNoImage() }}"
                                                                 alt="{{ $product->name }}">
 
                                                         </span>

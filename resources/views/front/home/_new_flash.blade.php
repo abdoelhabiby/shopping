@@ -83,14 +83,16 @@
 
 
                                                 </div>
-                                                <p class="seller_name">
-                                                    <a title="View seller profile"
-                                                        href="jmarketplace/3_harry-makle/index.htm">
-                                                        <i class="fa fa-user"></i>
-                                                        {{ $product->vendor ? $product->vendor->name : '' }}
+                                                @if($product->vendor)
+        <p class="seller_name">
+            <a title="View seller profile"
+                href="{{ route('front.seller.products', $product->vendor->id) }}">
+                <i class="fa fa-user"></i>
+                {{ $product->vendor ? $product->vendor->name : '' }}
+            </a>
+        </p>
 
-                                                    </a>
-                                                </p>
+        @endif
 
                                                 <div class="product-group-price">
 
@@ -264,13 +266,16 @@
 
 
                                                     </div>
+                                                    @if($product->vendor)
                                                     <p class="seller_name">
                                                         <a title="View seller profile"
-                                                            href="jmarketplace/1_david-james/index.htm">
+                                                            href="{{ route('front.seller.products', $product->vendor->id) }}">
                                                             <i class="fa fa-user"></i>
                                                             {{ $product->vendor ? $product->vendor->name : '' }}
                                                         </a>
                                                     </p>
+
+                                                    @endif
 
 
                                                     <div class="product-title" itemprop="name"><a

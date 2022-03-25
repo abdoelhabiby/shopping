@@ -1,6 +1,7 @@
 <?php
 
 use App\Cart\Cart;
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductReview;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Builder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -30,37 +32,12 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::get('test', function (Request $request) {
 
-    $search = $request->search;
 
+   return Product::with(['images' => function($images){
+       $images->limit(2);
+   }])->latest()->limit(2)->get();
 
-
-    $products = Product::when($search, function ($query) use ($search) {
-
-        $query->whereTranslationLike('name', '%' . $search . '%')
-            ->orWhere('slug', 'like', '%' . $search . '%')
-            ->orWhere('sku', 'like', '%' . $search . '%')
-            ->orWhereHas('categories', function ($query) use ($search) {
-                $query->whereTranslationLike('name', '%' . $search . '%')
-                    ->orWhere('slug', 'like', '%' . $search . '%');
-            });
-    })
-        ->with([
-            'attribute',
-            'reviewsRating',
-            'images'
-        ])
-        ->active()
-        ->orderBy('id', 'desc')
-        ->paginate(12);
-
-
-
-
-
-     return view('front.catalog.search', compact( 'products'));
-
-    return   $products;
-});
+})->name('front.test');
 
 
 
@@ -155,7 +132,7 @@ Route::group(
             //-------------------------------------------------------
 
             //-----route subcategory==-------------
-            Route::get('s/{category:slug}', "CategoryController@subCategory")->name('front.subcategory.show');
+            Route::get('s/{subcategory:slug}', "CategoryController@subCategory")->name('front.subcategory.show');
 
             //-----route category-------------
             Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');

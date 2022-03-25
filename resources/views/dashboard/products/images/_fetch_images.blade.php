@@ -1,5 +1,4 @@
-
-  <section id="image-gallery" class="card">
+<section id="image-gallery" class="card">
     <div class="card-header">
         <h4 class="card-title">Image gallery</h4>
         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
@@ -16,8 +15,7 @@
         <div class="card-body">
             <div class="card-text">
                 <div>
-                    <a href="{{ route('product.attibutes.index', $product->slug) }}"
-                        class="">
+                    <a href="{{ route('product.attibutes.index', $product->slug) }}" class="">
                         Attributes
                     </a>
                 </div>
@@ -30,9 +28,8 @@
                         itemprop="associatedMedia" itemscope itemtype="">
 
                         <a href="{{ asset($image->name) }}" itemprop="contentUrl" data-size="700x560">
-                            <img class="img-thumbnail img-fluid" src="{{ asset($image->name) }}"
-                                itemprop="thumbnail" alt="Image description"
-                                style="height: 200px !important" />
+                            <img class="img-thumbnail img-fluid" src="{{ asset($image->name) }}" itemprop="thumbnail"
+                                alt="Image description" style="height: 200px !important" />
                         </a>
 
                     </figure>
@@ -96,74 +93,78 @@
 {{-- --------------------------------------------------------------- --}}
 {{-- --------------------------------------------------------------- --}}
 {{-- --------------------------------------------------------------- --}}
-<section id="">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title ">
-                        images
-                    </h4>
+
+@if (admin()->can('delete_product'))
 
 
-                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                    <div class="heading-elements">
-                        <ul class="list-inline mb-0">
+    <section id="">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title ">
+                           delete images
+                        </h4>
 
-                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                            <li><a data-action="close"><i class="ft-x"></i></a></li>
 
-                        </ul>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
 
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+
+                            </ul>
+
+
+                        </div>
 
                     </div>
 
-                </div>
 
+                    <div class="card-content collapse show">
+                        <div class="card-body card-dashboard">
 
-                <div class="card-content collapse show">
-                    <div class="card-body card-dashboard">
+                            <p class="card-text "> images</p>
 
-                        <p class="card-text "> images</p>
+                            <div class="show-images">
 
-                        <div class="show-images">
+                                <div class="row text-center show-images-row">
+                                    @if ($product->images->count() > 0)
 
-                            <div class="row text-center show-images-row" >
-                                @if ($product->images->count() > 0)
+                                        @foreach ($product->images as $image)
+                                            <div class="col-2 mb-1 image-section-{{ $image->id }}">
+                                                <img src="{{ asset($image->name) }}" width="90" height="100" alt="">
+                                                <div class="">
 
-                                    @foreach ($product->images as $image)
-                                        <div class="col-2 mb-1 image-section-{{ $image->id }}">
-                                            <img src="{{ asset($image->name) }}" width="90" height="100"
-                                                alt="">
-                                            <div class="">
-                                                <button id="delete-image" data-id="{{ $image->id }}"
-                                                    data-action="{{ route('product.images.delete', [$product->id, $image->id]) }}"
-                                                    class="btn btn-danger  btn-sm "
-                                                    style="margin-top: 3px;padding: 1px;"><i
-                                                        class="la la-trash"></i></button>
+                                                        <button id="delete-image" data-id="{{ $image->id }}"
+                                                            data-action="{{ route('product.images.delete', [$product->id, $image->id]) }}"
+                                                            class="btn btn-danger  btn-sm "
+                                                            style="margin-top: 3px;padding: 1px;"><i
+                                                                class="la la-trash"></i></button>
 
+                                                </div>
+                                                <hr>
                                             </div>
-                                            <hr>
-                                        </div>
-
-                                    @endforeach
+                                        @endforeach
 
 
-                                @endif
+                                    @endif
+
+
+                                </div>
 
 
                             </div>
 
 
                         </div>
-
-
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+@endif

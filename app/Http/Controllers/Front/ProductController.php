@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Front;
 
 use App\Models\Admin;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Models\ProductReview;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Front\BaseController;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
 
 
@@ -77,6 +74,7 @@ class ProductController extends Controller
 
 
             ])
+            ->withTranslation()
             ->firstOrFail();
 
         if (user()) {
@@ -94,7 +92,7 @@ class ProductController extends Controller
         $key = 'products_views_' . $sess_id;
 
         if (!Cache::has($key)) {
-            Cache::add($key, [], (60 * 60 * 24) ); // 1 minute
+            Cache::add($key, [], (60 * 60 * 24)); // 1 minute
         }
 
         $latest = (array) Cache::get($key);
@@ -102,7 +100,7 @@ class ProductController extends Controller
         if (!in_array($product->id, $latest)) {
             array_push($latest, $product->id);
             $product->increment('views');
-            Cache::put($key, $latest,(60 * 60 * 24));
+            Cache::put($key, $latest, (60 * 60 * 24));
         }
 
 
@@ -126,6 +124,7 @@ class ProductController extends Controller
                 'images'
             ])
             ->active()
+            ->withTranslation()
             ->orderBy('id', 'desc')
             ->paginate(12);
 

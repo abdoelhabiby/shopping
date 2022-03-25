@@ -26,10 +26,24 @@ class ProductImageController extends Controller
 
 
 
+    public function __construct()
+    {
+
+        $this->middleware('permission:create_product')->only('store');
+        $this->middleware('permission:delete_product')->only('destroy');
+    }
+
+
+
     //----------------------index-------------------
     public function index(Product $product)
     {
-        return view('dashboard.products.images.index', compact('product'));
+        if (admin()->hasAnyPermission(['read_product', 'create_product'])) {
+
+            return view('dashboard.products.images.index', compact('product'));
+        }
+
+        abort(403);
     }
 
     //--------------get all product images----------------------------

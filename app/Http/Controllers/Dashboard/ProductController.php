@@ -32,6 +32,16 @@ class ProductController extends Controller
     ];
 
 
+    public function __construct()
+    {
+        $this->middleware('permission:read_product')->only('index');
+        $this->middleware('permission:create_product')->only(['create', 'store']);
+        $this->middleware('permission:update_product')->only(['edit', 'update']);
+        $this->middleware('permission:delete_product')->only('destroy');
+    }
+
+
+
 
     /**
      * Display a listing of the category.

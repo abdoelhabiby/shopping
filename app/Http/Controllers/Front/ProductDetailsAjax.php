@@ -27,32 +27,33 @@ class ProductDetailsAjax extends Controller
 
 
 
-        $product =  Product::active()->where('slug',$product_slug)
-        ->whereHas('attribute', function ($attribute) use ($product_attribute_id) {
-            return $attribute->where('id',$product_attribute_id)->where('is_active', true);
-        })
-        ->with([
-            'attribute' => function ($attr) use ($product_attribute_id) {
-                return $attr->where('is_active', true)->where('id', $product_attribute_id);
-            },
-            'attributes' => function ($at) {
-                return $at->where('is_active', true);
-            }
-        ])
-        ->first();
+        $product =  Product::active()->where('slug', $product_slug)
+            ->whereHas('attribute', function ($attribute) use ($product_attribute_id) {
+                return $attribute->where('id', $product_attribute_id)->where('is_active', true);
+            })
+            ->with([
+                'attribute' => function ($attr) use ($product_attribute_id) {
+                    return $attr->where('is_active', true)->where('id', $product_attribute_id)->withTranslation();
+                },
+                'attributes' => function ($at) {
+                    return $at->where('is_active', true)->withTranslation();
+                },
+                'image'
+            ])
+            ->withTranslation()
+            ->first();
 
 
 
 
-            if(!$product){
+        if (!$product) {
             return $this->notfound();
-
-            }
-
+        }
 
 
 
-        $get_modal_has_product_detilas = view('front.includes/_modal_product_details', ['product' => $product])->render();
+
+        $get_modal_has_product_detilas = view('front.includes._modal_product_details', ['product' => $product])->render();
 
         return $this->returnRenderHtml('quickview_modal', $get_modal_has_product_detilas);
     }

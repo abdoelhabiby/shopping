@@ -29,6 +29,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/vendors.css">
 
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/icheck.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/custom.css">
+
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/morris.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/chartist.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/chartist-plugin-tooltip.css">

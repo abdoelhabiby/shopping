@@ -39,60 +39,64 @@
 
 
 
-                {{-- ----------------show images with gallery --}}
+                @if (admin()->hasAnyPermission(['read_slider', 'create_slider']))
+                    {{-- ----------------show images with gallery --}}
 
-                @include(
-                    'dashboard.settings.home_page_slider._fetch_images'
-                )
-
+                    @include(
+                        'dashboard.settings.home_page_slider._fetch_images'
+                    )
+                @endif
                 {{-- ------------------------------------------ --}}
                 {{-- ------------------------------------------ --}}
-                {{-- ------------------------------------------ --}}
-                <!-- DOM - jQuery events table -->
-                <section id="dom">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">
-                                        Upload images
-                                    </h4>
+
+                {{-- ------------section upload images----------- --}}
+
+                @if (admin()->can('create_slider'))
+                    <section id="dom">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title ">
+                                            Upload images
+                                        </h4>
 
 
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                    <div class="heading-elements">
-                                        <ul class="list-inline mb-0">
+                                        <a class="heading-elements-toggle"><i
+                                                class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
 
-                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
 
-                                        </ul>
+                                            </ul>
 
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+
+                                    <div class="card-content collapse show">
+                                        <div class="card-body card-dashboard">
 
 
-                                <div class="card-content collapse show">
-                                    <div class="card-body card-dashboard">
+                                            <!-- /resources/views/post/create.blade.php -->
 
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
 
-                                        <!-- /resources/views/post/create.blade.php -->
-
-                                        @if ($errors->any())
-                                            <div class="alert alert-danger">
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif
-
-                                        <!-- Create Post Form -->
+                                            <!-- Create Post Form -->
 
 
 
@@ -100,21 +104,25 @@
 
 
 
-                                        <form action="#" class="dropzone dropzone-area dz-clickable"
-                                            id="dpz-multiple-files">
-                                            <div class="dz-message">Drop Files Here To Upload</div>
-                                        </form>
+                                            <form action="#" class="dropzone dropzone-area dz-clickable"
+                                                id="dpz-multiple-files">
+                                                <div class="dz-message">Drop Files Here To Upload</div>
+                                            </form>
 
 
 
+
+
+
+
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-
-
+                    </section>
+                @endif
 
             </div>
         </div>
@@ -128,10 +136,10 @@
 
 @section('js')
     <script>
-
-
-
         var url = "{{ route('admin.homepage_slider.store') }}";
+
+        var check_permission_delete = "{{ admin()->can('delete_slider') }}" ? true : false;
+
 
         var uploadedDocumentMap = {}
         Dropzone.options.dpzMultipleFiles = {
@@ -156,18 +164,22 @@
 
                             </figure>`;
 
-
-                var append_image = `<div class="col-md-3 mb-1 image-section-${response.data.id}">
-                        <img src="${response.data.image_url}" width="90" height="100"
-                        alt="">
-                        <div class="">
+                var button_delete = '';
+                if (check_permission_delete) {
+                    button_delete = `  <div class="">
                         <button id="delete-image" data-id="${response.data.id}"
                         data-action="${response.data.image_delete_url}"
                         class="btn btn-danger  btn-sm "
                         style="margin-top: 3px;padding: 1px;"><i
                             class="la la-trash"></i></button>
 
-                        </div>
+                        </div>`;
+                }
+
+                var append_image = `<div class="col-md-3 mb-1 image-section-${response.data.id}">
+                        <img src="${response.data.image_url}" width="90" height="100"
+                        alt="">
+                          ${button_delete}
                         <hr>
                         </div>`;
 

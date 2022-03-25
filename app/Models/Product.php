@@ -7,11 +7,13 @@ use phpDocumentor\Reflection\Types\This;
 use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
+use Staudenmeir\EloquentParamLimitFix\ParamLimitFix;
 
 class Product extends Model
 {
 
-    use Translatable, SoftDeletes, GlobalMethodUesdInModels;
+    use Translatable, SoftDeletes, GlobalMethodUesdInModels,HasEagerLimit;
 
 
     protected $translatedAttributes = ['name', 'description'];
