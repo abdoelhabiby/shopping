@@ -33,7 +33,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
     
-    $image= Product::where('id',4)->with('images')->first()->images->first();
+    $image= Product::where('id',3)->with('images')->first()->images->first();
     
     return "<img src='". asset($image->name) ."'>";
 
