@@ -8,7 +8,6 @@ use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
-use Staudenmeir\EloquentParamLimitFix\ParamLimitFix;
 
 class Product extends Model
 {
@@ -34,14 +33,10 @@ class Product extends Model
 
 
 
-    // protected $casts = [
-    //     'created_at' => 'datetime:Y-m-d h:i:s'
-    // ];
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i:s'
+    ];
 
-    public function getCreatedAtAttribute($value)
-    {
-        return date('Y-m-d H:i:s',strtotime($value));
-    }
 
 
     //------------------get brand relation-----------
@@ -148,16 +143,19 @@ class Product extends Model
 
     public function reviewsRating()
     {
+
         return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
             'product_id',
-            \DB::raw("ROUND(SUM(DISTINCT quality) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("ROUND(SUM(CAST(quality as double)) * 5 / (COUNT(id) * 5)) as stars"),
             \DB::raw("COUNT(product_id) as total_rating")
-        )
-        ->havingRaw('stars')
-        ->groupBy('product_id');
+        )->groupBy('product_id');
+
+        // return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
+        //     'product_id',
+        //     \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+        //     \DB::raw("COUNT(product_id) as total_rating")
+        // )->groupBy('product_id');
     }
-
-
     // -----------------------------------------
 
     // -----------------------------------------
