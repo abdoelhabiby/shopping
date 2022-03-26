@@ -199,12 +199,14 @@ class HomeRepository implements HomeRepositoryInterface
     public function getMainCategoriesWithNestedSubcategoriesProducts(int $main_categories_limit = 3, int $products_limit = 10, int $image_count = 2)
     {
 
+
+
+
+
         $ttl = 60 * 60 * 4; //evry 4 hours
 
         $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
-
-
-            $category = Category::mainCategory()
+            $categories = Category::mainCategory()
                 ->whereHas('chields.chields')
                 ->with([
                     'chields' => function ($query) {
@@ -212,7 +214,8 @@ class HomeRepository implements HomeRepositoryInterface
                     },
                     'chields.chields' => function ($query) {
                         $query->active()->select(['id', 'parent_id', 'slug'])->whereHas('products.attributes')->withTranslation();
-                    }
+                    },
+
                 ])
                 ->select(['id', 'parent_id', 'slug'])
                 ->inRandomOrder()
@@ -223,12 +226,18 @@ class HomeRepository implements HomeRepositoryInterface
 
 
 
-            $main_category_with_las_chields_id = $category->mapWithKeys(function ($main) {
-                return [$main->slug => ['chields' =>  $main->chields->map(function ($lastchield) {
-                    return  $lastchield->chields->map(function ($map) {
-                        return  $map->id;
-                    });
-                })->collapse(), 'category_trans' => $main->name]];
+
+
+            $main_category_with_las_chields_id = $categories->mapWithKeys(function ($main) {
+                return [
+                    $main->slug => [
+                        'chields' =>  $main->chields->map(function ($lastchield) {
+                            return  $lastchield->chields->map(function ($map) {
+                                return  $map->id;
+                            });
+                        })->collapse(), 'category_translations' => $main->translations->pluck('name', 'locale')->toArray()
+                    ]
+                ];
             })->toArray();
 
 
@@ -236,9 +245,9 @@ class HomeRepository implements HomeRepositoryInterface
 
             foreach ($main_category_with_las_chields_id as $category => $data) {
 
-                // dd(($chields_id['chields']->toArray()));
 
                 $chields_id = $data['chields']->toArray();
+
 
                 if ($category && is_array($chields_id) && count($chields_id) > 0) {
 
@@ -277,14 +286,15 @@ class HomeRepository implements HomeRepositoryInterface
 
                     $category_products[$category]['products'] = $products;
 
-                    $category_products[$category]['category_name'] = $data['category_trans'] ?? $category;
+                    $category_products[$category]['category_translations'] = $data['category_translations'] ?? $category;
                 }
             }
 
-            // dd($category_products);
+
+
 
             return  $category_products;
-        });
+        }); // end cache
 
 
         return $main_category_with_nested_chields_products;

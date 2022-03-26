@@ -61,9 +61,7 @@
                                 @isset($products)
 
                                     @if (count($products) > 0)
-
                                         @foreach ($products as $product)
-
                                             <!-- ---------------------------------- -->
 
                                             <!-- ---------------------------------- -->
@@ -123,17 +121,11 @@
                                                                 </div>
 
                                                                 <div class="product-line-info">
-                                                                    {{-- <span
-                                                                        class="label-atrr">الحجم:</span>
-                                                                    <span class="value">ص</span> --}}
+
                                                                     <span
                                                                         class="value">{{ $product->attribute->name }}</span>
                                                                 </div>
-                                                                {{-- <div
-                                                                    class="product-line-info">
-                                                                    <span class="label-atrr">:</span>
-                                                                    <span class="value">ابيض مطفي</span>
-                                                                </div> --}}
+
 
                                                             </div>
                                                             <div class=" text-center product-line-actions col-sm-6 col-xs-12">
@@ -193,15 +185,9 @@
                                                                                             {{ $product->attribute->qty }}
                                                                                             @lang('front.count_in_stock') !
                                                                                         </span>
-
                                                                                     @else
-
-
                                                                                         <div class="label text-danger">
                                                                                             @lang('front.unavailable')</div>
-
-
-
                                                                                     @endif
 
 
@@ -260,9 +246,7 @@
                                             </div>
 
                                             <!-- ---------------------------------- -->
-
                                         @endforeach
-
                                     @else
                                         <div class="d-flex justify-content-center m-4">
 
@@ -315,110 +299,109 @@
                                     </div>
 
                                     <div class="">
-                                        <div class=" cart-summary-line"
-                                        id="cart-subtotal-products">
-                                        <span class="label js-subtotal">
-                                            @lang('front.total_products_price') :
-                                        </span>
-                                        <span class="value">{{ $total_price }} @lang('front.egp')</span>
+                                        <div class="cart-summary-line" id="cart-subtotal-products">
+                                            <span class="label js-subtotal">
+                                                @lang('front.total_products_price') :
+                                            </span>
+                                            <span class="value">{{ $total_price }} @lang('front.egp')</span>
+                                        </div>
+                                        <div class="cart-summary-line" id="cart-subtotal-shipping">
+                                            <span class="label">
+                                                {{ __('front.totla_shipping') }}:
+                                            </span>
+
+                                            <span class="value">{{ __('front.free') }}</span>
+                                            <div><small class="value"></small></div>
+                                        </div>
                                     </div>
-                                    <div class="cart-summary-line" id="cart-subtotal-shipping">
-                                        <span class="label">
-                                            Total الشحن:
-                                        </span>
-                                        <span class="value">مجاناً</span>
-                                        <div><small class="value"></small></div>
+
+
+
+
+
+                                    <div class="">
+                                        <div class="cart-summary-line cart-total">
+                                            <span class="label js-subtotal">
+                                                @lang('front.total_price') :
+                                            </span>
+                                            <span class="value">{{ $total_price }} @lang('front.egp')</span>
+                                            <span class="value"> ({{ __('front.tax_incl') }})</span>
+                                        </div>
+
                                     </div>
+
                                 </div>
 
 
 
 
-                                <div class="">
-                                        <div class=" cart-summary-line
-                                    cart-total">
-                                    <span class="label js-subtotal">
-                                        @lang('front.total_price') :
+
+
+
+
+
+
+
+                                @if ($total_products_count > 0 && $total_price > 0)
+                                    <div class="checkout cart-detailed-actions">
+                                        <div class="text-xs-center">
+                                            <a href="{{ route('front.checkout.index') }}" class="btn btn-primary">
+                                             {{ __('front.checkout') }}
+                                             </a>
+
+                                        </div>
+                                    </div>
+                                @endif
+
+
+
+
+
+
+                            </div>
+
+
+
+                            <div class="blockreassurance_product">
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_verified_user_black_36dp_1x.png">
+                                        &nbsp;
                                     </span>
-                                    <span class="value">{{ $total_price }} @lang('front.egp')</span>
-                                    <span class="value">(شامل للضريبة)</span>
+                                    <p class="block-title" style="color:#000000;">Security policy (edit with Customer
+                                        reassurance module)</p>
                                 </div>
-
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_local_shipping_black_36dp_1x.png">
+                                        &nbsp;
+                                    </span>
+                                    <p class="block-title" style="color:#000000;">Delivery policy (edit with Customer
+                                        reassurance module)</p>
+                                </div>
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_swap_horiz_black_36dp_1x.png">
+                                        &nbsp;
+                                    </span>
+                                    <p class="block-title" style="color:#000000;">Return policy (edit with Customer
+                                        reassurance module)</p>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
 
+
+
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-                        @if ($total_products_count > 0 && $total_price > 0)
-
-                            <div class="checkout cart-detailed-actions">
-                                <div class="text-xs-center">
-                                    <a href="{{ route('front.checkout.index') }}" class="btn btn-primary">اتمام
-                                        الطلب</a>
-
-                                </div>
-                            </div>
-
-                        @endif
-
-
-
-
-
 
                     </div>
-
-
-
-                    <div class="blockreassurance_product">
-                        <div>
-                            <span class="item-product">
-                                <img class="svg"
-                                    src="{{ asset('front') }}/modules/blockreassurance/img/ic_verified_user_black_36dp_1x.png">
-                                &nbsp;
-                            </span>
-                            <p class="block-title" style="color:#000000;">Security policy (edit with Customer
-                                reassurance module)</p>
-                        </div>
-                        <div>
-                            <span class="item-product">
-                                <img class="svg"
-                                    src="{{ asset('front') }}/modules/blockreassurance/img/ic_local_shipping_black_36dp_1x.png">
-                                &nbsp;
-                            </span>
-                            <p class="block-title" style="color:#000000;">Delivery policy (edit with Customer
-                                reassurance module)</p>
-                        </div>
-                        <div>
-                            <span class="item-product">
-                                <img class="svg"
-                                    src="{{ asset('front') }}/modules/blockreassurance/img/ic_swap_horiz_black_36dp_1x.png">
-                                &nbsp;
-                            </span>
-                            <p class="block-title" style="color:#000000;">Return policy (edit with Customer
-                                reassurance module)</p>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-
+                </section>
 
             </div>
-
         </div>
-        </section>
-
-    </div>
-    </div>
     </div>
 
 @stop

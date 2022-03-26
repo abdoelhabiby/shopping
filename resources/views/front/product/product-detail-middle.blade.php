@@ -79,7 +79,7 @@
 
                                             <div class="comment_details" style="">
                                                 <h4>{{ $review->title }}</h4>
-                                                <p>{{ $review->review }}</p>
+                                                <p> {!! nl2br(e($review->review)) !!}</p>
                                             </div>
 
                                         </div>

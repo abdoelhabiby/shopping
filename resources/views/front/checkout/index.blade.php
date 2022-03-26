@@ -150,9 +150,10 @@
                                         </div>
                                         <div class="cart-summary-line" id="cart-subtotal-shipping">
                                             <span class="label">
-                                                Total الشحن:
+                                                {{ __('front.totla_shipping') }}:
                                             </span>
-                                            <span class="value">مجاناً</span>
+
+                                            <span class="value">{{ __('front.free') }}</span>
                                             <div><small class="value"></small></div>
                                         </div>
                                     </div>
@@ -166,7 +167,7 @@
                                                 @lang('front.total_price') :
                                             </span>
                                             <span class="value">{{ $total_price }} @lang('front.egp')</span>
-                                            <span class="value">(شامل للضريبة)</span>
+                                            <span class="value"> ({{ __('front.tax_incl') }})</span>
                                         </div>
 
                                     </div>

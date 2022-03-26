@@ -17,7 +17,8 @@
 
                             <div class="block block-product clearfix">
                                 <h2 class="title_block">
-                                    {{ $data['category_name'] }}
+
+                                    {{ isset($data['category_translations'][currentLocale()] ) ? $data['category_translations'][currentLocale()] : $category }}
                                 </h2>
 
                                 <div class="block_content">

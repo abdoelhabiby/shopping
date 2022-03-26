@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -33,11 +34,13 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
 
-    // return env('STRIPE_PUBLISH_KEY');
+
 
     Cache::flush();
 
-   return 'succes cache';
+    return 'succes cache';
+
+
 
 })->name('front.test');
 
@@ -157,8 +160,3 @@ Route::group(
         });
     }
 ); // end group packege LaravelLocalization
-
-
-
-
-
