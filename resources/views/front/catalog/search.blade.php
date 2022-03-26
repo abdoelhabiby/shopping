@@ -26,15 +26,7 @@
 
 
 
-                    {{-- <li itemprop="itemListElement" itemscope="">
-                        <a itemprop="item"
-                            href="">
-                            <span itemprop="name">
-                               {{ request()->has('q') ? request()->get('q') : }}
-                            </span>
-                        </a>
-                        <meta itemprop="position" content="1">
-                    </li> --}}
+
 
                 </ol>
 
@@ -108,7 +100,7 @@
                       <p class="card-text">
                         {{ __('front.message_for_better_search') }}
                         </p>
-                      <a href="{{ route('home') }}" class="btn btn-primary">{{ __('front.home') }}</a>
+                      <a href="{{ route('front.home') }}" class="btn btn-primary">{{ __('front.home') }}</a>
                     </div>
                   </div>
 

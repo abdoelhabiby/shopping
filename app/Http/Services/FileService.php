@@ -28,6 +28,16 @@ class FileService
         // return false;
     }
     // -----------------------------------------------------
+
+    public static function checkDirectoryExistsOrCreate($path) : void
+    {
+
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0775, true);
+            }
+
+    }
+
     // -----------------------------------------------------
     // -----------------------------------------------------
 

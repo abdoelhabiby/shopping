@@ -84,10 +84,7 @@ class ProductImageController extends Controller
 
             $folder_path = public_path('images/products/' . $product->id);
 
-            if (!File::exists($folder_path)) {
-                File::makeDirectory($folder_path, 0775, true);
-            }
-
+            FileService::checkDirectoryExistsOrCreate($folder_path);
 
             $get_count_can_upload = $this->max_images_upload - $product->images()->count();
 
@@ -135,9 +132,9 @@ class ProductImageController extends Controller
 
     public function destroy(Product $product, ProductImage $image)
     {
-        $check_image = File::exists(public_path($image->name)) ? true : false;
 
-        if (request()->ajax() && $product->id == $image->product_id && $check_image) {
+
+        if (request()->ajax() && $product->id == $image->product_id) {
 
             try {
 

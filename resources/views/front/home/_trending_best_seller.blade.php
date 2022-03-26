@@ -28,10 +28,7 @@
                                 <div class="item  text-center  ">
 
                                     @foreach ($products_best_sellers as $key => $product)
-                                        @include(
-                                            'front.includes.section_product',
-                                            $product
-                                        )
+                                        @include('front.includes.section_product', $product  )
                                     @endforeach
 
                                 </div>
@@ -88,13 +85,13 @@
 
                                                     @if ($product->images->count() > 0)
                                                         @foreach ($product->images as $index => $image)
-                                                            @if ($index == 0 && fileExist($image->name))
+                                                            @if ($index == 0 )
                                                                 <img class="img-fluid image-cover"
-                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     title="{{ $product->name }}" width="600" height="600">
-                                                            @elseif($index == 1 && fileExist($image->name))
+                                                            @elseif($index == 1 )
                                                                 <img class="img-fluid image-secondary"
-                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     title="{{ $product->name }}" alt="" width="600"
                                                                     height="600">
                                                              @break

@@ -230,7 +230,7 @@ class ProductReviewController extends BaseController
     private function getCalculateReviews($product_id)
     {
         return ProductReview::select(
-            \DB::raw("ROUND( (SUM(quality) * 5) / (COUNT(id) * 5) ) as stars"),
+            \DB::raw("ROUND(SUM(CAST(quality as integer)) * 5 / (COUNT(id) * 5)) as stars"),
             \DB::raw("COUNT(id) as total_rating")
         )->where('product_id', $product_id)->first();
     }

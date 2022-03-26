@@ -101,17 +101,16 @@
                                                                             @if ($product->images->count() > 0)
                                                                                 @foreach ($product->images as $index => $image)
 
-                                                                                    @if ($index == 0 && fileExist($image->name))
+                                                                                    @if ($index == 0 )
                                                                                         <img class="img-fluid image-cover"
-                                                                                            src="{{ asset($image->name) }}"
+                                                                                            src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}"
                                                                                             alt=""
                                                                                             title="{{ $product->name }}"
                                                                                             width="600" height="600">
-                                                                                    @elseif($index == 1 &&
-                                                                                        fileExist($image->name))
+                                                                                    @elseif($index == 1)
 
                                                                                         <img class="img-fluid image-secondary"
-                                                                                            src="{{ asset($image->name) }}"
+                                                                                            src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}"
                                                                                             alt=""
                                                                                             title="{{ $product->name }}"
                                                                                             width="600" height="600">
@@ -123,7 +122,7 @@
                                                                             @else
 
                                                                                 <img class="img-fluid image-cover"
-                                                                                    src="{{ asset('/images/noImage.jpg') }}"
+                                                                                    src="{{ getLinkImageNoImage()  }}"
                                                                                     alt="" width="600" height="600">
 
                                                                             @endif

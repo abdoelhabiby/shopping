@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Dashboard\UserRequest;
 
@@ -62,11 +63,18 @@ class UserController extends Controller
 
             if ($request->hasFile('image') && $request->image != null) {
 
+
+                $folder_path = public_path('images/users');
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
-
-                $path = imageUpload($image, 'users');
-
+                $path = 'images/users/' . $image->hashName();
+                FileService::reszeImageAndSave($image, public_path(), $path,50,50);
                 $validated['image'] = $path;
+
+
+
+
             }
 
             User::create($validated);
@@ -115,15 +123,21 @@ class UserController extends Controller
 
             if ($request->hasFile('image') && $request->image != null) {
 
+                $folder_path = public_path('images/users');
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
+                $path = 'images/users/' . $image->hashName();
 
-                $path = imageUpload($image, 'users');
-
+                FileService::reszeImageAndSave($image, public_path(), $path);
                 $validated['image'] = $path;
+                FileService::deleteFile(public_path($user->image));
 
-                if ($user->image != 'images/default.png') {
-                    deleteFile($user->image);
-                }
+
+
+                // ---------------------------------
+
+
             }
 
 

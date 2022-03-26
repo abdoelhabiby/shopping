@@ -50,13 +50,13 @@
 
                                                                     @if ($product->images->count() > 0)
                                                                         @foreach ($product->images as $offset => $image)
-                                                                            @if ($offset == 0 && fileExist($image->name))
+                                                                            @if ($offset == 0 )
                                                                                 <img class="img-fluid image-cover"
-                                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                                     width="600" height="600">
-                                                                            @elseif($offset == 1 && fileExist($image->name))
+                                                                            @elseif($offset == 1 )
                                                                                 <img class="img-fluid image-secondary"
-                                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                                     alt="" width="600" height="600">
                                                                             @else
                                                                             @break

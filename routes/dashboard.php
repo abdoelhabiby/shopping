@@ -28,33 +28,6 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
-    Route::get('test', function(){
-
-        $product = Product::with('images')->find(5);
-
-        // return $product->images;
-
-        $images = ProductImage::where('product_id',5)->get();
-
-        $users = User::all();
-
-        // dd(collect(ProductImage::all()));
-
-        // return ProductImage::first();
-
-         return  ProductImagesCollection::collection($product->images);
-
-
-    });
-
-    Route::post('test', function (Request $request) {
-
-        $product = Product::find(5);
-
-        return $product->images;
-
-        // return new ProductImagesCollection();
-    });
 
 
 

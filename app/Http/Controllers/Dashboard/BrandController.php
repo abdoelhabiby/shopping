@@ -67,22 +67,21 @@ class BrandController extends Controller
             $validated = $request->validated();
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
-            $folder_path = public_path('images/brands');
 
-            if (!File::exists($folder_path)) {
-                File::makeDirectory($folder_path, 0775, true);
-            }
 
 
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
 
+                $folder_path = public_path('images/brands');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
                 $path = 'images/sliders/' . $image->hashName();
-                FileService::reszeImageAndSave($image, public_path(), $path,600,350);
+                FileService::reszeImageAndSave($image, public_path(), $path, 600, 350);
                 $validated['image'] = $path;
-
             }
 
             //----------customize the translation-------------------
@@ -103,8 +102,6 @@ class BrandController extends Controller
             return $th->getMessage();
             return catchErro($this->model . '.index', $th);
         }
-
-
     }
 
 
@@ -117,11 +114,10 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-          $row = $brand;
+        $row = $brand;
         //   $main_categories = Category::mainCategory()->select('id')->get();
 
-        return view($this->view_model . '.edit',compact('row'));
-
+        return view($this->view_model . '.edit', compact('row'));
     }
 
     /**
@@ -143,10 +139,13 @@ class BrandController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-              //-------------uploade image if found-----------
+            //-------------uploade image if found-----------
 
-              if ($request->hasFile('image') && $request->image != null) {
+            if ($request->hasFile('image') && $request->image != null) {
 
+                $folder_path = public_path('images/brands');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
 
                 $image = $request->file('image');
                 $path = 'images/brands/' . $image->hashName();
@@ -156,8 +155,6 @@ class BrandController extends Controller
                 $validated['image'] = $path;
 
                 FileService::deleteFile(public_path($brand->image));
-
-
             }
 
             //----------customize the translation-------------------
@@ -174,7 +171,6 @@ class BrandController extends Controller
 
             DB::commit();
             return redirect()->route($this->model . '.index')->with(['success' => "success update"]);
-
         } catch (\Throwable $th) {
             DB::rollback();
             return catchErro($this->model . '.index', $th);
@@ -198,8 +194,5 @@ class BrandController extends Controller
         }
 
         return $this->notfound();
-
-
-
     }
 }

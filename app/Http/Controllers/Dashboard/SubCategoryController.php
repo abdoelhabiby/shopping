@@ -72,9 +72,8 @@ class SubCategoryController extends Controller
 
                 $folder_path = public_path('images/categories');
 
-                if (!File::exists($folder_path)) {
-                    File::makeDirectory($folder_path, 0775, true);
-                }
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
 
 
                 $image = $request->file('image');
@@ -145,6 +144,10 @@ class SubCategoryController extends Controller
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
+                $folder_path = public_path('images/categories');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
 
                 $image = $request->file('image');
                 $path = 'images/categories/' . $image->hashName();

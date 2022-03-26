@@ -168,7 +168,7 @@
                 if (check_permission_delete) {
                     button_delete = `  <div class="">
                         <button id="delete-image" data-id="${response.data.id}"
-                        data-action="${response.data.image_delete_url}"
+                        data-action="${response.data.image_url_delete}"
                         class="btn btn-danger  btn-sm "
                         style="margin-top: 3px;padding: 1px;"><i
                             class="la la-trash"></i></button>

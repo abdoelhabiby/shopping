@@ -37,11 +37,7 @@ Route::get('test', function (Request $request) {
 
     Cache::flush();
 
-   return Product::with(['images' => function($images){
-       $images->limit(2);
-   },
-   'reviewsRating'
-   ])->latest()->limit(2)->get();
+   return 'succes cache';
 
 })->name('front.test');
 
@@ -166,4 +162,3 @@ Route::group(
 
 
 
-Route::get('/home', 'HomeController@index')->name('home');

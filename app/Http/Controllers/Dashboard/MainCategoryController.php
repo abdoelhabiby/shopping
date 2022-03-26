@@ -75,10 +75,8 @@ class MainCategoryController extends Controller
 
                 $folder_path = public_path('images/categories');
 
-                if (!File::exists($folder_path)) {
-                    File::makeDirectory($folder_path, 0775, true);
-                }
 
+                FileService::checkDirectoryExistsOrCreate($folder_path);
 
                 $image = $request->file('image');
                 $path = 'images/categories/' . $image->hashName();
@@ -103,6 +101,8 @@ class MainCategoryController extends Controller
             return redirect()->route('main-categories.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
+            dd($th->getMessage());
+
             return catchErro('main-categories.index', $th);
         }
     }
@@ -146,6 +146,11 @@ class MainCategoryController extends Controller
 
             if ($request->hasFile('image') && $request->image != null) {
 
+                $folder_path = public_path('images/categories');
+
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
 
                 $image = $request->file('image');
                 $path = 'images/categories/' . $image->hashName();
@@ -155,8 +160,6 @@ class MainCategoryController extends Controller
                 $validated['image'] = $path;
 
                 FileService::deleteFile(public_path($main_category->image));
-
-
             }
 
             //----------customize the translation-------------------
@@ -175,6 +178,7 @@ class MainCategoryController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
 
+            dd($th->getMessage());
 
             return catchErro('main-categories.index', $th);
         }
@@ -198,5 +202,11 @@ class MainCategoryController extends Controller
         }
 
         return $this->notfound();
-    }
+    } //-----------------------
+
+
+
+
+
+    // /------------------------------------------
 }

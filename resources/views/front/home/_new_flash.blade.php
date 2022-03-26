@@ -35,13 +35,13 @@
 
                                                     @if ($product->images->count() > 0)
                                                         @foreach ($product->images as $index => $image)
-                                                            @if ($index == 0 && fileExist($image->name))
+                                                            @if ($index == 0  )
                                                                 <img class="img-fluid image-cover w-100"
-                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     style="height: 350px" title="{{ $product->name }}">
-                                                            @elseif($index == 1 && fileExist($image->name))
+                                                            @elseif($index == 1))
                                                                 <img class="img-fluid image-secondary w-100"
-                                                                    src="{{ asset($image->name) }}" alt=""
+                                                                    src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     style="height: 350px" title="{{ $product->name }}">
                                                             @else
                                                             @break
@@ -218,14 +218,14 @@
 
                                                         @if ($product->images->count() > 0)
                                                             @foreach ($product->images as $index => $image)
-                                                                @if ($index == 0 && fileExist($image->name))
+                                                                @if ($index == 0)
                                                                     <img class="img-fluid image-cover w-100"
-                                                                        src="{{ asset($image->name) }}" alt=""
+                                                                        src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                         style="height: 180px"
                                                                         title="{{ $product->name }}">
-                                                                @elseif($index == 1 && fileExist($image->name))
+                                                                @elseif($index == 1)
                                                                     <img class="img-fluid image-secondary w-100"
-                                                                        src="{{ asset($image->name) }}" alt=""
+                                                                        src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                         style="height: 180px"
                                                                         title="{{ $product->name }}">
                                                                 @else
