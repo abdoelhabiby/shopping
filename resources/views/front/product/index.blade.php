@@ -63,7 +63,7 @@
                                         <div class="product-cover">
                                             @if ($product->images->first())
                                                 <img class="js-qv-product-cover img-fluid"
-                                                    src="{{ asset($product->images->first()->name) }}" alt=""
+                                                    src="{{ fileExist($product->images->first()->name) ? asset($product->images->first()->name) :  pathNoImage() }}" alt=""
                                                     title="{{ $product->name }}" style="width:100%;" itemprop="image">
                                             @else
                                                 <img class="img-fluid image-cover" src="{{ pathNoImage() }}" alt=""
