@@ -35,11 +35,11 @@
 
                                                     @if ($product->images->count() > 0)
                                                         @foreach ($product->images as $index => $image)
-                                                            @if ($index == 0  )
+                                                            @if ($index == 0)
                                                                 <img class="img-fluid image-cover w-100"
                                                                     src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     style="height: 350px" title="{{ $product->name }}">
-                                                            @elseif($index == 1))
+                                                            @elseif($index == 1)
                                                                 <img class="img-fluid image-secondary w-100"
                                                                     src="{{ fileExist($image->name) ? asset($image->name) :  getLinkImageNoImage() }}" alt=""
                                                                     style="height: 350px" title="{{ $product->name }}">
