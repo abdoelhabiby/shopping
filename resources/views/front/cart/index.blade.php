@@ -95,7 +95,7 @@
 
 
                                                             <img class="img-fluid"
-                                                                src="{{ $product->image ? asset($product->image->name) : pathNoImage() }}"
+                                                                src="{{ $product->image && fileExist($product->image->name) ? asset($product->image->name) : pathNoImage() }}"
                                                                 alt="{{ $product->name }}">
 
                                                         </span>
