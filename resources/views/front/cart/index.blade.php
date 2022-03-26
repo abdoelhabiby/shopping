@@ -69,7 +69,7 @@
                                             <!-- ---------------------------------- -->
 
                                             <div
-                                                class="cart-overview product-{{ $product->id . '-' . $product->attribute->id }}">
+                                                class="cart-overview mb-4 product-{{ $product->id . '-' . $product->attribute->id }}">
 
 
                                                 <div class="product-line-grid row spacing-10">
