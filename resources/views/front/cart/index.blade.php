@@ -76,23 +76,6 @@
                                                     <!--  product left content: image-->
                                                     <div class="product-line-grid-left col-sm-2 col-xs-4">
                                                         <span class="product-image media-middle">
-                                                            {{-- @if ($product->images->first())
-
-                                                                @php
-                                                                    $image = $product->images->first()->name;
-                                                                @endphp
-                                                                <img class="img-fluid"
-                                                                    src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
-                                                                    alt="{{ $product->name }}">
-
-                                                            @else
-                                                                <img class="img-fluid" src="{{ getLinkImageNoImage() }}"
-                                                                    alt="{{ $product->name }}">
-
-                                                            @endif --}}
-
-
-
 
                                                             <img class="img-fluid"
                                                                 src="{{ $product->image && fileExist($product->image->name) ? asset($product->image->name) : pathNoImage() }}"
