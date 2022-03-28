@@ -101,7 +101,6 @@ class MainCategoryController extends Controller
             return redirect()->route('main-categories.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th->getMessage());
 
             return catchErro('main-categories.index', $th);
         }
