@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\ProductImagesCollection;
+use Spatie\Permission\Models\Role;
 
 /*
 
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     //-------------------------------------------
 
     Route::get('/', function () {
+
         return view('dashboard.home');
     })->name('dashboard.home');
 

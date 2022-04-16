@@ -343,10 +343,15 @@
 
 
                                 @if ($total_products_count > 0 && $total_price > 0)
+
                                     <div class="checkout cart-detailed-actions">
-                                        <div class="text-xs-center">
-                                            <a href="{{ route('front.checkout.index') }}" class="btn btn-primary">
-                                             {{ __('front.checkout') }}
+                                        <p>{{ __('front.checkout') . " " . __('front.with') }}:</p>
+
+                                        <div class="d-flex">
+                                            <a href="{{ route('front.checkout.index','stripe') }}" class="btn btn-primary ml-1">
+                                              stripe
+                                             </a>   <a href="{{ route('front.checkout.index','myfatoorah') }}" class="btn btn-primary">
+                                              myfatoorah
                                              </a>
 
                                         </div>

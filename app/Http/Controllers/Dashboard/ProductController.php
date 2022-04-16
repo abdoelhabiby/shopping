@@ -52,57 +52,43 @@ class ProductController extends Controller
     {
 
 
-        $search_by = $this->search_by;
+        $search = $request->search;
+        // ---------------------------------
 
-        $products = $request->products;
-        $category = $request->category;
-        $brand = $request->brand;
-        $tag = $request->tag;
 
         $products = Product::with([
             'categories',
             'tags',
             'brand'
         ])
-            ->when($category, function ( $query, $category) {
+            ->when($search, function ($query, $search) {
 
-                return $query->whereHas('categories', function ( $query) use ($category) {
-                    return $query->whereTranslationLike('name', '%' . $category . '%')
-                        ->orWhere('slug', 'like', '%' . $category . '%');
-
-                });
+                return $query->whereTranslationLike('name', '%' . $search . '%')
+                    ->orWhere('sku', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%')
+                    ->orWhereRaw("(CASE WHEN is_active = 1 THEN 'active' ELSE 'deactive' END) like '$search%'")
+                    ->orWhereHas('categories', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('tags', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    });
             })
-             ->when($brand, function ($query, $brand) {
-
-                return $query->whereHas('brand', function ($query) use ($brand) {
-                    return $query->whereTranslationLike('name', '%' . $brand . '%')
-                        ->orWhere('slug', 'like', '%' . $brand . '%');
-                });
-            })
-             ->when($tag, function ($query, $tag) {
-
-                return $query->whereHas('tags', function ($query) use ($tag) {
-                    return $query->whereTranslationLike('name', '%' . $tag . '%')
-                        ->orWhere('slug', 'like', '%' . $tag . '%');
-                });
-            })
-             ->when($products, function ($query, $products) {
-
-              return $query->whereTranslationLike('name', '%' . $products . '%')
-                ->orWhere('sku', 'like', '%' . $products . '%')
-                ->orWhere('slug', 'like', '%' . $products . '%');
-            })
-
             ->orderBy('id', 'desc')->paginate($this->default_paginate);
 
 
+
+
+
+
+
         return view($this->view_model . '.index', compact(['products', 'search_by']));
-
-
-
-
-
-
     }
 
     /**

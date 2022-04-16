@@ -1,19 +1,13 @@
 <?php
 
 use App\Cart\Cart;
-use App\Models\Tag;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\ProductImage;
+
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
-use App\Models\ProductReview;
-use App\Models\ProductCategory;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
+use App\Http\Services\MyfatoorahPaymentService;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -34,14 +28,49 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('test', function (Request $request) {
 
 
+    dd(sprintf('%0.2f', 1554654654));
+
+
+    // return $product;
+    // paymentId
+    // invoiceId
+
+    $id = $request->paymentId;
+    // $payment = MyfatoorahPaymentService::getPaymentData($id);
+    $payment = MyfatoorahPaymentService::getPaymentData($id,'paymentId');
+
+
+    dd($payment);
+
+    $status = $payment->InvoiceStatus; //Paid or Pending
+    $amount = $payment->InvoiceValue;
+
+    if (count($payment->InvoiceTransactions) > 1) {
+        foreach ($payment->InvoiceTransactions as $transaction) {
+            if ($transaction->TransactionStatus == 'Succss') {
+                $gateway_method = $transaction->PaymentGateway;
+                break;
+            }
+        }
+    } else {
+        $gateway_method =  ($payment->InvoiceTransactions[0])->PaymentGateway;
+    }
+
+
+
+    $data = [
+        'status' => $status,
+        'amount' => $amount,
+        'gateway_method' => $gateway_method,
+    ];
+
+    dd($data, $payment);
+
 
 
     Cache::flush();
 
     return 'succes cache';
-
-
-
 })->name('front.test');
 
 
@@ -91,6 +120,8 @@ Route::group(
             // ------------------------------------------
             //-----------------------routes with auth----------------------------
 
+
+
             Route::group(['middleware' => 'auth'], function () {
 
                 //-------------------start wishlis--------------------
@@ -116,8 +147,14 @@ Route::group(
 
                 // Route::get('checkout/{amount}','CheckoutController@index')->name('front.checkout.index');
 
-                Route::get('checkout', 'CheckoutController@index')->name('front.checkout.index');
-                Route::post('charge', 'CheckoutController@charge')->name('front.checkout.charge');
+                Route::middleware('checkAddressDetails')->group(function () {
+
+                    Route::get('checkout/{gatewaypayment}', 'CheckoutController@index')->name('front.checkout.index');
+                    Route::post('charge/stripe', 'CheckoutController@chargeStripe')->name('front.checkout.charge.stripe');
+                });
+
+                Route::post('charge/myfatoorah/redirect', 'CheckoutController@myfatoorahSaveOrderAndRedirect')->name('front.checkout.myfatoorah.redirect');
+
 
                 // --------------------------------------------------
 
@@ -125,10 +162,21 @@ Route::group(
 
                 Route::get('profile/edit', "Auth\UpdateController@edit")->name('front.profile.edit');
                 Route::put('profile/edit', "Auth\UpdateController@update")->name('front.profile.update');
+
+                Route::get('profile/address/edit', "ProfileController@editAddress")->name('front.profile.address.edit');
+                Route::put('profile/address/edit', "ProfileController@updateAddress")->middleware('mergeUserId')->name('front.profile.address.update');
+
+
                 Route::get('profile/change-password', "Auth\UpdateController@changePassword")->name('front.profile.change_password');
-                Route::put('profile/change-password', "Auth\UpdateController@updateChangePassword")->name('front.profile.update_change_password');
+                Route::put('profile/change-password', "Auth\UpdateController@updateChangePassword")
+                    ->middleware('throttle:6,10')
+                    ->name('front.profile.update_change_password');
             });
             //---------------------end routes with auth------------
+
+
+            Route::get('charge/myfatoorah/callback', 'CheckoutController@callbackMyfatoorah')->name('front.checkout.charge.myfatoorah');
+
 
             //-----------------------start routes categories---------
 

@@ -29,6 +29,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/vendors.css">
 
 
+
+
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/icheck.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/custom.css">
 
@@ -68,6 +70,7 @@
     {{-- ----------------------------end rtl
     ------------------------------------------------- --}}
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/selects/select2.min.css">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/dropzone.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/dropzone.css">
@@ -145,6 +148,9 @@
     <!-- BEGIN VENDOR JS-->
     <script src="{{ asset('admin') }}/vendors/js/vendors.min.js" type="text/javascript"></script>
 
+    <script src="{{ asset('admin') }}/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
+
+
       <!-- BEGIN PAGE VENDOR JS-->
   <script src="{{ asset('admin') }}/vendors/js/gallery/masonry/masonry.pkgd.min.js"
   type="text/javascript"></script>
@@ -188,7 +194,6 @@
 
 
 
-
     <script src="{{ asset('admin/js/dropzone.min.js') }}"></script>
 
     <script src="{{ asset('admin') }}/vendors/js/forms/repeater/jquery.repeater.min.js" type="text/javascript"></script>
@@ -196,6 +201,9 @@
     <script src="{{ asset('admin') }}/js/scripts/forms/form-repeater.js" type="text/javascript"></script>
 
     <script src="{{ asset('admin/js/custom.js') }}"></script>
+
+
+    <script src="{{ asset('admin') }}/js/scripts/forms/select/form-select2.js" type="text/javascript"></script>
 
 
 

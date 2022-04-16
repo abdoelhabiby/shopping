@@ -63,8 +63,9 @@
                                         <div class="product-cover">
                                             @if ($product->images->first())
                                                 <img class="js-qv-product-cover img-fluid"
-                                                    src="{{ fileExist($product->images->first()->name) ? asset($product->images->first()->name) :  pathNoImage() }}" alt=""
-                                                    title="{{ $product->name }}" style="width:100%;" itemprop="image">
+                                                    src="{{ fileExist($product->images->first()->name) ? asset($product->images->first()->name) : pathNoImage() }}"
+                                                    alt="" title="{{ $product->name }}" style="width:100%;"
+                                                    itemprop="image">
                                             @else
                                                 <img class="img-fluid image-cover" src="{{ pathNoImage() }}" alt=""
                                                     title="{{ $product->name }}" style="width:100%;" itemprop="image">
@@ -211,9 +212,13 @@
                                                                 @foreach ($product->categories as $category)
                                                                     <span>
                                                                         {{-- add link to category here --}}
-                                                                        <a href="" title="{{ $category->name }}">
-                                                                            {{ $category->name }}
-                                                                        </a>
+                                                                        @if ($category->parent->slug)
+                                                                            <a href="{{ route('front.category.show', [$category->parent->slug, $category->slug]) }}"
+                                                                                title="{{ $category->name }}">
+                                                                                {{ $category->name }}
+                                                                            </a>
+                                                                        @endif
+
                                                                     </span>
                                                                 @endforeach
 
@@ -368,10 +373,10 @@
 
                                                 {{-- ------------section information seller --}}
 
-                                                @if($product->vendor)
-
-                                                    @include('front.product.information_seler'  )
-
+                                                @if ($product->vendor)
+                                                    @include(
+                                                        'front.product.information_seler'
+                                                    )
                                                 @endif
 
                                                 {{-- ------------------------------- --}}

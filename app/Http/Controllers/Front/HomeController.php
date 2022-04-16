@@ -28,21 +28,18 @@ class HomeController extends BaseController
 
 
         //----------get some offers to show in section offers----
+
         $products_offer = $home_repository->getProductsOffer(9);
 
-        //--------------------get new products added----------
 
         $new_poducts = $home_repository->getNewProducts(18);
 
-        //--------------------get products best sellers ----------
 
         $best_sellers = $home_repository->getBestSellers(18);
 
-        //--------------------get products trending ----------
 
         $trending = $home_repository->getProductsTrending(6);
 
-        //----------------------get image sliders------------------
 
         $ttl = 60 * 60 * 24;
         $slider_images = Cache::remember('home_slider_images', $ttl, function () {

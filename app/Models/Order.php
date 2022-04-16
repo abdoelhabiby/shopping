@@ -16,6 +16,11 @@ class Order extends Model
         'charge_id',
         'amount',
         'note',
+        'status',
+        'payment_gateway',
+        'payment_method',
+        'refused_reason',
+        'return_quantity'
     ];
 
     // protected $casts = [

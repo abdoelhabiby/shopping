@@ -24,6 +24,14 @@ class Cart
         }
     }
 
+
+
+    // ------------------------------
+    public function resetCart()
+    {
+        session()->forget('cart');
+    }
+    // ------------------------------
     //------------------add items to cart----------------------
 
 

@@ -54,7 +54,7 @@ class ProductController extends BaseController
                 },
 
                 'categories' => function ($cat) {
-                    return $cat->select(['product_id', 'category_id', 'categories.id']);
+                    return $cat->with('parent');
                 },
                 'tags' => function ($tag) {
                     return $tag->select(['product_id', 'tag_id', 'tags.id']);
@@ -95,6 +95,7 @@ class ProductController extends BaseController
 
 
         $sess_id = request()->getSession()->getId();
+
         $key = 'products_views_' . $sess_id;
 
         if (!Cache::has($key)) {

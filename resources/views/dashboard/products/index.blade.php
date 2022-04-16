@@ -91,7 +91,20 @@ $model_name = 'products';
                                             </div>
 
                                             <div class="float-right  mb-1">
-                                                <form action="{{ route('products.index') }}" method="get"
+
+                                                <form action="{{ route('products.index') }}" method="GET">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="search" placeholder="search"
+                                                        aria-describedby="button-addon2"  value="{{ request()->search }}">
+                                                        <div class="input-group-append">
+                                                          <button class="btn btn-primary" type="submit">
+                                                            <i class="la la-search"></i>
+                                                          </button>
+                                                        </div>
+                                                      </div>
+                                                </form>
+
+                                                {{-- <form action="{{ route('products.index') }}" method="get"
                                                     id="form-search">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
@@ -129,7 +142,7 @@ $model_name = 'products';
                                                         </div>
                                                     </div>
 
-                                                </form>
+                                                </form> --}}
 
                                             </div>
 
@@ -139,7 +152,7 @@ $model_name = 'products';
 
 
 
-                                        <table class="table tabel-print table-responsive">
+                                        <table class="table tabel-print " style="width: 100%">
                                             <thead>
                                                 <th>ID</th>
                                                 <th>Slug</th>
