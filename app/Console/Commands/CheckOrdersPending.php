@@ -132,7 +132,7 @@ class CheckOrdersPending extends Command
 
 
         $order->update([
-            'charge_id' => $payment_id,
+            // 'charge_id' => $payment_id,
             'payment_method' => $gateway_method,
             'status' =>  'paid',
             'note' => 'updated to paid after check '
@@ -180,8 +180,8 @@ class CheckOrdersPending extends Command
             $order->update([
                 'status' =>  'refused',
                 'return_quantity' => 1,
-                'refused_reason' => 'be cause expired date to paid',
-                'note' => 'beck products count equal ' . $products_returned_quantity
+                'refused_reason' => 'because expired date to paid',
+                'note' => 'back products count equal ' . $products_returned_quantity
             ]);
         }
     }

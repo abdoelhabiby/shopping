@@ -10,10 +10,11 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\ProductImagesCollection;
-use Spatie\Permission\Models\Role;
+use App\Http\Resources\Dahboard\ProdctsCollection;
 
 /*
 
@@ -31,10 +32,16 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
 
 
+    // ----------------------test-------------------
+
+
 
     //-------------------------------------------
 
     Route::get('/', function () {
+
+
+
 
         return view('dashboard.home');
     })->name('dashboard.home');
@@ -53,6 +60,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
         'except' => 'show'
     ]);
 
+    // -----------------------fetch datatable ajax----------------
+
+
+    Route::get('products/fetch', 'ProductController@fetchDataTable')->name('products.datatable.fetch');
 
     //----------------- start routes product attributes and images---------------
 

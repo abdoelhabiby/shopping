@@ -211,54 +211,6 @@ class MyfatoorahPaymentService
 
     // --------------------------------------------------------
 
-    public static function charge($token, $description, UserAddressDetails $user_address_details)
-    {
-
-
-
-
-        $cart = self::cart();
-        $stripe = self::newStripe();
-        $total_price =  $cart->getTotalProductsPrice();
-
-
-        $customer_id = self::createCustomer($token, $user_address_details);
-
-        $charge = $stripe->charges()->create([
-            'currency' => 'EGP',
-            'amount'   => $total_price,
-            'description' => $description,
-            "customer" => $customer_id
-
-        ]);
-
-
-        if ((int) substr($total_price, 0, 1)  != (int) substr($charge['amount_captured'], 0, 1)) {
-
-            throw new Exception('stribe payemnts dosent equals');
-        }
-
-
-
-        if (isset($charge['id']) && isset($charge['status']) && $charge['status'] == 'succeeded') {
-
-            $payment_method = $charge['payment_method_details']['card']['brand'];
-
-            $charge  = [
-                'charge_id' => $charge['id'],
-                'status' => $charge['status'],
-                'amount' => $charge['amount'],
-                'currency' => $charge['currency'],
-                'payment_method' => $payment_method
-            ];
-
-
-            return $charge;
-        }
-
-        return false;
-    }
-
 
     // --------------------------------------
 

@@ -1,4 +1,7 @@
-<div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow " data-scroll-to-active="true">
+{{-- <div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow " data-scroll-to-active="true"> --}}
+
+    <div class="main-menu menu-fixed menu-dark menu-accordion    menu-shadow " data-scroll-to-active="true">
+
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
@@ -149,7 +152,7 @@
 
                 <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
                     route-name-open="{{ $module_name }}.*" count="{{ App\Models\Brand::count() }}">
-                    <x-slot name="icon"> <i class="las la-yahoo"></i> </x-slot>
+                    <x-slot name="icon"> <i class="las la-dove"></i> </x-slot>
                     <ul class="menu-content">
                         @if (admin()->can('read_brand'))
                             <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
@@ -292,9 +295,7 @@
                             <a class="menu-item" href="{{ route('admin.homepage_slider.index') }}"
                                 data-i18n="nav.dash.ecommerce">Home Page slider </a>
                         </li>
-                        <li class="">
-                            <a class="menu-item" href="" data-i18n="nav.dash.ecommerce">sett 2 </a>
-                        </li>
+
 
 
 

@@ -25,57 +25,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 
-Route::get('test', function (Request $request) {
-
-
-    dd(sprintf('%0.2f', 1554654654));
-
-
-    // return $product;
-    // paymentId
-    // invoiceId
-
-    $id = $request->paymentId;
-    // $payment = MyfatoorahPaymentService::getPaymentData($id);
-    $payment = MyfatoorahPaymentService::getPaymentData($id,'paymentId');
-
-
-    dd($payment);
-
-    $status = $payment->InvoiceStatus; //Paid or Pending
-    $amount = $payment->InvoiceValue;
-
-    if (count($payment->InvoiceTransactions) > 1) {
-        foreach ($payment->InvoiceTransactions as $transaction) {
-            if ($transaction->TransactionStatus == 'Succss') {
-                $gateway_method = $transaction->PaymentGateway;
-                break;
-            }
-        }
-    } else {
-        $gateway_method =  ($payment->InvoiceTransactions[0])->PaymentGateway;
-    }
-
-
-
-    $data = [
-        'status' => $status,
-        'amount' => $amount,
-        'gateway_method' => $gateway_method,
-    ];
-
-    dd($data, $payment);
-
-
-
-    Cache::flush();
-
-    return 'succes cache';
-})->name('front.test');
-
-
-
-
 
 Route::group(
     [

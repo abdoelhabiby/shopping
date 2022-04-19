@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\This;
 use Astrotomic\Translatable\Translatable;
@@ -12,7 +13,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 class Product extends Model
 {
 
-    use Translatable, SoftDeletes, GlobalMethodUesdInModels,HasEagerLimit;
+    use Translatable, SoftDeletes, GlobalMethodUesdInModels, HasEagerLimit;
 
 
     protected $translatedAttributes = ['name', 'description'];
@@ -36,6 +37,7 @@ class Product extends Model
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i:s'
     ];
+
 
 
 
@@ -96,8 +98,7 @@ class Product extends Model
     public function authReview()
     {
 
-            return  $this->hasOne(ProductReview::class,'product_id','id')->where('user_id',user()->id);
-
+        return  $this->hasOne(ProductReview::class, 'product_id', 'id')->where('user_id', user()->id);
     }
 
 
@@ -136,6 +137,7 @@ class Product extends Model
                 return $attr->where('is_active', true);
             });
     }
+
 
 
 

@@ -3,7 +3,7 @@
 
     <a @if($oneList) href="{{ route($routeNameOpen) }}" @endif > {{ $icon }}
 
-        <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($name) }}</span>
+        <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst(str_replace('-', ' ', $name)) }}</span>
         @if(isset($count) )
          <span class="badge badge badge-info badge-pill float-right mr-2">{{ $count }}</span>
 

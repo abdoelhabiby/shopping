@@ -14,6 +14,7 @@ class OrderController extends Controller
 
     use AjaxResponseTrait;
     protected $view_model = 'dashboard.orders';
+    public $default_paginate = 10;
 
 
     public function __construct()
@@ -33,8 +34,6 @@ class OrderController extends Controller
      */
     public function index(OrderDataTable $datatable)
     {
-
-        // return Order::latest()->first();
         return $datatable->render($this->view_model . '.index');
     }
 
@@ -67,12 +66,14 @@ class OrderController extends Controller
             },
 
 
-            'user' => function($q){
-                return $q->select(['id','name','email','image']);
-            }
+            // 'user' => function($q){
+            //     return $q->select(['id','name','email','image']);
+            // },
+            'user.addressDetails'
             ])->findOrFail($id);
 
 
+            // return $order->user->addressDetails;
 
         return view($this->view_model . '.show',compact('order'));
     }

@@ -86,16 +86,25 @@ class OrderDataTable extends DataTable
     {
         return [
 
+
+
+
             // Column::make('id'),
             Column::make('user.name')->title('name'),
+            Column::make('charge_id')->title('charge id'),
+            Column::make('status')->title('status'),
+            Column::make('payment_gateway')->title('gateway'),
+            Column::make('payment_method')->title('method'),
             Column::make('amount'),
-            Column::make('note'),
+            // Column::make('note'),
             Column::make('created_at'),
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
+
         ];
     }
 

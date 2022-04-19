@@ -97,8 +97,18 @@
 
 
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css"> --}}
+
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/responsive.dataTables.min.css">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/colReorder.dataTables.min.css"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/fixedHeader.dataTables.min.css"> --}}
+
+
 
 
 
@@ -161,9 +171,25 @@
   <!-- END PAGE VENDOR JS-->
 
     <!-- BEGIN VENDOR JS-->
-    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+  <!-- BEGIN PAGE VENDOR JS-->
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"
+  type="text/javascript"></script>
+  {{-- <script src="{{ asset('admin') }}/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.colReorder.min.js"
+  type="text/javascript"></script> --}}
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js"
+  type="text/javascript"></script>
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/buttons.bootstrap4.min.js"
+  type="text/javascript"></script>
+  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.fixedHeader.min.js"
+  type="text/javascript"></script>
+  <!-- END PAGE VENDOR JS-->
+
+
+    {{-- <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript">
-    </script>
+    </script> --}}
 
     <script src="{{ asset('admin') }}/vendors/js/forms/toggle/bootstrap-switch.min.js" type="text/javascript"></script>
     <script src="{{ asset('admin') }}/vendors/js/forms/toggle/bootstrap-checkbox.min.js" type="text/javascript">

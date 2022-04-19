@@ -186,7 +186,6 @@ $model_name = 'products';
 
                                                             <select name="categories[]" class="select2 form-control "
                                                                 multiple="" tabindex="-1" aria-hidden="true">
-                                                                <option disabled >Select Categories</option>
 
                                                                 @isset($sub_categories)
                                                                     @if ($sub_categories->count() > 0)
@@ -324,7 +323,7 @@ $model_name = 'products';
 
 
                                                             <label>
-                                                                <input type="checkbox" name="is_active" value="true"
+                                                                <input type="checkbox" checked name="is_active" value="true"
                                                                     > active
                                                             </label>
                                                         </div>

@@ -27,9 +27,9 @@ class HomeRepository implements HomeRepositoryInterface
         $ttl = 60 * 60 * 6; //evry 6 hours
 
 
-        $products_offer = Cache::remember('home_products_offer', $ttl, function () use ($limit) {
+        // $products_offer = Cache::remember('home_products_offer', $ttl, function () use ($limit) {
 
-            return $this->product->active()->whereHas('offer')->with([
+            $products_offer = $this->product->active()->whereHas('offer')->with([
                 'offer' => function ($offer) {
                     return $offer->select([
                         "id",
@@ -49,7 +49,7 @@ class HomeRepository implements HomeRepositoryInterface
             ])
                 ->withTranslation()
                 ->limit($limit)->get();
-        });
+        // });
 
 
         return $products_offer;
@@ -65,9 +65,9 @@ class HomeRepository implements HomeRepositoryInterface
 
         $ttl = 60 * 60 * 3; //evry 3 hours
 
-        $new_products = Cache::remember('home_new_products', $ttl, function () use ($limit) {
+        // $new_products = Cache::remember('home_new_products', $ttl, function () use ($limit) {
 
-            return  $this->product->active()
+            $new_products =  $this->product->active()
                 ->with(
                     [
                         'vendor' => function ($vend) {
@@ -95,7 +95,7 @@ class HomeRepository implements HomeRepositoryInterface
                 )
                 ->withTranslation()
                 ->active()->latest()->limit($limit)->get();
-        });
+        // });
 
         return  $new_products;
     }
@@ -107,9 +107,9 @@ class HomeRepository implements HomeRepositoryInterface
     {
         $ttl = 60 * 60 * 4; //evry 4 hours
 
-        $products_best_seller = Cache::remember('home_products_best_seller', $ttl, function () use ($limit) {
+        // $products_best_seller = Cache::remember('home_products_best_seller', $ttl, function () use ($limit) {
 
-            return $this->product->active()
+            $products_best_seller = $this->product->active()
                 ->whereHas('attribute', function ($attribute) {
                     return $attribute->active();
                 })
@@ -141,7 +141,7 @@ class HomeRepository implements HomeRepositoryInterface
                 )
                 ->withTranslation()
                 ->latest()->limit($limit)->get();
-        });
+        // });
 
         return $products_best_seller;
     }
@@ -153,10 +153,10 @@ class HomeRepository implements HomeRepositoryInterface
     {
         $ttl = 60 * 60 * 4; //evry 4 hours
 
-        $products_trending = Cache::remember('home_products_trending', $ttl, function () use ($limit) {
+        // $products_trending = Cache::remember('home_products_trending', $ttl, function () use ($limit) {
 
 
-            return $this->product->active()
+            $products_trending =  $this->product->active()
 
                 ->with(
                     [
@@ -186,7 +186,7 @@ class HomeRepository implements HomeRepositoryInterface
                 )
                 ->withTranslation()
                 ->latest()->limit($limit)->get();
-        });
+        // });
 
         return $products_trending;
     }
@@ -205,7 +205,8 @@ class HomeRepository implements HomeRepositoryInterface
 
         $ttl = 60 * 60 * 4; //evry 4 hours
 
-        $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
+        // $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
+
             $categories = Category::mainCategory()
                 ->whereHas('chields.chields')
                 ->with([
@@ -290,14 +291,12 @@ class HomeRepository implements HomeRepositoryInterface
                 }
             }
 
-
-
-
             return  $category_products;
-        }); // end cache
+
+        // }); // end cache
 
 
-        return $main_category_with_nested_chields_products;
+        // return $main_category_with_nested_chields_products;
     }
 
 
