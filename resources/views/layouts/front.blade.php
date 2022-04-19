@@ -10,7 +10,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
 
-    <title>Osah Store @yield('title')</title>
+    <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
     <meta name="description" content="Shop powered by PrestaShop">
     <meta name="keywords" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">

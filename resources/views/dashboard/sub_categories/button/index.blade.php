@@ -1,8 +1,12 @@
-<a href="{{ route('sub-categories.edit', $id) }}"><i class="la la-edit"></i></a>
+@if (admin()->can('update_category'))
+    <a href="{{ route('sub-categories.edit', $id) }}"><i class="la la-edit"></i></a>
+@endif
 
 
-
-<a class="delete_log text-danger" data-url="{{route('sub-categories.destroy',$id)}}" data-id="{{ $id }}"><i class="la la-trash"></i></a>
+@if (admin()->can('delete_category'))
+    <a class="delete_log text-danger" data-url="{{ route('sub-categories.destroy', $id) }}"
+        data-id="{{ $id }}"><i class="la la-trash"></i></a>
+@endif
 
 
 
@@ -43,21 +47,21 @@
 
                             $('#sub-category-table').DataTable().ajax.reload();
 
-                            swal( {
-                                title:'succes delete',
+                            swal({
+                                title: 'succes delete',
                                 type: "success",
                                 timer: 3000,
-                                });
+                            });
 
 
                         },
-                        error:function(response) {
+                        error: function(response) {
 
-                            swal( {
-                                title:'404 not found',
+                            swal({
+                                title: '404 not found',
                                 type: "error",
                                 timer: 3000,
-                                });
+                            });
 
                         }
                     })
@@ -77,7 +81,4 @@
         }); //end click
 
     })
-
 </script>
-
-

@@ -16,11 +16,25 @@ class ProductAttributeController extends Controller
 {
     use AjaxResponseTrait;
 
+    public function __construct()
+    {
+
+        $this->middleware('permission:create_product')->only('store');
+        $this->middleware('permission:update_product')->only('update');
+        $this->middleware('permission:delete_product')->only('destroy');
+    }
+
+
 
 
     public function index(Product $product)
     {
-        return view('dashboard.products/attributes/index', compact('product'));
+        if (admin()->hasAnyPermission(['read_product', 'create_product', 'update_product'])) {
+
+            return view('dashboard.products.attributes.index', compact('product'));
+        }
+
+        abort(403);
     }
 
 

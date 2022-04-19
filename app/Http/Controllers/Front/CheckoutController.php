@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers\Front;
 
+use Exception;
 use App\Cart\Cart;
 use App\Models\Order;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use App\Models\OrderProduct;
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Illuminate\Http\Request;
+use App\Http\Traits\StripeTrait;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Traits\MyfatoorahTrait;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Services\StripePaymentService;
+use App\Http\Controllers\Front\BaseController;
 
 
-class CheckoutController extends Controller
+class CheckoutController extends BaseController
 {
-    //
+    use MyfatoorahTrait, StripeTrait;
 
+    protected $payments_gateway = ['stripe', 'myfatoorah'];
 
 
     private function myCart()
@@ -47,8 +54,13 @@ class CheckoutController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request, $gateway)
     {
+
+
+        if (!in_array($gateway, $this->payments_gateway)) {
+            abort(404);
+        }
 
         if (!$this->checkCartNotEmpty()) {
 
@@ -56,125 +68,109 @@ class CheckoutController extends Controller
         }
 
 
-        $cart = $this->myCart(); // service class
+        switch ($gateway) {
+            case 'stripe': {
 
-        $total_products_count = (int) $cart->getTotalProductsQuanityt();
+                    return StripePaymentService::init();
+                }
+                break;
 
-        $total_price =  $cart->getTotalProductsPrice();
+            case 'myfatoorah': {
+                    return $this->paymentWithMyfatoorahInit();
+                }
+                break;
+            default:
 
-        return view('front.checkout.index', compact(['total_products_count', 'total_price']));
+                return redirect()->route('front.home');
+        }
     }
+
+
 
 
 
     //------------------------------------------------
 
-    public function charge(Request $request)
+
+
+    protected function saveOrder($charge_id, $payment_gateway, $payment_method, Cart $cart)
     {
+        $products = $cart->getProducts();
+        $total_price =  $cart->getTotalProductsPrice();  //total amount
 
 
-        try {
+        //---save order and charge id
 
-            DB::beginTransaction();
+        //payment status =>>>> 'pending','paid','refused'
+        //and default pending
 
-            $cart = $this->myCart(); // service class
-            $products = $cart->getProducts();
-            $total_price =  $cart->getTotalProductsPrice();  //total amount
-
-            // return $cart->getProducts();
-
-            $description = "name : " . user()->name . " email : " . user()->email;
-            $charge = Stripe::charges()->create([
-                'currency' => 'USD',
-                'source' => $request->stripeToken,
-                'amount'   => $total_price,
-                'description' => $description
-            ]);
+        $order = Order::create([
+            'user_id' => user()->id,
+            'charge_id' => $charge_id,
+            'amount' => $total_price,
+            'payment_gateway' => $payment_gateway,
+            'payment_method' => $payment_method,
+            'created_at' => now(),
+        ]);
 
 
+        //---------------save order products---------
+        $order_products = [];
 
-            //---------check if the payment suces or not by check charge id is return
+        foreach ($products as $product) {
 
-            if (!isset($charge['id'])) {
-                $error_message = "لقد حدث خطأ برجاء المحاوله مره اخر";
-                return redirect()->route('front.checkout.index')->with(['error' => $error_message]);
+            //---------get real price by check if the product has offer------
+            if ($product->attribute->hasOffer) {
+                $real_price = $product->attribute->price_offer;
+            } else {
+                $real_price = $product->attribute->price;
+            } //-----end check if has offer----------
+
+            $user_count_selected = $product->user_select_quantity ?? 1;
+            $check_quantity = $product->attribute->qty > 0 ? 1 : 0;
+
+            //check the user select found in stock
+            if ($user_count_selected <= $product->attribute->qty) {
+                $check_quantity = $user_count_selected;
             }
 
 
-            //---save order and charge id
+            if ($check_quantity > 0) {
 
-            $order = Order::insertGetId([
-                'user_id' => user()->id,
-                'charge_id' => $charge['id'],
-                'amount' => $total_price,
-                // 'note',
-                'created_at' => now(),
-            ]);
+                $order_products[] = [
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'product_attribute_id' => $product->attribute->id,
+                    'quantity' => $check_quantity,
+                    'price' => $real_price,
+                    'created_at' => now(),
 
+                ];
 
-            //---------------save order products---------
-            $order_products = [];
+                //---------decrement the quantity-------------
 
-            foreach ($products as $product) {
+                $product->attribute->decrement('qty', $check_quantity);
+            }
+        } //---end of foreach
 
-                //---------get real price by check if the product has offer------
-                if ($product->attribute->hasOffer) {
-                    $real_price = $product->attribute->price_offer;
-                } else {
-                    $real_price = $product->attribute->price;
-                } //-----end check if has offer----------
+        //--------save order products in database----
 
-                $user_count_selected = $product->user_select_quantity ?? 1;
-                $check_quantity = $product->attribute->qty > 0 ? 1 : 0;
+        OrderProduct::insert($order_products);
 
-                //check the user select found in stock
-                if ($user_count_selected <= $product->attribute->qty) {
-                    $check_quantity = $user_count_selected;
-                }
-
-
-                if ($check_quantity > 0) {
-
-                    $order_products[] = [
-                        'order_id' => $order,
-                        'product_id' => $product->id,
-                        'product_attribute_id' => $product->attribute->id,
-                        'quantity' => $check_quantity,
-                        'price' => $real_price,
-                        'created_at' => now(),
-
-                    ];
-
-
-                    //---------decrement the quantity-------------
-                    $product->attribute->decrement('qty', $check_quantity);
-                }
-            } //---end of foreach
-
-
-
-            //--------save order products in database----
-
-            OrderProduct::insert($order_products);
-
-            //forget the session
-
-            session()->forget('cart');
-
-
-
-
-            DB::commit();
-            $success_message = "تم اتمام الطلب";
-            return redirect()->route('front.home')->with(['success' => $success_message]);
-        } catch (\Throwable $th) {
-
-            DB::rollback();
-            $error_message = "لقد حدث خطأ برجاء المحاوله مره أخري";
-            return redirect()->route('front.checkout.index')->with(['error' => $error_message]);
-        }
+        return $order;
     }
+
     //------------------------------------------------
+
+    //------------------------------------------------
+    //------------------------------------------------
+
+
+
+
+    //------------------------------------------------
+
+
 
 
 

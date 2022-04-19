@@ -46,9 +46,16 @@ $model_name = 'users';
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route( $model_name . '.create') }}"
+
+                                            @if (admin()->can('create_user'))
+                                            <li>
+                                                <a href="{{ route($model_name . '.create') }}"
                                                     class="btn btn-outline-info btn-sm box-shadow-2"><i
-                                                        class="la la-plus"></i></a></li>
+                                                        class="la la-plus"></i></a>
+                                            </li>
+                                            @endif
+
+
                                             <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                             <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                             <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -78,37 +85,40 @@ $model_name = 'users';
                                             <tbody>
 
                                                 @if ($rows->count() > 0)
-
-
                                                     @foreach ($rows as $index => $row)
-
                                                         <tr>
-                                                            <td> {{ orderNumberOfRows($rows->perPage()) + $index + 1 }}</td>
+                                                            <td> {{ orderNumberOfRows($rows->perPage()) + $index + 1 }}
+                                                            </td>
                                                             <td>{{ $row->name }}</td>
                                                             <td>{{ $row->email }}</td>
-                                                        <td><img src="{{asset($row->image )}}" class="rounded-circle" width="50" height="50" alt=""></td>
+                                                            <td><img src="{{ asset($row->image) }}" class="rounded-circle"
+                                                                    width="50" height="50" alt=""></td>
                                                             <td>
                                                                 <div class="btn-group" role="group"
                                                                     aria-label="Basic example">
 
-                                                                    <a href="{{ route( $model_name . '.edit', $row->id) }}"
-                                                                        class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">
-                                                                        Edit
-                                                                    </a>
+                                                                    @if (admin()->can('update_user'))
+                                                                        <a href="{{ route($model_name . '.edit', $row->id) }}"
+                                                                            class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">
+                                                                            Edit
+                                                                        </a>
+                                                                    @endif
 
-                                                                    <button type="button" id="button_delete"
-                                                                        data-action="{{ route( $model_name . '.destroy', $row->id) }}"
-                                                                        data-name="{{ $row->name }}"
-                                                                        class="btn btn-outline-danger btn-min-width box-shadow-3 mr-1 mb-1">
-                                                                        Delete
-                                                                    </button>
+                                                                    @if (admin()->can('delete_user'))
+                                                                        <button type="button" id="button_delete"
+                                                                            data-action="{{ route($model_name . '.destroy', $row->id) }}"
+                                                                            data-name="{{ $row->name }}"
+                                                                            class="btn btn-outline-danger btn-min-width box-shadow-3 mr-1 mb-1">
+                                                                            Delete
+                                                                        </button>
+                                                                    @endif
+
 
                                                                 </div>
 
                                                                 <i class="la la-automobile"></i>
                                                             </td>
                                                         </tr>
-
                                                     @endforeach
                                                 @endif
 

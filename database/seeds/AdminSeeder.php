@@ -15,6 +15,9 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
+        // Admin::truncate();
+        // Role::truncate();
+        // Permission::truncate();
 
         try {
 

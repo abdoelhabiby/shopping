@@ -201,7 +201,7 @@ if (!function_exists('pathNoImage')) {
     function pathNoImage()
     {
 
-        return '/images/noImage.jpg';
+        return asset('/images/noImage.jpg');
     }
 }
 

@@ -77,8 +77,11 @@ $model_name = 'orders';
                                                             <tr>
                                                                 <th>Username</th>
                                                                 <th>Email</th>
+                                                                <th>status</th>
                                                                 <th>Total Amount</th>
-                                                                <th>Total Products Quantity</th>
+                                                                <th>Total Quantity</th>
+                                                                <th>gateway</th>
+                                                                <th>method</th>
                                                                 <th>Created at</th>
                                                             </tr>
                                                         </thead>
@@ -86,8 +89,16 @@ $model_name = 'orders';
                                                             <tr>
                                                                 <td> {{ $order->user->name }}</td>
                                                                 <td> {{ $order->user->email }}</td>
+                                                                <td> {{ $order->status }}</td>
                                                                 <td> {{ $order->amount }}</td>
-                                                                <td> {{  $order->orderProducts->sum('quantity')}}</td>
+                                                                <td> {{ $order->orderProducts->sum('quantity') }}</td>
+                                                                <td>
+                                                                    {{ $order->payment_gateway }}
+                                                                </td>
+                                                                   <td>
+                                                                    {{ $order->payment_method }}
+                                                                </td>
+
                                                                 <td> {{ $order->created_at }}</td>
 
 
@@ -98,9 +109,7 @@ $model_name = 'orders';
                                                     </table>
 
 
-                                                    @if ($order->note)
-
-
+                                                    @if ($order->note )
                                                         <div class="note">
                                                             <div
                                                                 class="bs-callout-primary callout-border-left callout-transparent p-1">
@@ -108,8 +117,65 @@ $model_name = 'orders';
                                                                 <p>{{ $order->note }}</p>
                                                             </div>
                                                         </div>
-
                                                     @endif
+
+                                                    @if ($order->status == 'refused' )
+                                                        <div class="refused mt-2">
+                                                            <div
+                                                                class="bs-callout-dabger callout-border-left callout-transparent p-1">
+                                                                <h4 class="danger">refused reason</h4>
+                                                                <p>{{ $order->refused_reason }}</p>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+
+                                                    {{-- order user address details --}}
+
+
+                                                    <div class="card ">
+
+                                                        <div class="card-body p-3 " style="min-height: 225px; ">
+
+                                                            <p class="mb-2">Address detials : </p>
+
+                                                            <p class="card-title">
+                                                                first name : {{  $order->user->addressDetails->first_name }}
+                                                            </p>
+                                                            <p class="card-title">
+                                                                last name : {{  $order->user->addressDetails->last_name }}
+                                                            </p>
+                                                            <p class="card-text">
+                                                                 email : {{  $order->user->addressDetails->email }}
+                                                            </p>
+
+                                                            <p class="card-text">
+                                                                 phone : {{ $order->user->addressDetails->phone }}
+                                                            </p>
+                                                            @if ($order->user->addressDetails->second_phone)
+                                                                <p class="card-text">
+                                                                   second phone :  {{ $order->user->addressDetails->second_phone }}
+                                                                </p>
+                                                            @endif
+                                                            <p class="card-text">
+                                                               address :  {{  $order->user->addressDetails->address }}
+                                                            </p>
+
+                                                            @if ($order->user->addressDetails->second_address)
+                                                                <p class="card-text">
+                                                                    second address :   {{  $order->user->addressDetails->second_address }}
+                                                                </p>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+
 
 
 
@@ -125,9 +191,6 @@ $model_name = 'orders';
                                                     <!-- ---------------------------------- -->
 
                                                     @if ($order->orderProducts && $order->orderProducts->count() > 0)
-
-
-
                                                         <div class="cart-overview mt-3">
 
                                                             <h3 class="card-title" id="basic-layout-form">
@@ -144,14 +207,13 @@ $model_name = 'orders';
                                                                         <th>attribute</th>
                                                                         <th>price</th>
                                                                         <th>quantity</th>
+
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
 
 
                                                                     @foreach ($order->orderProducts as $order_product)
-
-
                                                                         <tr>
                                                                             <td>
                                                                                 @php
@@ -164,10 +226,7 @@ $model_name = 'orders';
                                                                                     width='100' height="100">
                                                                             </td>
                                                                             <td>
-                                                                                <a href="">
                                                                                     {{ $order_product->product->name }}
-
-                                                                                </a>
                                                                             </td>
                                                                             <td>
                                                                                 {{ $order_product->attribute->name }}
@@ -179,9 +238,8 @@ $model_name = 'orders';
                                                                                 {{ $order_product->quantity }}
                                                                             </td>
 
+
                                                                         </tr>
-
-
                                                                     @endforeach
 
 
@@ -193,7 +251,6 @@ $model_name = 'orders';
 
 
                                                         </div>
-
                                                     @endif
 
                                                     <!-- ---------------------------------- -->

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class FrontViewServiceProvider extends ServiceProvider
@@ -27,14 +28,6 @@ class FrontViewServiceProvider extends ServiceProvider
 
         //------------------using in all view in front end -------------------
 
-
-        $main_categories_home = Category::mainCategory()->with(['chields' => function($q){
-            return $q->select(['parent_id','slug','id'])->whereHas('chields',function($chield){
-                return $chield->where('is_active',true)->whereHas('products');
-            });
-        }])->active()->select(['slug','id'])->get();
-
-        view()->share('main_categories_home', $main_categories_home);
 
 
 

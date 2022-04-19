@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Brand;
 use App\Models\Category;
 use App\DataTables\BrandDataTable;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
 use App\Http\Requests\Dashboard\BrandRequest;
 
@@ -16,6 +18,16 @@ class BrandController extends Controller
 
     protected $view_model = 'dashboard.brands';
     protected $model = 'brands';
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:read_brand')->only('index');
+        $this->middleware('permission:create_brand')->only(['create', 'store']);
+        $this->middleware('permission:update_brand')->only(['edit', 'update']);
+        $this->middleware('permission:delete_brand')->only('destroy');
+    }
+
 
 
     /**
@@ -56,11 +68,19 @@ class BrandController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
+
+
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
+                $folder_path = public_path('images/brands');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
+                $path = 'images/sliders/' . $image->hashName();
+                FileService::reszeImageAndSave($image, public_path(), $path, 600, 350);
                 $validated['image'] = $path;
             }
 
@@ -82,8 +102,6 @@ class BrandController extends Controller
             return $th->getMessage();
             return catchErro($this->model . '.index', $th);
         }
-
-
     }
 
 
@@ -96,11 +114,10 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-          $row = $brand;
+        $row = $brand;
         //   $main_categories = Category::mainCategory()->select('id')->get();
 
-        return view($this->view_model . '.edit',compact('row'));
-
+        return view($this->view_model . '.edit', compact('row'));
     }
 
     /**
@@ -122,15 +139,22 @@ class BrandController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-              //-------------uploade image if found-----------
+            //-------------uploade image if found-----------
 
-              if ($request->hasFile('image') && $request->image != null) {
+            if ($request->hasFile('image') && $request->image != null) {
+
+                $folder_path = public_path('images/brands');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
-                $path = imageUpload($image, $this->model);
+                $path = 'images/brands/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
 
-                deleteFile($brand->image);
-
+                FileService::deleteFile(public_path($brand->image));
             }
 
             //----------customize the translation-------------------
@@ -147,7 +171,6 @@ class BrandController extends Controller
 
             DB::commit();
             return redirect()->route($this->model . '.index')->with(['success' => "success update"]);
-
         } catch (\Throwable $th) {
             DB::rollback();
             return catchErro($this->model . '.index', $th);
@@ -164,14 +187,12 @@ class BrandController extends Controller
     {
         if (request()->ajax()) {
 
+            FileService::deleteFile(public_path($brand->image));
             $brand->delete();
 
             return $this->successMessage('ok');
         }
 
         return $this->notfound();
-
-
-
     }
 }

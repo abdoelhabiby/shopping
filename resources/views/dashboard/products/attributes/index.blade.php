@@ -82,10 +82,9 @@ $model_name = 'product attributes';
                                                 </h5>
                                                 <h5>images :
                                                     <small><i>
-                                                        <a
-                                                        href="{{ route('product.images.index', $product->slug) }}">
-                                                        <i class="la la-image"></i>
-                                                    </a></i></small>
+                                                            <a href="{{ route('product.images.index', $product->slug) }}">
+                                                                <i class="la la-image"></i>
+                                                            </a></i></small>
                                                 </h5>
                                             </div>
 
@@ -93,7 +92,6 @@ $model_name = 'product attributes';
                                                 @if ($product->firstImage())
                                                     <img src="{{ asset($product->firstImage()->name) }}" width="270"
                                                         height="300" alt="">
-
                                                 @endif
                                             </div>
 
@@ -112,60 +110,65 @@ $model_name = 'product attributes';
 
 
                 <!-- -------- include form create------------ -->
-                @include('dashboard.products.attributes._create')
+                @if (admin()->can('create_product'))
+                    @include('dashboard.products.attributes._create')
+                @endif
 
                 <!-- -------- include fetch attribute------------ -->
 
-
-                <section id="">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">
-                                        attributes
-                                    </h4>
-
-
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                    <div class="heading-elements">
-                                        <ul class="list-inline mb-0">
-
-                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
-
-                                        </ul>
+                @if (admin()->can('read_product'))
+                    <section id="">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title ">
+                                            attributes
+                                        </h4>
 
 
-                                    </div>
+                                        <a class="heading-elements-toggle"><i
+                                                class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
 
-                                </div>
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
 
-
-                                <div class="card-content collapse show">
-                                    <div class="card-body card-dashboard">
-
-                                        <p class="card-text "> All Attributes</p>
-
-                                        <button class="btn btn-primary  printMe mb-2">Print <i
-                                                class="la la-print"></i></button>
-                                        <button class="btn btn-info  refresh mb-2">Refresh <i
-                                                class="la la-spinner "></i></button>
-
-                                        <div class="show-attributes col-12">
+                                            </ul>
 
 
                                         </div>
 
+                                    </div>
 
+
+                                    <div class="card-content collapse show">
+                                        <div class="card-body card-dashboard">
+
+                                            <p class="card-text "> All Attributes</p>
+
+                                            <button class="btn btn-primary  printMe mb-2">Print <i
+                                                    class="la la-print"></i></button>
+                                            <button class="btn btn-info  refresh mb-2">Refresh <i
+                                                    class="la la-spinner "></i></button>
+
+                                            <div class="show-attributes col-12">
+
+
+                                            </div>
+
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                @endif
+
 
 
 
@@ -185,18 +188,19 @@ $model_name = 'product attributes';
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('admin/js/printThis.js') }}"></script>
-
 @endpush
 
 @section('js')
     <script>
+        var check_can_read = "{{ admin()->can('read_product') }}" ? true : false;
+
         fetchAttribute(); // mounted fetch get attribute
 
 
 
         $(document).on('click', '.close-edit-attribute', function() {
             fetchAttribute();
-         });
+        });
 
         //---------------------print attributes----------------
         $(".printMe").click(function() {
@@ -343,32 +347,37 @@ $model_name = 'product attributes';
 
         function fetchAttribute() {
 
-            var url = "{{ route('product.attibutes.fetch_attribute', $product->slug) }}";
-            var div_attributes = $('.show-attributes'); // to append images to parrent element
-            var token = "{{ csrf_token() }}";
+            if (check_can_read) {
+                var url = "{{ route('product.attibutes.fetch_attribute', $product->slug) }}";
+                var div_attributes = $('.show-attributes'); // to append images to parrent element
+                var token = "{{ csrf_token() }}";
 
 
-            $.ajax({
-                url: url,
-                method: 'get',
-                data: {
-                    _token: token
-                },
-                beforeSend: function() {
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    data: {
+                        _token: token
+                    },
+                    beforeSend: function() {
 
-                },
-                success: function(response) {
+                    },
+                    success: function(response) {
 
-                    div_attributes.html(response.attributes);
+                        div_attributes.html(response.attributes);
 
 
-                },
-                error: function(response) {}
-            })
+                    },
+                    error: function(response) {}
+                })
+
+            } else {
+                return false;
+            }
+
 
 
         }
-
     </script>
 
     @yield('create_attribute_js')

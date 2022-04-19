@@ -24,9 +24,9 @@
                         <meta itemprop="position" content="1">
                     </li>
                     <li itemprop="itemListElement" itemscope="">
-                        <a itemprop="item" href="{{ route('front.main_category.show',$subcategory->parent->slug) }}">
+                        <a itemprop="item" href="{{ route('front.main_category.show',$subcategory->slug) }}">
                             <span itemprop="name">
-                                {{$subcategory->parent->name}}
+                                {{$subcategory->name}}
                             </span>
                         </a>
                         <meta itemprop="position" content="1">
@@ -64,7 +64,7 @@
 
 
                 {{-- check if main category has chileds --}}
-                @if ($categories_with_paginate->count() > 0)
+                @if ($sub_category_chields->count() > 0)
 
                     {{-- start forecah chileds of maincategory --}}
 
@@ -80,7 +80,7 @@
                             <div class="nov-row-wrap row">
 
 
-                                @foreach ($categories_with_paginate as $category)
+                                @foreach ($sub_category_chields as $category)
                                     <div class="nov-image col-lg-2 col-md-2">
                                         <div class="block">
                                             <div class="block_content">
@@ -140,7 +140,7 @@
 
                     <div class="d-flex justify-content-center mb-14 ">
 
-                        {{ $categories_with_paginate->links() }}
+                        {{ $sub_category_chields->links() }}
 
                     </div>
 

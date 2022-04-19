@@ -14,6 +14,18 @@ class OrderController extends Controller
 
     use AjaxResponseTrait;
     protected $view_model = 'dashboard.orders';
+    public $default_paginate = 10;
+
+
+    public function __construct()
+    {
+        $this->middleware('permission:read_order')->only(['index','show']);
+        $this->middleware('permission:create_order')->only(['create', 'store']);
+        $this->middleware('permission:update_order')->only(['edit', 'update']);
+        $this->middleware('permission:delete_order')->only('destroy');
+    }
+
+
 
     /**
      * Display a listing of the resource.
@@ -22,7 +34,6 @@ class OrderController extends Controller
      */
     public function index(OrderDataTable $datatable)
     {
-
         return $datatable->render($this->view_model . '.index');
     }
 
@@ -55,12 +66,14 @@ class OrderController extends Controller
             },
 
 
-            'user' => function($q){
-                return $q->select(['id','name','email','image']);
-            }
+            // 'user' => function($q){
+            //     return $q->select(['id','name','email','image']);
+            // },
+            'user.addressDetails'
             ])->findOrFail($id);
 
 
+            // return $order->user->addressDetails;
 
         return view($this->view_model . '.show',compact('order'));
     }

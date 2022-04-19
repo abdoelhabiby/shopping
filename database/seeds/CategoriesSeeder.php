@@ -13,6 +13,8 @@ class CategoriesSeeder extends Seeder
     public function run()
     {
 
+        // Category::truncate();
+
 
         $m_data = [
             'slug' => 'clothes',

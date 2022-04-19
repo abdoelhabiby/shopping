@@ -37,133 +37,93 @@
                 @include('dashboard.includes.alerts.success')
                 @include('dashboard.includes.alerts.errors')
 
-                <!-- DOM - jQuery events table -->
-                <section id="dom">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">
-                                        home page slider
-                                    </h4>
 
 
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                    <div class="heading-elements">
-                                        <ul class="list-inline mb-0">
+                @if (admin()->hasAnyPermission(['read_slider', 'create_slider']))
+                    {{-- ----------------show images with gallery --}}
 
-                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                    @include(
+                        'dashboard.settings.home_page_slider._fetch_images'
+                    )
+                @endif
+                {{-- ------------------------------------------ --}}
+                {{-- ------------------------------------------ --}}
 
-                                        </ul>
+                {{-- ------------section upload images----------- --}}
 
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="card-content collapse show">
-                                    <div class="card-body card-dashboard">
-
-
-                                        <!-- /resources/views/post/create.blade.php -->
-
-                                        @if ($errors->any())
-                                            <div class="alert alert-danger">
-                                                <ul>
-                                                    @foreach ($errors->all() as $error)
-                                                        <li>{{ $error }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @endif
-
-                                        <!-- Create Post Form -->
+                @if (admin()->can('create_slider'))
+                    <section id="dom">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title ">
+                                            Upload images
+                                        </h4>
 
 
+                                        <a class="heading-elements-toggle"><i
+                                                class="la la-ellipsis-v font-medium-3"></i></a>
+                                        <div class="heading-elements">
+                                            <ul class="list-inline mb-0">
 
-                                        <div class="mb-2">
-                                            <p class="card-text float-left">Upload images</p>
+                                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                                <li><a data-action="close"><i class="ft-x"></i></a></li>
 
-                                            <div class="float-right">
-                                                <form id="form-images"
-                                                    action="{{ route('admin.homepage_slider.store_database') }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-primary btn-xs">Save
-                                                        Images</button>
-                                                </form>
-
-
-                                            </div>
-
-                                            <div class="clearfix"></div>
+                                            </ul>
 
 
                                         </div>
 
-
-
-                                        <form action="#" class="dropzone dropzone-area dz-clickable"
-                                            id="dpz-multiple-files">
-                                            <div class="dz-message">Drop Files Here To Upload</div>
-                                        </form>
-
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section id="">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title ">
-                                        images
-                                    </h4>
-
-
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-                                    <div class="heading-elements">
-                                        <ul class="list-inline mb-0">
-
-                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
-
-                                        </ul>
-
-
                                     </div>
 
-                                </div>
+
+                                    <div class="card-content collapse show">
+                                        <div class="card-body card-dashboard">
 
 
-                                <div class="card-content collapse show">
-                                    <div class="card-body card-dashboard">
+                                            <!-- /resources/views/post/create.blade.php -->
+
+                                            @if ($errors->any())
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+
+                                            <!-- Create Post Form -->
 
 
-                                        <div class="show-images">
 
-                                            @include('dashboard.settings.home_page_slider._fetch_images')
+
+
+
+
+                                            <form action="#" class="dropzone dropzone-area dz-clickable"
+                                                id="dpz-multiple-files">
+                                                <div class="dz-message">Drop Files Here To Upload</div>
+                                            </form>
+
+
+
+
+
+
+
 
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                @endif
+
             </div>
         </div>
 
@@ -176,10 +136,10 @@
 
 @section('js')
     <script>
-        // fetch();
+        var url = "{{ route('admin.homepage_slider.store') }}";
 
+        var check_permission_delete = "{{ admin()->can('delete_slider') }}" ? true : false;
 
-        var url = "{{ route('admin.homepage_slider.store', ) }}";
 
         var uploadedDocumentMap = {}
         Dropzone.options.dpzMultipleFiles = {
@@ -189,40 +149,73 @@
             addRemoveLinks: true,
             paramName: 'image',
             acceptedFiles: ".jpeg,.jpg,.png",
-         //   dictRemoveFile: "Remove file",
+            //   dictRemoveFile: "Remove file",
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
             },
             success: function(file, response) {
 
-                //this.removeAllFiles();  // if i want use real time
+                var append_image_swiper = ` <figure class="col-lg-3 col-md-6 col-12 image-section-galary-${response.data.id}"   itemprop="associatedMedia" itemscope itemtype="">
 
-                $('#form-images').append('<input type="hidden" data-name="' + response.original_name +
-                    '" name="images[]" value="' + response.name + '">')
-                uploadedDocumentMap[file.name] = response.name
+                            <a href="${response.data.image_url}" itemprop="contentUrl" data-size="700x560">
+                            <img class="img-thumbnail img-fluid" src="${response.data.image_url}"
+                            itemprop="thumbnail" alt="Image description" style="height: 200px !important" />
+                            </a>
+
+                            </figure>`;
+
+                var button_delete = '';
+                if (check_permission_delete) {
+                    button_delete = `  <div class="">
+                        <button id="delete-image" data-id="${response.data.id}"
+                        data-action="${response.data.image_url_delete}"
+                        class="btn btn-danger  btn-sm "
+                        style="margin-top: 3px;padding: 1px;"><i
+                            class="la la-trash"></i></button>
+
+                        </div>`;
+                }
+
+                var append_image = `<div class="col-md-3 mb-1 image-section-${response.data.id}">
+                        <img src="${response.data.image_url}" width="90" height="100"
+                        alt="">
+                          ${button_delete}
+                        <hr>
+                        </div>`;
+
+                $(".my-gallery-row").append(append_image_swiper);
+                $(".show-images-row").append(append_image);
+
+
+                file.previewElement.remove();
+
             },
-            error: function(file, response) {
+            error: function(file, response, xhr) {
+
+                if (typeof(xhr) !== 'undefined' && typeof(xhr.status) !== 'undefined' && xhr.status == 422) {
+
+                    swal({
+                        title: response.errors.image[0],
+                        type: "error",
+                        timer: 6000,
+                    });
+                }
 
 
-                swal({
-                    title: response.errors.image[0],
-                    type: "error",
-                    timer: 6000,
-                });
+
 
             },
 
             removedfile: function(file) {
-                file.previewElement.remove()
-                var name = ''
+                file.previewElement.remove();
+                var name = '';
                 if (typeof file.name !== 'undefined') {
-                    name = file.name
+                    name = file.name;
                 } else {
-                    name = uploadedDocumentMap[file.name]
+                    name = uploadedDocumentMap[file.name];
                 }
-                $('#form-images').find('input[name="images[]"][data-name="' + name + '"]').remove()
-            },
 
+            },
             init: function() {
 
             }
@@ -234,9 +227,13 @@
 
         //----------delete image-----------------------
 
+        //----------delete image-----------------------
+
         $(document).on('click', '#delete-image', function() {
             var url = $(this).data('action');
             var token = "{{ csrf_token() }}";
+            var image_id = $(this).data('id');
+            var that = $(this);
 
 
             swal({
@@ -261,7 +258,9 @@
                         },
                         success: function(response) {
 
-                            fetch();
+                            // fetch();
+                            $(document).find(".image-section-" + image_id).remove();
+                            $(document).find(".image-section-galary-" + image_id).remove();
 
                             swal({
                                 title: 'succes delete',
@@ -294,33 +293,9 @@
         });
 
 
+
+
+
         //------------ fetch images----------------------
-
-        function fetch() {
-            var url = "{{ route('admin.homepage_slider.fetch') }}";
-            var div_images = $('.show-images'); // to append images to parrent element
-            var token = "{{ csrf_token() }}";
-
-
-            $.ajax({
-                url: url,
-                method: 'get',
-                data: {
-                    _token: token
-                },
-                beforeSend: function() {
-
-                },
-                success: function(response) {
-                    $('.show-images').html(response.images);
-                    console.log(response);
-
-                },
-                error: function(response) {}
-            })
-
-
-        }
-
     </script>
 @stop

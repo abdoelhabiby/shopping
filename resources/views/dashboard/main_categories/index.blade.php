@@ -11,8 +11,6 @@ $model_name = 'main-categories';
 @endsection
 
 @section('content')
-
-
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row">
@@ -47,9 +45,11 @@ $model_name = 'main-categories';
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route( $model_name . '.create') }}"
-                                                    class="btn btn-outline-info btn-sm box-shadow-2"><i
-                                                        class="la la-plus"></i></a></li>
+                                            @if (admin()->can('create_category'))
+                                                <li><a href="{{ route($model_name . '.create') }}"
+                                                        class="btn btn-outline-info btn-sm box-shadow-2"><i
+                                                            class="la la-plus"></i></a></li>
+                                            @endif
                                             <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                             <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                             <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -74,15 +74,9 @@ $model_name = 'main-categories';
 
                                         @push('scripts')
                                             {{-- <script
-                                                src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"> </script>
-                                            --}}
+                                                src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"> </script> --}}
                                             <script src="/vendor/datatables/buttons.server-side.js"></script>
                                             {!! $dataTable->scripts() !!}
-
-
-
-
-
                                         @endpush
 
 
@@ -96,12 +90,4 @@ $model_name = 'main-categories';
         </div>
 
     </div>
-
-
-
-
-
-
-
-
 @endsection

@@ -11,8 +11,6 @@ $model_name = 'orders';
 @endsection
 
 @section('content')
-
-
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row">
@@ -35,7 +33,9 @@ $model_name = 'orders';
                 @include('dashboard.includes.alerts.success')
                 @include('dashboard.includes.alerts.errors')
 
-                <!-- DOM - jQuery events table -->
+
+
+                -
                 <section id="dom">
                     <div class="row">
                         <div class="col-12">
@@ -65,22 +65,17 @@ $model_name = 'orders';
 
                                         <div class="container" style="background: #FFF;padding-top: 20px;">
 
-                                            {!! $dataTable->table() !!}
+                                            {{-- {!! $dataTable->table() !!} --}}
+                                            {!! $dataTable->table(['class' => 'table table-responsive']) !!}
                                         </div>
-
 
                                         @push('scripts')
                                             {{-- <script
-                                                src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"> </script>
-                                            --}}
+                                                src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"> </script> --}}
                                             <script src="/vendor/datatables/buttons.server-side.js"></script>
                                             {!! $dataTable->scripts() !!}
-
-
-
-
-
                                         @endpush
+
 
 
                                     </div>
@@ -89,17 +84,21 @@ $model_name = 'orders';
                         </div>
                     </div>
                 </section>
+
+
             </div>
         </div>
 
     </div>
+@endsection
 
 
+@section('js')
+    <script>
+        // $('#orders-table').DataTable({
+        //         'responsive': true,
 
-
-
-
-
-
-
+        // });
+        // $(document).find('#orders-table').addClass('table-responsive');
+    </script>
 @endsection

@@ -1,80 +1,86 @@
-<div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow " data-scroll-to-active="true">
+{{-- <div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow " data-scroll-to-active="true"> --}}
+
+    <div class="main-menu menu-fixed menu-dark menu-accordion    menu-shadow " data-scroll-to-active="true">
+
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
-            <li
-                class="nav-item {{ request()->segment(1) == 'dashboard' && request()->segment(2) == null ? 'active' : '' }}">
-                <a href="{{ route('dashboard.home') }}"><i class="la la-home"></i><span class="menu-title"
-                        data-i18n="nav.add_on_drag_drop.main">Home
-                    </span></a>
-            </li>
+
+
+
+
+            {{-- ---------------------use componenet ----------------- --}}
+            {{-- -------------------home----------------------- --}}
+            <x-dashboard.sidbar-item name="home" :one-list="true" route-name-open="dashboard.home">
+                <x-slot name="icon"> <i class="la la-home"></i> </x-slot>
+            </x-dashboard.sidbar-item>
+
+
+            {{-- ------------------------------------------ --}}
 
             {{-- ------------------------start nav item admins------------------------ --}}
 
-            @if (admin()->hasRole('super_admin'))
+            @if (admin()->hasAnyPermission(['read_admin', 'create_admin']))
 
+                @php  $module_name = 'admins';  @endphp
 
-
-                <li class="nav-item {{ isActive('admins') }}">
-
-                    @php
-                        $module_name = 'admins';
-                    @endphp
-
-                    <a href=""><i class="las la-users-cog"></i>
-                        <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-
-                        @php
-                        //get count fo admins without superadmins
-                            $ids_super_admin = App\Models\Admin::role('super_admin')
-                                ->get()
-                                ->pluck('id');
-
-                            $count_admins = App\Models\Admin::whereNotIn('id', $ids_super_admin)->count();
-                        @endphp
-                        <span
-                            class="badge badge badge-info badge-pill float-right mr-2">{{ $count_admins }}</span>
-                    </a>
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*"
+                    count="{{ App\Models\Admin::notRole('super_admin')->count() }}">
+                    <x-slot name="icon"> <i class="las la-users-cog"></i> </x-slot>
                     <ul class="menu-content">
-                        <li class="active"><a class="menu-item" href="{{ route('admins.index') }}"
-                                data-i18n="nav.dash.ecommerce">show all </a>
-                        </li>
-                        <li>
-                            <a class="menu-item" href="{{ route('admins.create') }}" data-i18n="nav.dash.crypto">
-                                add
-                            </a>
-                        </li>
+                        @if (admin()->can('read_admin'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_admin'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
                     </ul>
-                </li>
+
+                </x-dashboard.sidbar-item>
+
             @endif
+
 
             {{-- ------------------------end nav item admins------------------------ --}}
 
 
+
+
+            {{-- ----------------------------------------- --}}
+
+
+
+
+
+
+
             {{-- -----start nav users -------- --}}
-            <li class="nav-item {{ isActive('users') }}">
 
-                @php
-                    $module_name = 'users';
-                @endphp
+            @if (admin()->hasAnyPermission(['read_user', 'create_user']))
 
-                <a href=""><i class="la la-users"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\User::count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+
+                @php  $module_name = 'users';  @endphp
+
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*" count="{{ App\Models\User::count() }}">
+                    <x-slot name="icon"> <i class="las la-users"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_user'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_user'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
+
+                </x-dashboard.sidbar-item>
+
+
+
+            @endif
+
+
             {{-- ------end nav users --------- --}}
 
 
@@ -83,174 +89,160 @@
 
             {{-- -----start nav item
             main-categories-------- --}}
+            @if (admin()->hasAnyPermission(['read_category', 'create_category']))
 
-            <li class="nav-item {{ isActive('main-categories') }}">
+                @php  $module_name = 'main-categories';  @endphp
 
-                @php
-                    $module_name = 'main-categories';
-                @endphp
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*"
+                    count="{{ App\Models\Category::mainCategory()->count() }}">
+                    <x-slot name="icon"> <i class="las la-list"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_category'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_category'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
 
-                <a href=""><i class="la la-list"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Category::mainCategory()->count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                </x-dashboard.sidbar-item>
 
 
+
+            @endif
             {{-- ------end nav item categories--------- --}}
 
             {{-- -----start nav item
             sub-categories-------- --}}
-
-            <li class="nav-item {{ isActive('sub-categories') }}">
-
-                @php
-                    $module_name = 'sub-categories';
-                @endphp
-
-                <a href=""><i class="la la-list"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Category::subCategory()->count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @if (admin()->hasAnyPermission(['read_category', 'create_category']))
 
 
-            {{-- ------end nav item categories--------- --}}
+                @php  $module_name = 'sub-categories';  @endphp
+
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*"
+                    count="{{ App\Models\Category::subCategory()->count() }}">
+                    <x-slot name="icon"> <i class="las la-list"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_category'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_category'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
+
+                </x-dashboard.sidbar-item>
 
 
+
+                {{-- ------end nav item categories--------- --}}
+
+            @endif
 
 
 
             {{-- -----start nav item barnds-------- --}}
 
-            @php
-                $module_name = 'brands';
-            @endphp
+            @if (admin()->hasAnyPermission(['read_brand', 'create_brand']))
 
-            <li class="nav-item {{ isActive($module_name) }}">
 
-                <a href=""><i class="la la-yahoo"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Brand::count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                @php  $module_name = 'brands';  @endphp
+
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*" count="{{ App\Models\Brand::count() }}">
+                    <x-slot name="icon"> <i class="las la-dove"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_brand'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_brand'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
+
+                </x-dashboard.sidbar-item>
+
+
+            @endif
             {{-- ------end nav item barnds--------- --}}
 
             {{-- -----start nav item tags-------- --}}
 
-            @php
-                $module_name = 'tags';
-            @endphp
+            @if (admin()->hasAnyPermission(['read_tag', 'create_tag']))
 
-            <li class="nav-item {{ isActive($module_name) }}">
+                @php  $module_name = 'tags';  @endphp
 
-                <a href=""><i class="la la-tags"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Tag::count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="{{ $module_name }}.*" count="{{ App\Models\Tag::count() }}">
+                    <x-slot name="icon"> <i class="las la-tags"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_tag'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_tag'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
+
+                </x-dashboard.sidbar-item>
+
+
+            @endif
             {{-- ------end nav item tags--------- --}}
 
             {{-- -----start nav item products-------- --}}
 
+            @if (admin()->hasAnyPermission(['read_product', 'create_product']))
+
+
+                @php  $module_name = 'products';  @endphp
+
             @php
-                $module_name = 'products';
+                $routes = ['product.images.*',$module_name .'.*'] ;
             @endphp
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    :route-name-open="$routes" count="{{ App\Models\Product::count() }}">
+                    <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_product'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="{{ $module_name }}.index" />
+                        @endif
+                        @if (admin()->can('create_product'))
+                            <x-dashboard.sidbar-item-list name="add" route-name="{{ $module_name }}.create" />
+                        @endif
+                    </ul>
 
-            <li class="nav-item {{ isActive($module_name) }}">
+                </x-dashboard.sidbar-item>
 
-                <a href=""><i class="las la-tshirt"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Product::count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item" href="{{ route($module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
-                    <li>
-                        <a class="menu-item" href="{{ route($module_name . '.create') }}"
-                            data-i18n="nav.dash.crypto">
-                            add
-                        </a>
-                    </li>
-                </ul>
-            </li>
+
+
+            @endif
             {{-- ------end nav item products--------- --}}
 
 
 
             {{-- -----start nav orders -------- --}}
+            @if (admin()->can('read_order'))
 
-            @php
-                $module_name = 'orders';
-            @endphp
 
-            <li class="nav-item {{ isActive($module_name) }}">
+                @php  $module_name = 'orders';  @endphp
 
-                <a href="">
-                    {{-- <i class="la la-cart"></i> --}}
-                    <i class="las la-shopping-bag"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">{{ App\Models\Order::count() }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="active"><a class="menu-item"
-                            href="{{ route('dashboard.' . $module_name . '.index') }}"
-                            data-i18n="nav.dash.ecommerce">show all </a>
-                    </li>
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                    route-name-open="dashboard.{{ $module_name }}.*" count="{{ App\Models\Product::count() }}">
+                    <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
+                    <ul class="menu-content">
+                        @if (admin()->can('read_order'))
+                            <x-dashboard.sidbar-item-list name="show all" route-name="dashboard.{{ $module_name }}.index" />
+                        @endif
 
-                </ul>
-            </li>
+                    </ul>
+
+                </x-dashboard.sidbar-item>
+
+
+            @endif
 
             {{-- ------end nav orders --------- --}}
 
@@ -268,28 +260,49 @@
 
 
             {{-- -----start nav item settings-------- --}}
-            <li class="nav-item {{ isActive('users') }}">
 
-                @php
-                    $module_name = 'settings';
-                @endphp
+            @if (admin() && admin()->can('read_slider'))
 
-                <a href=""><i class="la la-cog"></i>
-                    <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
-                </a>
+
+
+            {{-- @php  $module_name = 'orders';  @endphp
+
+            <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
+                route-name-open="dashboard.{{ $module_name }}.*" count="{{ App\Models\Product::count() }}">
+                <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
                 <ul class="menu-content">
-                    <li class="">
-                        <a class="menu-item" href="{{ route('admin.homepage_slider.index') }}"
-                            data-i18n="nav.dash.ecommerce">Home Page slider </a>
-                    </li>
-                    <li class="">
-                        <a class="menu-item" href="" data-i18n="nav.dash.ecommerce">sett 2 </a>
-                    </li>
-
-
+                    @if (admin()->can('read_order'))
+                        <x-dashboard.sidbar-item-list name="show all" route-name="dashboard.{{ $module_name }}.index" />
+                    @endif
 
                 </ul>
-            </li>
+
+            </x-dashboard.sidbar-item> --}}
+
+
+
+                <li class="nav-item @if (request()->routeIs('admin.homepage_slider.index')) active open @endif">
+
+                    @php
+                        $module_name = 'settings';
+                    @endphp
+
+                    <a href=""><i class="la la-cog"></i>
+                        <span class="menu-title" data-i18n="nav.dash.main"> {{ ucfirst($module_name) }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        <li class="@if (request()->routeIs('admin.homepage_slider.index')) active @endif">
+                            <a class="menu-item" href="{{ route('admin.homepage_slider.index') }}"
+                                data-i18n="nav.dash.ecommerce">Home Page slider </a>
+                        </li>
+
+
+
+
+                    </ul>
+                </li>
+            @endif
+
             {{-- ------end nav item settings--------- --}}
 
 

@@ -1,0 +1,359 @@
+@extends('layouts.front')
+
+@section('title')
+    | @lang('front.checkout')
+@stop
+
+
+@section('style')
+    <style>
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 #e6ebf1;
+            -webkit-transition: box-shadow 150ms ease;
+            transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+            box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+
+        .StripeElement--invalid {
+            border-color: #fa755a;
+        }
+
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
+
+    </style>
+@endsection
+
+@section('breadcrumb')
+
+
+
+    <nav data-depth="3" class="breadcrumb-bg">
+        <div class="container no-index">
+            <div class="breadcrumb" style="background-color: #eee; border-radius: 25px;">
+
+                <ol itemscope="" itemtype="">
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="{{ route('front.home') }}">
+                            <span itemprop="name">
+                                @lang('front.home')
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="">
+                            <span itemprop="name">
+                                @lang('front.checkout')
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+
+                </ol>
+
+            </div>
+        </div>
+    </nav>
+
+@stop
+
+@section('content')
+
+    <div class="container no-index">
+        @include('front.includes.alerts.success')
+        @include('front.includes.alerts.errors')
+        <div class="row">
+            <div id="content-wrapper" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <section id="main" class="mb-5">
+                    <h1 class="page-title">@lang('front.checkout') : {{ $data['total_price'] }} @lang('front.egp')</h1>
+                    <div class="cart-grid row">
+
+                        <!-- Left Block: cart product informations & shpping -->
+
+
+                        <div class="cart-grid-left col-xs-12 col-lg-6">
+
+
+
+
+                            <div class="" style="max-width:500px">
+
+                                <form action="{{ route('front.checkout.charge.stripe') }}" method="post" id="payment-form">
+                                    @csrf
+
+                                    <input type="hidden" name="amount" value="{{ $data['total_price'] }}">
+                                    <div class="form-row">
+                                        <label for="card-element">
+                                            Credit or debit card
+                                        </label>
+                                        <div id="card-element">
+                                            <!-- A Stripe Element will be inserted here. -->
+                                        </div>
+
+                                        <!-- Used to display Element errors. -->
+                                        <div id="card-errors" role="alert"></div>
+                                    </div>
+
+                                    <button class="btn btn-lg btn-success "
+                                        style="  margin-top: 15px !important;">@lang('front.checkout')</button>
+                                </form>
+
+                            </div>
+
+                            <!-- shipping informations -->
+
+
+
+                        </div>
+
+
+                        {{-- -----------user details----------- --}}
+
+                        @if (user()->addressDetails)
+                            <div class="cart-grid-body col-xs-12 col-lg-3" style="min-height:260px">
+
+                                <div class="card ">
+
+
+                                    <div class="card-header cleafix" style="background: #2d9ae8;color:white">
+                                        <a href="{{ route('front.profile.address.edit') }}" class="float-left"><i
+                                                style="color:white" class="fa fa-edit fa-lg"></i></a>
+                                        <h4 class="float-right"> {{ __('front.about_address_details') }} </h4>
+
+                                    </div>
+                                    <div class="card-body p-3 " style="min-height: 225px; ">
+
+
+
+
+                                        <p class="card-title">
+                                            {{ __('front.first_name') . ' : ' . user()->addressDetails->first_name }}</p>
+                                        <p class="card-title">
+                                            {{ __('front.last_name') . ' : ' . user()->addressDetails->last_name }}</p>
+                                        <p class="card-text">
+                                            {{ __('front.email') . ' : ' . user()->addressDetails->email }}
+                                        </p>
+
+                                        <p class="card-text">
+                                            {{ __('front.phone') . ' : ' . user()->addressDetails->phone }}
+                                        </p>
+                                        @if (user()->addressDetails->second_phone)
+                                            <p class="card-text">
+                                                {{ __('front.second_phone') . ' : ' . user()->addressDetails->second_phone }}
+                                            </p>
+                                        @endif
+                                        <p class="card-text">
+                                            {{ __('front.address') . ' : ' . user()->addressDetails->address }}
+                                        </p>
+
+                                        @if (user()->addressDetails->second_address)
+                                            <p class="card-text">
+                                                {{ __('front.second_address') . ' : ' . user()->addressDetails->second_address }}
+                                            </p>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+
+
+                        @endif
+                        <!-- Right Block: cart subtotal & cart total -->
+                        <div class="cart-grid-right col-xs-12 col-lg-3">
+
+
+                            <div class="cart-summary">
+
+
+
+
+                                <div class="cart-detailed-totals">
+                                    <div class="cart-summary-products">
+                                        <div class="summary-label">{{ $data['total_products_count'] }}
+                                            @lang('front.count_products_in_your_cart')</div>
+                                    </div>
+
+                                    <div class="">
+                                        <div class="cart-summary-line" id="cart-subtotal-products">
+                                            <span class="label js-subtotal">
+                                                @lang('front.total_products_price') :
+                                            </span>
+                                            <span class="value">{{ $data['total_price'] }}
+                                                @lang('front.egp')</span>
+                                        </div>
+                                        <div class="cart-summary-line" id="cart-subtotal-shipping">
+                                            <span class="label">
+                                                {{ __('front.totla_shipping') }}:
+                                            </span>
+
+                                            <span class="value">{{ __('front.free') }}</span>
+                                            <div><small class="value"></small></div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="">
+                                        <div class="cart-summary-line cart-total">
+                                            <span class="label js-subtotal">
+                                                @lang('front.total_price') :
+                                            </span>
+                                            <span class="value">{{ $data['total_price'] }}
+                                                @lang('front.egp')</span>
+                                            <span class="value"> ({{ __('front.tax_incl') }})</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+                                <div class="checkout cart-detailed-actions">
+                                    <div class="text-xs-center">
+                                        <a href="{{ route('cart.index') }}" class="btn btn-primary">
+                                            @lang('front.details')</a>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+
+
+                            {{-- <div class="blockreassurance_product">
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_verified_user_black_36dp_1x.png">
+                                        &nbsp;
+                                    </span>
+                                    <p class="block-title" style="color:#000000;">Security policy (edit with Customer
+                                        reassurance module)</p>
+                                </div>
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_local_shipping_black_36dp_1x.png">
+                                        &nbsp;
+                                    </span>
+                                    <p class="block-title" style="color:#000000;">Delivery policy (edit with Customer
+                                        reassurance module)</p>
+                                </div>
+                                <div>
+                                    <span class="item-product">
+                                        <img class="svg"
+                                            src="{{ asset('front') }}/modules/blockreassurance/img/ic_swap_horiz_black_36dp_1x.png">
+                                        &nbsp;
+                                    </span>
+                                    <p class="block-title" style="color:#000000;">Return policy (edit with Customer
+                                        reassurance module)</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div> --}}
+
+
+                        </div>
+
+
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+@stop
+@section('scripts')
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        var stripe = Stripe("{{ env('STRIPE_PUBLISH_KEY') }}");
+        var elements = stripe.elements();
+
+        // Custom styling can be passed to options when creating an Element.
+        var style = {
+            base: {
+                // Add your base input styles here. For example:
+                fontSize: '16px',
+                color: '#32325d',
+            },
+        };
+
+        // Create an instance of the card Element.
+        var card = elements.create('card', {
+            style: style
+        });
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
+
+
+
+        // Create a token or display an error when the form is submitted.
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function(result) {
+                if (result.error) {
+                    // Inform the customer that there was an error.
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+
+        function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
+
+
+@stop

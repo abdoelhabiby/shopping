@@ -6,6 +6,7 @@ namespace App\Repositories\Front;
 
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\Front\HomeRepositoryInterface;
 
 class HomeRepository implements HomeRepositoryInterface
@@ -23,34 +24,35 @@ class HomeRepository implements HomeRepositoryInterface
     public function getProductsOffer($limit)
     {
 
-        return $this->product->active()->whereHas('offer')->with([
-            'offer' => function ($offer) {
-                return $offer->select([
-                    "id",
-                    "sku",
-                    "qty",
-                    "product_id",
-                    "price",
-                    "price_offer",
-                    "start_offer_at",
-                    "end_offer_at",
-                ]);
-            },
-            'images' => function ($im) {
-                return $im->select(['name', 'product_id']);
-            },
-            'reviews' => function ($rev) {
-                return $rev->select(
-                    'product_id',
-                    \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                    \DB::raw("COUNT(product_id) as total_rating")
-                )->groupBy('product_id');
-            }
-        ])
-            ->limit($limit)->get()->map(function ($album) {
-                $album->setRelation('images', $album->images->take(2));
-                return $album;
-            });
+        $ttl = 60 * 60 * 6; //evry 6 hours
+
+
+        // $products_offer = Cache::remember('home_products_offer', $ttl, function () use ($limit) {
+
+            $products_offer = $this->product->active()->whereHas('offer')->with([
+                'offer' => function ($offer) {
+                    return $offer->select([
+                        "id",
+                        "sku",
+                        "qty",
+                        "product_id",
+                        "price",
+                        "price_offer",
+                        "start_offer_at",
+                        "end_offer_at",
+                    ])->active()->withTranslation();
+                },
+                'images' => function ($query) {
+                    $query->take(2);
+                },
+                'reviewsRating'
+            ])
+                ->withTranslation()
+                ->limit($limit)->get();
+        // });
+
+
+        return $products_offer;
     }
 
 
@@ -60,36 +62,42 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getNewProducts($limit)
     {
-        return $this->product->active()
 
-            ->with(
-                [
-                    'vendor' => function ($vend) {
-                        return $vend->select(['name', 'id']);
-                    },
-                    'attribute' => function ($attr) {
-                        return $attr->select([
-                            "id",
-                            "sku",
-                            "qty",
-                            "product_id",
-                            "is_active",
-                            "price",
-                            "price_offer",
-                            "start_offer_at",
-                            "end_offer_at",
-                        ])->where('is_active', true);
-                    },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+        $ttl = 60 * 60 * 3; //evry 3 hours
 
-                ]
-            )->active()->latest()->limit(18)->get();
+        // $new_products = Cache::remember('home_new_products', $ttl, function () use ($limit) {
+
+            $new_products =  $this->product->active()
+                ->with(
+                    [
+                        'vendor' => function ($vend) {
+                            return $vend->select(['name', 'id']);
+                        },
+                        'attribute' => function ($attr) {
+                            return $attr->select([
+                                "id",
+                                "sku",
+                                "qty",
+                                "product_id",
+                                "is_active",
+                                "price",
+                                "price_offer",
+                                "start_offer_at",
+                                "end_offer_at",
+                            ])->active()->withTranslation();
+                        },
+                        'images' => function ($query) {
+                            $query->take(2);
+                        },
+                        'reviewsRating'
+
+                    ]
+                )
+                ->withTranslation()
+                ->active()->latest()->limit($limit)->get();
+        // });
+
+        return  $new_products;
     }
 
     //----------------get  products best sellers---------
@@ -97,36 +105,45 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getBestSellers($limit)
     {
-        return $this->product->active()
+        $ttl = 60 * 60 * 4; //evry 4 hours
 
-            ->with(
-                [
-                    'vendor' => function ($vend) {
-                        return $vend->select(['name', 'id']);
-                    },
-                    'attribute' => function ($attr) {
-                        return $attr->select([
-                            "id",
-                            "sku",
-                            "qty",
-                            "product_id",
-                            "is_active",
-                            "price",
-                            "price_offer",
-                            "start_offer_at",
-                            "end_offer_at",
-                        ])->where('is_active', true);
-                    },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+        // $products_best_seller = Cache::remember('home_products_best_seller', $ttl, function () use ($limit) {
 
-                ]
-            )->latest()->limit(18)->get();
+            $products_best_seller = $this->product->active()
+                ->whereHas('attribute', function ($attribute) {
+                    return $attribute->active();
+                })
+
+                ->with(
+                    [
+                        'vendor' => function ($vend) {
+                            return $vend->select(['name', 'id']);
+                        },
+                        'attribute' => function ($attr) {
+                            return $attr->select([
+                                "id",
+                                "sku",
+                                "qty",
+                                "product_id",
+                                "is_active",
+                                "price",
+                                "price_offer",
+                                "start_offer_at",
+                                "end_offer_at",
+                            ])->where('is_active', true)->withTranslation();
+                        },
+                        'images' => function ($query) {
+                            $query->take(2);
+                        },
+                        'reviewsRating'
+
+                    ]
+                )
+                ->withTranslation()
+                ->latest()->limit($limit)->get();
+        // });
+
+        return $products_best_seller;
     }
 
     //----------------get  products trending---------
@@ -134,35 +151,44 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function getProductsTrending($limit)
     {
-        return $this->product->active()
-            ->with(
-                [
-                    'vendor' => function ($vend) {
-                        return $vend->select(['name', 'id']);
-                    },
-                    'attribute' => function ($attr) {
-                        return $attr->select([
-                            "id",
-                            "sku",
-                            "qty",
-                            "product_id",
-                            "is_active",
-                            "price",
-                            "price_offer",
-                            "start_offer_at",
-                            "end_offer_at",
-                        ])->where('is_active', true);
-                    },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating")
-                        )->groupBy('product_id');
-                    }
+        $ttl = 60 * 60 * 4; //evry 4 hours
 
-                ]
-            )->latest()->limit($limit)->get();
+        // $products_trending = Cache::remember('home_products_trending', $ttl, function () use ($limit) {
+
+
+            $products_trending =  $this->product->active()
+
+                ->with(
+                    [
+                        'vendor' => function ($vend) {
+                            return $vend->select(['name', 'id']);
+                        },
+                        'attribute' => function ($attr) {
+                            return $attr->select([
+                                "id",
+                                "sku",
+                                "qty",
+                                "product_id",
+                                "is_active",
+                                "price",
+                                "price_offer",
+                                "start_offer_at",
+                                "end_offer_at",
+                            ])->where('is_active', true)->withTranslation();
+                        },
+                        'images' => function ($query) {
+                            $query->take(2);
+                        },
+                        'reviewsRating'
+
+
+                    ]
+                )
+                ->withTranslation()
+                ->latest()->limit($limit)->get();
+        // });
+
+        return $products_trending;
     }
 
 
@@ -170,72 +196,112 @@ class HomeRepository implements HomeRepositoryInterface
     //------------------get 3 main categories wsi his chields with products products ----
 
 
-    public function getThreeMainCategoriesWithChieldsProducts(int $chields_count = 3, int $products_count = 4)
+    public function getMainCategoriesWithNestedSubcategoriesProducts(int $main_categories_limit = 3, int $products_limit = 10, int $image_count = 2)
     {
 
 
 
 
 
+        $ttl = 60 * 60 * 4; //evry 4 hours
 
-        $categories = Category::mainCategory()
-            ->active()
-            ->whereHas('chields', function ($chi) {
-                return $chi->whereHas('products');
-            })
-            ->with([
-                'chields'
-            ])
-            ->inRandomOrder()
-            ->take(3)
-            ->get()
-            ->map(function ($main) use ($chields_count) {
-                $main->setRelation('chields', $main->chields->take($chields_count)); // limit of chields
-                return $main;
-            });
+        // $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
 
+            $categories = Category::mainCategory()
+                ->whereHas('chields.chields')
+                ->with([
+                    'chields' => function ($query) {
+                        $query->active()->select(['id', 'parent_id', 'slug'])->withTranslation();
+                    },
+                    'chields.chields' => function ($query) {
+                        $query->active()->select(['id', 'parent_id', 'slug'])->whereHas('products.attributes')->withTranslation();
+                    },
 
-        $groups = [];
-
-        foreach ($categories as $key => $main_categories) {
-
-            foreach ($main_categories->chields as $subcategory) {
+                ])
+                ->select(['id', 'parent_id', 'slug'])
+                ->inRandomOrder()
+                ->withTranslation()
+                ->active()
+                ->limit($main_categories_limit)->get();
 
 
 
-                if ($subcategory->products->count() > 0) {
-                    $groups[$key]['name'] = $main_categories->name;
-
-                    //------ add limit of products get in chiled------
-                    //-------i dont like it need to upgrade !!!!------
-                    $get_poducts = $subcategory->products()->active()->with([
-                        'attribute',
-                        'reviews' => function ($rev) {
-                            return $rev->select(
-                                'product_id',
-                                \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                                \DB::raw("COUNT(product_id) as total_rating")
-                            )->groupBy('product_id');
-                        }
-                    ])->whereHas('attribute')->latest()->take($products_count)->get();
 
 
-                    foreach ($get_poducts as $product) {
-                        $groups[$key]['products'][] = $product;
-                    }
+
+            $main_category_with_las_chields_id = $categories->mapWithKeys(function ($main) {
+                return [
+                    $main->slug => [
+                        'chields' =>  $main->chields->map(function ($lastchield) {
+                            return  $lastchield->chields->map(function ($map) {
+                                return  $map->id;
+                            });
+                        })->collapse(), 'category_translations' => $main->translations->pluck('name', 'locale')->toArray()
+                    ]
+                ];
+            })->toArray();
+
+
+            $category_products = [];
+
+            foreach ($main_category_with_las_chields_id as $category => $data) {
+
+
+                $chields_id = $data['chields']->toArray();
+
+
+                if ($category && is_array($chields_id) && count($chields_id) > 0) {
+
+
+                    $products = Product::whereHas('categories', function ($query) use ($chields_id) {
+                        $query->whereIn('product_categories.category_id', $chields_id);
+                    })
+                        ->with([
+
+                            'vendor' => function ($vend) {
+                                return $vend->select(['name', 'id']);
+                            },
+                            'attribute' => function ($attr) {
+                                return $attr->select([
+                                    "id",
+                                    "sku",
+                                    "qty",
+                                    "product_id",
+                                    "is_active",
+                                    "price",
+                                    "price_offer",
+                                    "start_offer_at",
+                                    "end_offer_at",
+                                ])->where('is_active', true)->withTranslation();
+                            },
+                            'images' => function ($query) {
+                                $query->take(2);
+                            },
+                            'reviewsRating'
+                        ])
+                        ->active()
+                        ->orderBy('created_at', 'desc')
+                        ->limit($products_limit)
+                        ->withTranslation()
+                        ->get();
+
+                    $category_products[$category]['products'] = $products;
+
+                    $category_products[$category]['category_translations'] = $data['category_translations'] ?? $category;
                 }
             }
-        }
+
+            return  $category_products;
+
+        // }); // end cache
 
 
-
-        return   collect($groups);
+        // return $main_category_with_nested_chields_products;
     }
 
 
+    // --------------------------------------------
 
-
-    //--------------------------------------
 
 
 

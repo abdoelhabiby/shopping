@@ -5,7 +5,7 @@
             <div id="_desktop_logo" class="contentsticky_logo d-flex align-items-center justify-content-start col-lg-3 col-md-3">
             <a href="{{route('front.home')}}">
 
-                    <span class="text-uppercase" style="font-size: 30px;color:#0275d8">oshastore</span>
+                    <span class="text-uppercase" style="font-size: 30px;color:#0275d8">{{ config('app.name', 'Laravel') }}</span>
                 {{-- <img src="{{asset('front')}}//img/logo-footer.png" alt="logo" width="167" height="23"> --}}
                 </a>
             </div>
@@ -21,7 +21,19 @@
                 </div>
                 <div class="contentsticky_group d-flex justify-content-end">
                     <div class="header_link_myaccount">
-                        <a class="login" href="login-1.html" rel="nofollow" title="Log in to your customer account"><i class="header-icon-account"></i></a>
+                        @auth
+
+                            <a class="login" href="{{ route('front.profile') }}" rel="nofollow" title="{{ __('front.profile') }}">
+                                <i class="header-icon-account"></i>
+                            </a>
+
+                        @else
+
+                            <a class="login" href="{{ route('login') }}" rel="nofollow" title="Log in to your customer account">
+                                <i class="header-icon-account"></i>
+                            </a>
+                        @endauth
+
                     </div>
                     <div class="header_link_wishlist">
 

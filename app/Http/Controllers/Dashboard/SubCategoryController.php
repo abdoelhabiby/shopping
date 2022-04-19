@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Traits\AjaxResponseTrait;
 use App\DataTables\SubCategoryDataTable;
 use App\Http\Requests\Dashboard\SubCategoryRequest;
@@ -15,6 +17,13 @@ class SubCategoryController extends Controller
     use AjaxResponseTrait;
     protected $view_model = 'dashboard.sub_categories';
 
+    public function __construct()
+    {
+        $this->middleware('permission:read_category')->only('index');
+        $this->middleware('permission:create_category')->only(['create', 'store']);
+        $this->middleware('permission:update_category')->only(['edit', 'update']);
+        $this->middleware('permission:delete_category')->only('destroy');
+    }
 
     /**
      * Display a listing of the category.
@@ -35,8 +44,8 @@ class SubCategoryController extends Controller
     public function create()
     {
         $main_categories = Category::select('id')->get();
-       // $main_categories = Category::mainCategory()->select('id')->get();
-        return view($this->view_model . '.create',compact('main_categories'));
+        // $main_categories = Category::mainCategory()->select('id')->get();
+        return view($this->view_model . '.create', compact('main_categories'));
     }
 
     /**
@@ -59,8 +68,19 @@ class SubCategoryController extends Controller
             //-------------uploade image if found-----------
 
             if ($request->hasFile('image') && $request->image != null) {
+
+
+                $folder_path = public_path('images/categories');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
+
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
             }
 
@@ -79,10 +99,9 @@ class SubCategoryController extends Controller
             return redirect()->route('sub-categories.index')->with(['success' => "success create"]);
         } catch (\Throwable $th) {
             DB::rollback();
+
             return catchErro('sub-categories.index', $th);
         }
-
-
     }
 
 
@@ -95,13 +114,12 @@ class SubCategoryController extends Controller
      */
     public function edit(Category $sub_category)
     {
-          $row = $sub_category;
-//          $main_categories = Category::mainCategory()->select('id')->get();
-          $main_categories = Category::select('id')->get();
+        $row = $sub_category;
+        //          $main_categories = Category::mainCategory()->select('id')->get();
+        $main_categories = Category::select('id')->get();
 
 
-        return view($this->view_model . '.edit',compact('row','main_categories'));
-
+        return view($this->view_model . '.edit', compact('row', 'main_categories'));
     }
 
     /**
@@ -123,15 +141,22 @@ class SubCategoryController extends Controller
             $validated['is_active'] = $request->has('is_active') ? true : false; //get active
 
 
-              //-------------uploade image if found-----------
+            //-------------uploade image if found-----------
 
-              if ($request->hasFile('image') && $request->image != null) {
+            if ($request->hasFile('image') && $request->image != null) {
+
+                $folder_path = public_path('images/categories');
+
+                FileService::checkDirectoryExistsOrCreate($folder_path);
+
                 $image = $request->file('image');
-                $path = imageUpload($image, 'categories');
+                $path = 'images/categories/' . $image->hashName();
+
+                FileService::reszeImageAndSave($image, public_path(), $path);
+
                 $validated['image'] = $path;
 
-                deleteFile($sub_category->image);
-
+                FileService::deleteFile(public_path($sub_category->image));
             }
 
             //----------customize the translation-------------------
@@ -147,7 +172,6 @@ class SubCategoryController extends Controller
             DB::commit();
 
             return redirect()->route('sub-categories.index')->with(['success' => "success update"]);
-
         } catch (\Throwable $th) {
             DB::rollback();
 
@@ -164,6 +188,7 @@ class SubCategoryController extends Controller
     public function destroy(Category $sub_category)
     {
         if (request()->ajax()) {
+            FileService::deleteFile(public_path($sub_category->image));
 
             $sub_category->delete();
 
@@ -171,8 +196,5 @@ class SubCategoryController extends Controller
         }
 
         return $this->notfound();
-
-
-
     }
 }

@@ -2,40 +2,41 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Product;
-use App\Models\ProductReview;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Front\BaseController;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
 
 
 
 
 
-//----------------------------------------------------------
+    //----------------------------------------------------------
     public function show($product_slug, $product_attribute_id)
     {
-       $product =  Product::active()->where('slug', $product_slug)
+
+        $product =  Product::active()->where('slug', $product_slug)
             ->whereHas('attribute', function ($attribute) use ($product_attribute_id) {
                 return $attribute->where('id', $product_attribute_id)
-                ->where('is_active', true);
+                    ->where('is_active', true);
             })
             ->with([
                 'attribute' => function ($attr) use ($product_attribute_id) {
                     return $attr->where('is_active', true)->where('id', $product_attribute_id)
-                    ->select([
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "is_active",
-                        "price",
-                        "price_offer",
-                        "start_offer_at",
-                        "end_offer_at",
-                        "id",
-                    ]);
+                        ->select([
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                            "id",
+                        ]);
                 },
                 'attributes' => function ($at) {
                     return $at->where('is_active', true)->select([
@@ -51,11 +52,9 @@ class ProductController extends Controller
 
                     ]);
                 },
-                'images' => function ($image) {
-                    return $image->select(['product_id', 'name'])->limit(7);
-                },
+
                 'categories' => function ($cat) {
-                    return $cat->select(['product_id', 'category_id', 'categories.id']);
+                    return $cat->with('parent');
                 },
                 'tags' => function ($tag) {
                     return $tag->select(['product_id', 'tag_id', 'tags.id']);
@@ -63,35 +62,87 @@ class ProductController extends Controller
                 'brand'  => function ($brand) {
                     return $brand->where('is_active', true)->select(['id', 'slug']);
                 },
+                'reviewsRating',
+                'images' => function ($query) {
+                    $query->limit(7);
+                },
                 'reviews' => function ($query) {
-                    return $query->where('user_id', "!=", user() ? user()->id : null)->with(['user' => function ($user) {
-                        return $user->select(['id', 'name', 'image']);
-                    }])->limit(5);
-                }
-            ])
-            ->first();
+                    if(user()){
+                        $query->where('user_id', "!=", user()->id)->limit(5)->orderBy('id', 'desc');
 
-        if (!$product) {
+                    }else{
+                        $query->limit(5)->orderBy('id', 'desc');
+
+                    }
+                },
+                'vendor:id,name,email'
+
+
+
+            ])
+            ->withTranslation()
+            ->firstOrFail();
+
+        if (user()) {
+            $product->load('authReview');
+
+            if ($product->authReview) {
+                $product->reviews->prepend($product->authReview);
+            }
+        }
+
+
+
+
+        $sess_id = request()->getSession()->getId();
+
+        $key = 'products_views_' . $sess_id;
+
+        if (!Cache::has($key)) {
+            Cache::add($key, [], (60 * 60 * 24)); // 1 minute
+        }
+
+        $latest = (array) Cache::get($key);
+
+        if (!in_array($product->id, $latest)) {
+            array_push($latest, $product->id);
+            $product->increment('views');
+            Cache::put($key, $latest, (60 * 60 * 24));
+        }
+
+
+
+        return view('front.product.index', compact(['product']));
+    }
+
+
+
+    // ------------------------------------------------------------
+
+    public function sellerProdcts(Admin $seller)
+    {
+
+
+
+        $products =  $seller->products()->whereHas('vendor')
+            ->with([
+                'attribute',
+                'reviewsRating',
+                'images'
+            ])
+            ->active()
+            ->withTranslation()
+            ->orderBy('id', 'desc')
+            ->paginate(12);
+
+
+        if (!$products->count() > 0) {
             abort(404);
         }
 
-
-
-        $user_product_review = null;
-
-        if (user()) {
-            $user_product_review = ProductReview::where('product_id', $product->id)->where('user_id', user()->id)->first();
-        }
-
-        $calculate_reviews = ProductReview::select(
-            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-            // \DB::raw("COALESCE( ROUND(SUM(quality) * 5 / (COUNT(id) * 5)),0)  as stars"),
-            \DB::raw("COUNT(id) as total_rating"),
-        )->where('product_id', $product->id)->first();
-
-
-
-
-        return view('front.product.index', compact(['product', 'user_product_review', 'calculate_reviews']));
+        return view('front.seller.products', compact(['seller', 'products']));
     }
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
 }

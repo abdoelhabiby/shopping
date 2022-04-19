@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\This;
 use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Product extends Model
 {
 
-    use Translatable, SoftDeletes, GlobalMethodUesdInModels;
+    use Translatable, SoftDeletes, GlobalMethodUesdInModels, HasEagerLimit;
+
 
     protected $translatedAttributes = ['name', 'description'];
-    protected $hidden = ['pivot','translations'];
+    protected $hidden = ['pivot', 'translations'];
 
 
     protected $fillable = [
@@ -34,6 +37,7 @@ class Product extends Model
     protected $casts = [
         'created_at' => 'datetime:Y-m-d h:i:s'
     ];
+
 
 
 
@@ -91,6 +95,13 @@ class Product extends Model
     }
 
 
+    public function authReview()
+    {
+
+        return  $this->hasOne(ProductReview::class, 'product_id', 'id')->where('user_id', user()->id);
+    }
+
+
     //--------------------------get relation has many attributes--------
 
     public function attributes()
@@ -119,15 +130,37 @@ class Product extends Model
     public function scopeActive($product)
     {
         return $product->where('is_active', true)
-            ->whereHas('categories', function ($cate) {
-                return $cate->where('is_active', true);
-            })->whereHas('attributes', function ($attr) {
+            // ->whereHas('categories', function ($cate) {
+            //     return $cate->where('is_active', true);
+            // })
+            ->whereHas('attributes', function ($attr) {
                 return $attr->where('is_active', true);
             });
     }
 
 
 
+
+    // -----------------------------------------
+
+    public function reviewsRating()
+    {
+
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
+            'product_id',
+            \DB::raw("ROUND(SUM(CAST(quality as integer)) * 5 / (COUNT(id) * 5)) as stars"),
+            \DB::raw("COUNT(product_id) as total_rating")
+        )->groupBy('product_id');
+
+        // return $this->hasMany(ProductReview::class, 'product_id', 'id')->select(
+        //     'product_id',
+        //     \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
+        //     \DB::raw("COUNT(product_id) as total_rating")
+        // )->groupBy('product_id');
+    }
+    // -----------------------------------------
+
+    // -----------------------------------------
 
 
     public function offer()
@@ -145,11 +178,4 @@ class Product extends Model
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
-
-
-
-
-
-
-
 }

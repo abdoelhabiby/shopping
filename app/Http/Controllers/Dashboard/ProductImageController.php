@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Product;
+use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Rules\CheckCountImageProduct;
+use Intervention\Image\Facades\Image;
 use App\Http\Traits\AjaxResponseTrait;
+use App\Http\Resources\ProductImagesCollection;
 
 class ProductImageController extends Controller
 {
@@ -22,138 +26,123 @@ class ProductImageController extends Controller
 
 
 
+    public function __construct()
+    {
+
+        $this->middleware('permission:create_product')->only('store');
+        $this->middleware('permission:delete_product')->only('destroy');
+    }
+
+
+
     //----------------------index-------------------
     public function index(Product $product)
     {
-        return view('dashboard.products.images.index', compact('product'));
+        if (admin()->hasAnyPermission(['read_product', 'create_product'])) {
+
+            return view('dashboard.products.images.index', compact('product'));
+        }
+
+        abort(403);
     }
 
     //--------------get all product images----------------------------
 
-    public function fetchImages(Product $product)
-    {
+    // public function fetchImages(Product $product)
+    // {
 
+    //     if(!request()->ajax()){
+    //         return $this->notfound();
+    //     }
 
-        $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
+    //     return  ProductImagesCollection::collection($product->images);
 
-        return $this->returnRenderHtml('images', $html);
-    }
+    //     // $html = view('dashboard.products.images._fetch_images', compact('product'))->render();
+
+    //     // return $this->returnRenderHtml('images', $html);
+    // }
 
     //--------------------------store image in folder product using dropzone-----------------
-    public function store(Request $request, $id)
+    public function store(Product $product, Request $request)
     {
 
-        if ($request->ajax()) {
-
-            $product = Product::find($id);
-
-            if (!$product) {
-                return response('not found 404 ', 404);
-            }
-
-            if ($request->hasFile('image') && $request->image != null) {
-
-                $request->validate([
-                    'image' => [
-                        'image',
-                        'mimes:png,jpg,jpeg',
-                    ]
-                ]);
-
-
-                $image = $request->file('image');
-                $path = imageUpload($image, 'products/' . $product->id);
-                $original_name = $image->getClientOriginalName();
-                $name = $path;
-
-                return response()->json([
-                    'name'          => $name,
-                    'original_name' => $original_name,
-                ]);
-            }
+        if (!$request->ajax()) {
+            return $this->notfound();
         }
-
-        return $this->response();
-    }
-
-
-
-
-    //-----------------------store images relation product in database-----------------
-
-    public function storeDatabase(Request $request, Product $product)
-    {
-
-
-        $get_count_can_upload = $this->max_images_upload - $product->images()->count();
 
 
         $request->validate([
-            'images' => 'required|array|min:1|max:' . $get_count_can_upload,
-            'images.*' => 'required|string|max:150'
-        ], [
-            'images.required' => 'please upload images',
-            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images',
-        ]);
+            'image' =>  'required|image|mimes:jpg,png,jpeg|max:2048'
 
+        ]);
 
         try {
 
+
             DB::beginTransaction();
 
-            $images = $request->images;
 
-            foreach ($images as $image) {
+            $folder_path = public_path('images/products/' . $product->id);
 
-                if (File::exists(public_path($image))) {
-                    $add_image = new ProductImage(['name' => $image]);
-                    $product->images()->save($add_image);
-                }
+            FileService::checkDirectoryExistsOrCreate($folder_path);
+
+            $get_count_can_upload = $this->max_images_upload - $product->images()->count();
+
+            if (!max($get_count_can_upload, 0) > 0) {
+                $message = "sorry product can take just {$this->max_images_upload} images";
+                $error = ['image' => [$message]];
+                return response(['errors' => $error], 422);
             }
 
-            //-----------clean folder from images not appended in database---------
-            $path = public_path('images/products/' . $product->id);
 
-            $all_images = [];
+            //max 2mb
 
-            foreach (File::allFiles($path) as $file) {
-                $all_images[] = str_replace(public_path(), '', $file);
-            }
 
-            $product_images_database = $product->images()->pluck('name')->toArray();
+            $image = $request->file('image');
+            $path ='images/products/' . $product->id . '/' . $image->hashName();
+            //save images in folder
+            FileService::reszeImageAndSave($image, public_path(), $path);
 
-            if (count($all_images) > 0) {
-                foreach ($all_images as $file) {
-                    if (!in_array($file, $product_images_database)) {
-                        deleteFile($file);
-                    }
-                }
-            }
+            //insert to database
+            $image = $product->images()->create(['name' => $path]);
 
 
             DB::commit();
 
-            return redirect()->back()->with(['success' => "success save"]);
+
+            return new ProductImagesCollection($image);
+
+
         } catch (\Throwable $th) {
             DB::rollback();
             Log::alert($th);
-            return redirect()->back()->with(['error' => 'some errors happend please try agian alatarererewer']);
+            $er_mes = 'some errors happend please try agian alatarererewer';
+            return response(['error' => $er_mes],400);
         }
-    }
+    } // end of method storre
 
 
-    //-------------delete image ----------------
+
+
+    //-----------------------destroy image-----------------
+
+
+
+
 
     public function destroy(Product $product, ProductImage $image)
     {
-        if (request()->ajax()) {
+
+
+        if (request()->ajax() && $product->id == $image->product_id) {
 
             try {
 
-                deleteFile($image->name);
-                $image->delete();
-                return $this->successMessage('ok');
+                FileService::deleteFile(public_path($image->name));
 
+                $image->delete();
+
+                return $this->successMessage('ok');
             } catch (\Throwable $th) {
                 Log::alert($th);
                 abort(404);

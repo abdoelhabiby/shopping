@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Category extends Model
 {
-    use Translatable,GlobalMethodUesdInModels;
+    use Translatable,GlobalMethodUesdInModels,HasEagerLimit;
 
     /**
      * The relations to eager load on every query.
@@ -33,11 +34,14 @@ class Category extends Model
     protected $translatedAttributes = ['name'];
 
 
-    protected $casts = [
-        'created_at' => 'datetime:Y-m-d h:i:s'
-    ];
+    // protected $casts = [
+    //     'created_at' => 'datetime:Y-m-d h:i:s'
+    // ];
 
-
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s',strtotime($value));
+    }
 //-------add scope is active--------------
 
 
@@ -101,6 +105,7 @@ public function scopeActive($q)
     {
         return $this->belongsToMany(Product::class, 'product_categories',  'category_id');
     }
+
 
 
 

@@ -54,6 +54,11 @@ class ProductAttribute extends Model
     }
 
 
+    public function scopeActive($product_attribute)
+    {
+        return $product_attribute->where('is_active', true);
+
+    }
 
 
 

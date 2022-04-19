@@ -7,8 +7,9 @@ use App\Models\Mywishlist;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
+use App\Http\Controllers\Front\BaseController;
 
-class MywishlistController extends Controller
+class MywishlistController extends BaseController
 {
 
     use AjaxResponseTrait;
@@ -20,35 +21,35 @@ class MywishlistController extends Controller
 
         try {
 
-            $wishlist_product_ids = user()->mywishlists()->pluck('product_id')->toArray();
-            $wishlist_products = Product::whereIn('id', $wishlist_product_ids)->with(
-                [
-                    'vendor' => function ($vend) {
-                        return $vend->select(['name', 'id']);
-                    },
-                    'attribute' => function ($attr) {
-                        return $attr->select([
-                            "id",
-                            "sku",
-                            "qty",
-                            "product_id",
-                            "is_active",
-                            "price",
-                            "price_offer",
-                            "start_offer_at",
-                            "end_offer_at",
-                        ])->where('is_active', true);
-                    },
-                    'reviews' => function ($rev) {
-                        return $rev->select(
-                            'product_id',
-                            \DB::raw("ROUND(SUM(quality) * 5 / (COUNT(id) * 5)) as stars"),
-                            \DB::raw("COUNT(product_id) as total_rating"),
-                        )->groupBy('product_id');
-                    }
+            $wishlist_products = user()->myWishlistsProducts()->with([
+                'vendor' => function ($vend) {
+                    return $vend->select(['name', 'id']);
+                },
+                'attribute' => function ($attr) {
+                    return $attr->select([
+                        "id",
+                        "sku",
+                        "qty",
+                        "product_id",
+                        "is_active",
+                        "price",
+                        "price_offer",
+                        "start_offer_at",
+                        "end_offer_at",
+                    ])->where('is_active', true)->withTranslation();
+                },
+                'reviewsRating',
+                'images' => function ($images) {
+                    $images->take(2);
+                }
 
-                ]
-            )->active()->latest()->paginate(8);
+            ])->active()
+                ->latest()
+                ->withTranslation()
+                ->paginate(8);
+
+
+
 
 
             return view('front.wishlist.index', compact(['wishlist_products']));

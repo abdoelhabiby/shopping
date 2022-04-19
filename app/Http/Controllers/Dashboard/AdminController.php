@@ -21,7 +21,7 @@ class AdminController extends Controller
         $this->middleware('permission:read_admin')->only('index');
         $this->middleware('permission:create_admin')->only(['create', 'store']);
         $this->middleware('permission:update_admin')->only(['edit', 'update']);
-        $this->middleware('permission:delete_admin')->only('delete');
+        $this->middleware('permission:delete_admin')->only('destroy');
     }
 
     //-------------------index-----------------

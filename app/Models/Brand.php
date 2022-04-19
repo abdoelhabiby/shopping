@@ -6,10 +6,11 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Translatable;
 use App\Http\Traits\GlobalMethodUesdInModels;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Brand extends Model
 {
-    use Translatable,GlobalMethodUesdInModels;
+    use Translatable,GlobalMethodUesdInModels,HasEagerLimit;
 
     protected $with = ['translations'];
 

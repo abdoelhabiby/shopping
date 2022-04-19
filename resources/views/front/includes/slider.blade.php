@@ -31,7 +31,8 @@
 
                             @foreach ($slider_images as $image)
 
-                                    <img src="{{ asset($image->image) }}" alt="" style="max-height: 500px !important">
+                                    {{-- <img src="{{ asset($image->image) }}" alt="" style="max-height: 500px !important"> --}}
+                                    <img class="" src="{{ asset($image->image) }}" style="display: inline; height: auto; width: 870px;">
 
                             @endforeach
 

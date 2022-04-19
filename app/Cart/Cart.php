@@ -24,6 +24,14 @@ class Cart
         }
     }
 
+
+
+    // ------------------------------
+    public function resetCart()
+    {
+        session()->forget('cart');
+    }
+    // ------------------------------
     //------------------add items to cart----------------------
 
 
@@ -204,9 +212,7 @@ class Cart
                                 "start_offer_at",
                                 "end_offer_at",
                             ]);
-                        }, 'images' => function ($query) {
-                            return $query->select(['product_id', 'name']);
-                        }
+                        }, 'image'
                     ])
                     ->select([
                         "id",

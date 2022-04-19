@@ -1,10 +1,13 @@
 <?php
 
 use App\Cart\Cart;
-use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Support\Facades\DB;
+
+use Carbon\Carbon;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use App\Http\Services\MyfatoorahPaymentService;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -16,9 +19,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 
-{{ route('front.prouct.show', [$product->slug, $product->attribute->id]) }}
 |
 */
+
 
 
 
@@ -56,8 +59,17 @@ Route::group(
 
             Route::get('product-reviews/{product_slug}', 'ProductReviewController@index')->name('product.reviews.index');
 
+            // ------------Route seller products---------------------
 
+            Route::get('seller/products/{seller}', 'ProductController@sellerProdcts')->name('front.seller.products');
+
+            // -------------------search-------------------
+            Route::get('catalog', 'FrontSearchController@search')->name('front.catalog.search');
+            // ------------------------------------------
+            // ------------------------------------------
             //-----------------------routes with auth----------------------------
+
+
 
             Route::group(['middleware' => 'auth'], function () {
 
@@ -84,10 +96,36 @@ Route::group(
 
                 // Route::get('checkout/{amount}','CheckoutController@index')->name('front.checkout.index');
 
-                Route::get('checkout', 'CheckoutController@index')->name('front.checkout.index');
-                Route::post('charge', 'CheckoutController@charge')->name('front.checkout.charge');
+                Route::middleware('checkAddressDetails')->group(function () {
+
+                    Route::get('checkout/{gatewaypayment}', 'CheckoutController@index')->name('front.checkout.index');
+                    Route::post('charge/stripe', 'CheckoutController@chargeStripe')->name('front.checkout.charge.stripe');
+                });
+
+                Route::post('charge/myfatoorah/redirect', 'CheckoutController@myfatoorahSaveOrderAndRedirect')->name('front.checkout.myfatoorah.redirect');
+
+
+                // --------------------------------------------------
+
+                Route::get('profile', "ProfileController@index")->name('front.profile');
+
+                Route::get('profile/edit', "Auth\UpdateController@edit")->name('front.profile.edit');
+                Route::put('profile/edit', "Auth\UpdateController@update")->name('front.profile.update');
+
+                Route::get('profile/address/edit', "ProfileController@editAddress")->name('front.profile.address.edit');
+                Route::put('profile/address/edit', "ProfileController@updateAddress")->middleware('mergeUserId')->name('front.profile.address.update');
+
+
+                Route::get('profile/change-password', "Auth\UpdateController@changePassword")->name('front.profile.change_password');
+                Route::put('profile/change-password', "Auth\UpdateController@updateChangePassword")
+                    ->middleware('throttle:6,10')
+                    ->name('front.profile.update_change_password');
             });
             //---------------------end routes with auth------------
+
+
+            Route::get('charge/myfatoorah/callback', 'CheckoutController@callbackMyfatoorah')->name('front.checkout.charge.myfatoorah');
+
 
             //-----------------------start routes categories---------
 
@@ -96,37 +134,26 @@ Route::group(
             //-------------------------------------------------------
 
             //-----route subcategory==-------------
-            Route::get('s/{category:slug}', "CategoryController@subCategory")->name('front.subcategory.show');
+            Route::get('s/{subcategory:slug}', "CategoryController@subCategory")->name('front.subcategory.show');
 
             //-----route category-------------
-             Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');
+            Route::get('category/{subcategory:slug}/{category:slug}', "CategoryController@category")->name('front.category.show');
+
+            //----------------routes user---------------------------
+
+
+
+
+
+
 
             //-------------------------------------------------------
-            //-------------------------------------------------------
+            //------------routes default auth-----------------
+
+            Auth::routes();
+
+
             //-------------------------------------------------------
         });
-
-
-
-
-
-
-        Route::get('test', function () {
-           return "test";
-
-        });
-
-
-
-        //------------routes default auth-----------------
-        Auth::routes();
     }
 ); // end group packege LaravelLocalization
-
-
-
-
-
-
-
-Route::get('/home', 'HomeController@index')->name('home');

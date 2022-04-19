@@ -15,10 +15,8 @@
 
                             <div class="product-cover">
 
-                                @if (fileExist($product->images[0]->name))
-                                    <img class="js-qv-product-cover img-fluid" src="{{ $product->images[0]->name }}"
+                                    <img class="js-qv-product-cover img-fluid" src="{{$product->image ? asset($product->image->name) : pathNoImage() }}"
                                         alt="" title="{{ $product->name }}" style="width:100%;" itemprop="image">
-                                @endif
 
 
                                 <div class="layer hidden-sm-down" data-toggle="modal" data-target="#product-modal">

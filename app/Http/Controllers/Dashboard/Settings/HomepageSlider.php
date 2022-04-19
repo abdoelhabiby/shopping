@@ -3,137 +3,109 @@
 namespace App\Http\Controllers\Dashboard\Settings;
 
 use App\Models\Slider;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use App\Http\Traits\AjaxResponseTrait;
 
 class HomepageSlider extends Controller
 {
 
+
+
     use AjaxResponseTrait;
     protected $max_images_upload = 10;
+
+    public function __construct()
+    {
+        $this->middleware('permission:read_slider')->only('index');
+        $this->middleware('permission:create_slider')->only('store');
+        $this->middleware('permission:delete_slider')->only('destroy');
+    }
 
 
     //----------------------index-------------------
     public function index()
     {
 
+
         $sliders = Slider::latest()->limit(10)->get();
         return view('dashboard.settings.home_page_slider.index', compact('sliders'));
-    }
-
-    //--------------get all product images----------------------------
-
-    public function fetchImages()
-    {
-
-        $sliders = Slider::latest()->limit(10)->get();
-
-        $html = view('dashboard.settings.home_page_slider._fetch_images', compact('sliders'))->render();
-
-        return $this->returnRenderHtml('images', $html);
     }
 
     //--------------------------store image in folder product using dropzone-----------------
     public function store(Request $request)
     {
 
-        if ($request->ajax()) {
+        // add validation files count before save
 
-
-            if ($request->hasFile('image') && $request->image != null) {
-
-                $request->validate([
-                    'image' => [
-                        'image',
-                        'mimes:png,jpg,jpeg',
-                    ]
-                ]);
-
-
-                $image = $request->file('image');
-                $path = imageUpload($image, 'sliders');
-                $original_name = $image->getClientOriginalName();
-                $name = $path;
-
-                return response()->json([
-                    'name'          => $name,
-                    'original_name' => $original_name,
-                ]);
-            }
+        if (!$request->ajax()) {
+            return $this->notfound();
         }
-
-        return $this->response();
-    }
-
-
-
-
-    //-----------------------store images relation product in database-----------------
-
-    public function storeDatabase(Request $request)
-    {
-
-
-        $slider_count = Slider::count();
-
-        $get_count_can_upload = $this->max_images_upload - $slider_count;
 
 
         $request->validate([
-            'images' => 'required|array|min:1|max:' . $get_count_can_upload,
-            'images.*' => 'required|string|max:150'
-        ], [
-            'images.required' => 'please upload images',
-            'images.max' => 'the product just can have ' . $this->max_images_upload . ' images',
+            'image' =>  'required|image|mimes:jpg,png,jpeg|max:2048'
+
         ]);
 
 
         try {
 
+
             DB::beginTransaction();
 
-            $images = $request->images;
 
-            foreach ($images as $image) {
+            $folder_path = public_path('images/sliders');
 
-                if (File::exists(public_path($image))) {
-
-                    Slider::create(['image' => $image]);
-                }
+            if (!File::exists($folder_path)) {
+                File::makeDirectory($folder_path, 0775, true);
             }
 
-            //-----------clean folder from images not appended in database---------
-            $path = public_path('images/sliders');
+            $get_count_can_upload = $this->max_images_upload - Slider::count();
 
-            $all_images = [];
 
-            foreach (File::allFiles($path) as $file) {  //get all images in folder
-                $all_images[] = str_replace(public_path(), '', $file);
+
+            if (!max($get_count_can_upload, 0) > 0) {
+                $message = "sorry sliders can add just {$this->max_images_upload} images";
+                $error = ['image' => [$message]];
+                return response(['errors' => $error], 422);
             }
 
-            $slider_images_in_database = Slider::pluck('image')->toArray();
 
-            //delete image not saved in database
-            if (count($all_images) > 0) {
-                foreach ($all_images as $file) {
-                    if (!in_array($file, $slider_images_in_database)) {
-                        deleteFile($file);
-                    }
-                }
-            }
+            //max 2mb
 
+
+            $image = $request->file('image');
+            $original_name = $image->getClientOriginalName();
+
+            $path = 'images/sliders/' . $image->hashName();
+
+            FileService::reszeImageAndSave($image, public_path(), $path, 600, 350);
+
+
+            //insert to database
+            $slider =  Slider::create(['image' => $path]);
 
             DB::commit();
 
-            return redirect()->back()->with(['success' => "success save"]);
+            return response()->json([
+                'data' => [
+                    'id'          => $slider->id,
+                    'image_url' => asset($slider->image),
+                    'image_url_delete' => route('admin.homepage_slider.delete', $slider->id)
+                ]
+            ]);
         } catch (\Throwable $th) {
             DB::rollback();
             Log::alert($th);
-            return redirect()->back()->with(['error' => 'some errors happend please try agian later']);
+            $er_mes = 'some errors happend please try agian alatarererewer';
+            return response(['error' => $er_mes], 400);
         }
     }
 
@@ -148,19 +120,16 @@ class HomepageSlider extends Controller
 
             try {
 
-                deleteFile($slider->image);
+                FileService::deleteFile(public_path($slider->image));
+
                 $slider->delete();
                 return $this->successMessage('ok');
-
             } catch (\Throwable $th) {
                 Log::alert($th);
                 abort(404);
             }
-
         }
 
         abort(404);
     }
-
-
 } //end of class

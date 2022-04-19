@@ -7,8 +7,9 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\AjaxResponseTrait;
+use App\Http\Controllers\Front\BaseController;
 
-class CartController extends Controller
+class CartController extends BaseController
 {
 
 
@@ -29,7 +30,9 @@ class CartController extends Controller
 
         $cart = $this->myCart(); // service class
 
-        $products = $cart->getProducts();
+
+       $products = $cart->getProducts();
+
         $total_products_count = (int) $cart->getTotalProductsQuanityt();
         $total_price =  $cart->getTotalProductsPrice();
 
@@ -65,7 +68,7 @@ class CartController extends Controller
                             "sku",
                             "qty",
                             "product_id",
-                        ]);
+                        ])->withTranslation();
                 }
             ])
             ->first();

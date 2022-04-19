@@ -81,33 +81,6 @@
 
 
 
-        {{-- <section id="content" class="page-content mt-15 mb-15">
-
-
-
-
-
-            <ul class="footer_links_ja list-inline">
-                <li class="list-inline-item">
-                    <a class="btn btn-secondary" href="javascript: history.go(-1)">
-                        <span>
-                            <i class="fa fa-chevron-left"></i>
-                            Go back
-                        </span>
-                    </a>
-                </li>
-                <li class="list-inline-item">
-                    <a class="btn btn-secondary" href="http://demo.bestprestashoptheme.com/savemart/modules/">
-                        <span>
-                            <i class="fa fa-chevron-left"></i>
-                            Home
-                        </span>
-                    </a>
-                </li>
-            </ul>
-
-
-        </section> --}}
 
 
 
@@ -116,7 +89,7 @@
 
 
                 {{-- check if  category has products --}}
-                @if ($category_products->count() > 0)
+                @if ($products->count() > 0)
 
                     {{-- start forecah products --}}
 
@@ -127,7 +100,7 @@
 
 
 
-                            @foreach ($category_products as $key => $product)
+                            @foreach ($products as $key => $product)
                                 <div class="item col-12 col-sm-6 col-md-4 col-lg-3">
 
 
@@ -147,7 +120,7 @@
 
                     <div class="d-flex justify-content-center mb-14 ">
 
-                        {{ $category_products->links() }}
+                        {{ $products->links() }}
 
                     </div>
 

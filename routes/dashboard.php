@@ -6,11 +6,15 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderProduct;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\ProductImagesCollection;
+use App\Http\Resources\Dahboard\ProdctsCollection;
 
 /*
 
@@ -26,18 +30,19 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 Route::group(['middleware' => 'auth:admin'], function () {
 
-    Route::get('test',  "TestControler@test");
 
-    Route::post('test', function (Request $request) {
 
-        return $request;
-    });
+    // ----------------------test-------------------
 
 
 
     //-------------------------------------------
 
     Route::get('/', function () {
+
+
+
+
         return view('dashboard.home');
     })->name('dashboard.home');
 
@@ -55,6 +60,10 @@ Route::group(['middleware' => 'auth:admin'], function () {
         'except' => 'show'
     ]);
 
+    // -----------------------fetch datatable ajax----------------
+
+
+    Route::get('products/fetch', 'ProductController@fetchDataTable')->name('products.datatable.fetch');
 
     //----------------- start routes product attributes and images---------------
 
@@ -63,8 +72,6 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
         Route::get('{product:slug}', "ProductImageController@index")->name('product.images.index');
         Route::post('{product}/store', "ProductImageController@store")->name('product.images.store');
-        Route::post('{product}', "ProductImageController@storeDatabase")->name('product.images.store_database');
-        Route::get('{product}/fetch', "ProductImageController@fetchImages")->name('product.images.fetch');
         Route::delete('{product}/{image}', "ProductImageController@destroy")->name('product.images.delete');
     });
 
@@ -90,8 +97,6 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
             Route::get('/', 'HomepageSlider@index')->name('admin.homepage_slider.index');
             Route::post('store', "HomepageSlider@store")->name('admin.homepage_slider.store');
-            Route::post('/', "HomepageSlider@storeDatabase")->name('admin.homepage_slider.store_database'); //store into databse
-            Route::get('fetch', "HomepageSlider@fetchImages")->name('admin.homepage_slider.fetch');
             Route::delete('{slider}', "HomepageSlider@destroy")->name('admin.homepage_slider.delete');
         });
     });

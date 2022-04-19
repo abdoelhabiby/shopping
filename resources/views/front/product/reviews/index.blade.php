@@ -173,7 +173,7 @@
                                                                                 class="fa fa-user-secret"></i>
                                                                         </div>
                                                                         <div class="date-comment">
-                                                                            {{ $review->created_at->format('Y/m/d') }}
+                                                                            {{ $review->created_at->diffForHumans() }}
                                                                         </div>
 
 
