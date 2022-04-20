@@ -168,7 +168,9 @@ trait MyfatoorahTrait
 
             DB::commit();
 
-            return redirect()->route('front.home')->with(['success' =>  __('front.order_success')]);
+            // return redirect()->route('front.home')->with(['success' =>  __('front.order_success')]);
+            return redirect()->route('front.user.orders')->with(['success' =>  __('front.order_success')]);
+
         } catch (\Throwable $th) {
 
             Log::alert($th);

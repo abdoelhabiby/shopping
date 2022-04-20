@@ -5,6 +5,55 @@
 @stop
 
 
+
+
+@section('breadcrumb')
+
+
+
+    <nav data-depth="3" class="breadcrumb-bg">
+        <div class="container no-index">
+            <div class="breadcrumb" style="background-color: #eee; border-radius: 25px;">
+
+                <ol itemscope="" itemtype="">
+
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="{{ route('front.home') }}">
+                            <span itemprop="name">
+                                @lang('front.home')
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="{{ route('front.profile') }}">
+                            <span itemprop="name">
+                                @lang('front.profile')
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+
+                    <li itemprop="itemListElement" itemscope="">
+                        <a itemprop="item" href="">
+                            <span itemprop="name">
+                                {{ __('front.orders') }}
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+
+                </ol>
+
+            </div>
+        </div>
+    </nav>
+
+@stop
+
+
+
 @section('content')
 
     <div class="no-index">
