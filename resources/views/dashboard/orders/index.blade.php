@@ -35,7 +35,6 @@ $model_name = 'orders';
 
 
 
-                -
                 <section id="dom">
                     <div class="row">
                         <div class="col-12">
