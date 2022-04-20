@@ -4,12 +4,12 @@
 
 namespace App\Repositories\Front;
 
+use App\Contracts\Front\HomeIndexContract;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
-use App\Interfaces\Front\HomeRepositoryInterface;
 
-class HomeRepository implements HomeRepositoryInterface
+class HomeIndexRepository implements HomeIndexContract
 {
 
     public $product; // model

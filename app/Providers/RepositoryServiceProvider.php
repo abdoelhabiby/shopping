@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Contracts\ProductContract;
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\Front\HomeIndexContract;
+use App\Repositories\Front\HomeIndexRepository;
 use App\Repositories\Dashboard\ProductRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -16,11 +18,9 @@ class RepositoryServiceProvider extends ServiceProvider
 
 
     protected $repositories = [
-        // CategoryContract::class         =>          CategoryRepository::class,
-        // AttributeContract::class        =>          AttributeRepository::class,
-        // BrandContract::class            =>          BrandRepository::class,
-        ProductContract::class          =>          ProductRepository::class,
-        // OrderContract::class            =>          OrderRepository::class,
+
+        ProductContract::class  => ProductRepository::class,
+        HomeIndexContract::class  => HomeIndexRepository::class,
     ];
 
 
@@ -34,14 +34,6 @@ class RepositoryServiceProvider extends ServiceProvider
         {
             $this->app->bind($interface, $implementation);
         }
-
-
-        $this->app->bind(
-            'App\Interfaces\Front\HomeRepositoryInterface',
-            'App\Repositories\Front\HomeRepository'
-
-        );
-
 
 
 
