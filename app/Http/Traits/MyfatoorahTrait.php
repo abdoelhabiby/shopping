@@ -104,7 +104,7 @@ trait MyfatoorahTrait
 
             DB::commit();
 
-            $cart->resetCart();
+            // $cart->resetCart();
 
             return redirect($payment_link);
         } catch (\Throwable $th) {

@@ -102,7 +102,8 @@ return [
     'edit_address_details' => 'تعديل تفاصيل الشحن',
     'with' => 'مع',
     'click_to_payemnt' => 'التحويل لصفحه الدفع',
-    'myfat_callback_not_paid' => 'لم تقم بالدفع يرجي اعادة المحاوله'
+    'myfat_callback_not_paid' => 'لم تقم بالدفع يرجي اعادة المحاوله',
+    'test_card' => 'بطاقة الاختبار'
 
 
 

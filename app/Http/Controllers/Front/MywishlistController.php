@@ -93,13 +93,16 @@ class MywishlistController extends BaseController
 
     //-------------------destroy------------------------
 
-    public function destroy($product_id)
+    public function destroy(Product $product)
     {
+
 
 
         try {
 
-            Mywishlist::where('user_id', user()->id)->where('product_id', $product_id)->delete();
+          Mywishlist::where('user_id', user()->id)->where('product_id', $product->id)->delete();
+
+
 
             return redirect()->route('mywishlist.index')->with(['success' => __('front.success_delete')]);
         } catch (\Exception $ex) {

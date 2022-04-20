@@ -77,7 +77,7 @@ class MyfatoorahPaymentService
             'DisplayCurrencyIso' => 'EGP',
             'DisplayCountryIso' => 'EGY',
             'CallBackUrl'        => env('MAYFATOORAH_CALLBACK_SUCCESS'),
-            'ErrorUrl'           => env('MAYFATOORAH_CALLBACK_ERROR'), //or 'https://example.com/error.php'
+            // 'ErrorUrl'           => env('MAYFATOORAH_CALLBACK_ERROR'), //or 'https://example.com/error.php'
             //'Language'           => 'en', //or 'ar'
             //'CustomerReference'  => 'orderId',
             //'CustomerCivilId'    => 'CivilId',

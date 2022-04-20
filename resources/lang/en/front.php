@@ -104,7 +104,8 @@ return [
     'edit_address_details' => 'edit shipping address',
     'with' => 'with',
     'click_to_payemnt' =>'click to payment',
-    'myfat_callback_not_paid' => 'you dont paid tray again'
+    'myfat_callback_not_paid' => 'you dont paid tray again',
+    'test_card' => 'test card'
 
 
 

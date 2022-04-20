@@ -26,6 +26,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 
+
 Route::group(
     [
         //  'prefix' => LaravelLocalization::setLocale(),
@@ -78,7 +79,7 @@ Route::group(
 
                     Route::get('/', 'MywishlistController@index')->name('mywishlist.index');
                     Route::post('{product_slug}', 'MywishlistController@store')->name('mywishlist.store');
-                    Route::delete('{product_id}', 'MywishlistController@destroy')->name('mywishlist.destroy');
+                    Route::delete('{product}', 'MywishlistController@destroy')->name('mywishlist.destroy');
                 });
 
                 //-------------------end wishlis--------------------

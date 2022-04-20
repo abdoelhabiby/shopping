@@ -117,10 +117,11 @@
 
                         $(document).find(".poduct_reviews #review_id_" + review_id) .remove();
 
-                        $(document).find('#id_new_comment_form')[0].reset();
+                        // $(document).find('#id_new_comment_form')[0].reset();
 
+                        $(document).find('#id_new_comment_form').trigger("reset");
 
-                        document.getElementById('id_new_comment_form').reset()
+                        // document.getElementById('id_new_comment_form').reset()
 
 
                         //----------------------------add new review---------------
@@ -149,6 +150,11 @@
 
                     $(document).find('#id_new_comment_form').attr('action', url_new_review)
                     myform.find('#new_comment_form_footer').remove();
+
+                    $(document).find('.poduct_reviews #add_review').addClass('d-block');
+
+                    $(document).find('.poduct_reviews #add_review').removeClass('d-none');
+
                     myform.find('.new_comment_form_content').append(model_foter);
 
                                     // --------------------------------------------
@@ -333,6 +339,11 @@
 
                     $('#new_comment_form').modal('hide');
                     $(document).find('#id_new_comment_form').attr('action', url_update_review)
+
+                    $(document).find('.poduct_reviews #add_review').removeClass('d-block');
+                    $(document).find('.poduct_reviews #add_review').addClass('d-none');
+
+
                     myform.find('#new_comment_form_footer').remove();
                     myform.find('.new_comment_form_content').append(model_foter);
                     // --------------------------------------

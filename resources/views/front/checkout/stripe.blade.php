@@ -87,6 +87,15 @@
 
 
 
+                            <div>
+                                <h5>{{ __('front.test_card') }}</h5>
+                                <p> card number : 4242 4242 4242 4242 </p>
+                                <p> MM/YY : 04/24</p>
+                                <p> CVC: 424</p>
+                                <p> ZIP: 42424</p>
+
+
+                            </div>
 
                             <div class="" style="max-width:500px">
 

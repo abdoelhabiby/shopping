@@ -43,6 +43,19 @@
                             <div class="poduct_reviews">
 
 
+                                @if (Auth::check('web'))
+                                    @if (!$product->authReview)
+                                        <a class="open-comment-form" id="add_review" data-toggle="modal" data-target="#new_comment_form"
+                                            href="#"><i class="fa fa-edit"></i> {{ __('front.write_review') }}
+                                        </a>
+                                    @endif
+                                @else
+                                    <a
+                                        href="{{ route('login') }}"><i class="fa fa-edit"></i> {{ __('front.write_review') }}
+                                    </a>
+
+                                @endif
+
 
                                 @if ($product->reviews->count() > 0)
 

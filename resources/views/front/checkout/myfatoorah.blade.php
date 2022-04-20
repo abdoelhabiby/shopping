@@ -95,6 +95,18 @@
 
                                     {{-- <h5 class="card-title">Special title treatment</h5> --}}
                                     <p class="card-text">
+
+
+                            <div class="m-4" style="text-align: left;">
+                                <h5>{{ __('front.test_card') }}</h5>
+                                <p> card holder name : test test </p>
+                                <p> card number : 5123 4500 0000 0008 </p>
+                                <p> MM/YY : 05 / 21</p>
+                                <p> CVC: 100</p>
+
+
+                            </div>
+
                                         {{ __('front.click_to_payemnt') }}
 
                                     </p>
