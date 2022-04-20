@@ -105,7 +105,32 @@ return [
     'with' => 'with',
     'click_to_payemnt' =>'click to payment',
     'myfat_callback_not_paid' => 'you dont paid tray again',
-    'test_card' => 'test card'
+    'test_card' => 'test card',
+    'orders' => 'orders',
+    'order' => 'order',
+    'show_orders' => 'show orders',
+    'status' => 'status',
+    'quantity' => 'quantity',
+    'method_pay' => 'method pay',
+    'created_at' => 'created at',
+    'show' => 'show',
+    'all_orders' => 'all orders',
+    'refused' => 'refused',
+    'paid' => 'paid',
+    'success' => 'success',
+    'fails' => 'fails',
+    'refused_reason' => 'refused reason',
+    'no_found_order' => 'dont make order for now',
+    'pending' => 'pending',
+    'attribute' => 'attribute',
+    'price' => 'price',
+    'image' => 'image',
+    'products' => 'products',
+    'order_number' => 'order number'
+
+
+
+
 
 
 

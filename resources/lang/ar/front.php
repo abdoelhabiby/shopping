@@ -103,7 +103,29 @@ return [
     'with' => 'مع',
     'click_to_payemnt' => 'التحويل لصفحه الدفع',
     'myfat_callback_not_paid' => 'لم تقم بالدفع يرجي اعادة المحاوله',
-    'test_card' => 'بطاقة الاختبار'
+    'test_card' => 'بطاقة الاختبار',
+    'orders' => 'الطلبات',
+    'order' => 'طلب',
+    'show_orders' => 'عرض الطلبات',
+    'status' => 'الحاله',
+    'quantity' => 'الكميه',
+    'method_pay' => 'وسيله الدفع',
+    'created_at' => 'انشأ في',
+    'show' => 'عرض',
+    'all_orders' => 'جميع الطلبات',
+    'refused' => 'رفض',
+    'paid' => 'دفع',
+    'success' => 'نجح',
+    'fails' => 'فشل',
+    'refused_reason' => 'سبب الرفض',
+    'no_found_order' => 'لم تقوم بطلب حتي الان',
+    'pending' => 'الانتظار',
+    'attribute' => 'النوع',
+    'price' => 'price',
+    'image' => 'صوره',
+    'products' => 'المنتجات',
+    'order_number' => 'رقم الطلب'
+
 
 
 

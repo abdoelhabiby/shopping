@@ -65,8 +65,11 @@ $model_name = 'orders';
 
                                         <div class="container" style="background: #FFF;padding-top: 20px;">
 
-                                            {{-- {!! $dataTable->table() !!} --}}
-                                            {!! $dataTable->table(['class' => 'table table-responsive']) !!}
+                                            <div class="table-responsive">
+
+                                                {{-- {!! $dataTable->table() !!} --}}
+                                                {!! $dataTable->table(['class' => 'table t ']) !!}
+                                            </div>
                                         </div>
 
                                         @push('scripts')

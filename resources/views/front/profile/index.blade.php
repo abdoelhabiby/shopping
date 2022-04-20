@@ -36,6 +36,14 @@
                                     {{ __('front.change_password') }}
                                 </strong>
                             </a>
+                            <hr>
+
+                            <p>
+                                <a href="{{ route('front.user.orders') }}">{{ __('front.orders') }} ({{ user()->orders->count() }})</a>
+
+                            </p>
+
+
                         </div>
                     </div>
 

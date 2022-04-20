@@ -121,7 +121,6 @@
 
                         $(document).find('#id_new_comment_form').trigger("reset");
 
-                        // document.getElementById('id_new_comment_form').reset()
 
 
                         //----------------------------add new review---------------

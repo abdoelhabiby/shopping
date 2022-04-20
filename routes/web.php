@@ -24,7 +24,10 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 
+Route::get('test',function(){
 
+    return user()->orders->count();
+});
 
 
 Route::group(
@@ -109,6 +112,9 @@ Route::group(
                 // --------------------------------------------------
 
                 Route::get('profile', "ProfileController@index")->name('front.profile');
+
+                Route::get('profile/orders', "OrderController@index")->name('front.user.orders');
+                Route::get('profile/orders/{id}', "OrderController@show")->name('front.user.orders.show');
 
                 Route::get('profile/edit', "Auth\UpdateController@edit")->name('front.profile.edit');
                 Route::put('profile/edit', "Auth\UpdateController@update")->name('front.profile.update');
