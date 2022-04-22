@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Services\MyfatoorahPaymentService;
+use App\Models\Category;
+use App\Models\Order;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -24,10 +26,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
 
-Route::get('test',function(){
-
-    return user()->orders->count();
-});
 
 
 Route::group(

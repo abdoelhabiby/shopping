@@ -194,24 +194,55 @@ $model_name = 'products';
                                                         <div class="form-group">
                                                             <label for="categories"> Categories</label>
 
+                                                            @php
+                                                                $product_categories = $product->categories->pluck('id')->toArray();
+                                                            @endphp
+
                                                             <select name="categories[]" class="select2 form-control "
-                                                                multiple="" tabindex="-1" aria-hidden="true">
+                                                            multiple="" tabindex="-1" aria-hidden="true">
 
+                                                            @if ($categories->count() > 0)
+                                                                {{-- ---------------main category------ --}}
+                                                                @foreach ($categories as $maincategory)
+                                                                    @if ($maincategory->count() > 0)
+                                                                        {{-- <optgroup label="{{$maincategory->name  }}"> --}}
+                                                                        {{-- -------------sub categories------ --}}
+                                                                        @foreach ($maincategory->subCategories as $subcategories)
+                                                                            <optgroup
+                                                                                label="{{ $maincategory->name . ' / ' . $subcategories->name }}">
+                                                                                {{-- --------categories last ---------- --}}
+                                                                                @foreach ($subcategories->categories as $categories_last)
+                                                                                    <option
+                                                                                        value="{{ $categories_last->id }}"
+                                                                                        @if (old('categories',$product_categories) && is_array(old('categories',$product_categories)))
+                                                                                          {{ in_array($categories_last->id, old('categories',$product_categories)) ? 'selected' : '' }}
+                                                                                        @endif>
+                                                                                        {{ $categories_last->name }}
+                                                                                    </option>
+                                                                                @endforeach
 
-                                                                <option disabled >Select Categories</option>
-                                                                @isset($sub_categories)
-                                                                    @if ($sub_categories->count() > 0)
+                                                                                {{-- --------end categories last ---------- --}}
 
-                                                                        @foreach ($sub_categories as $category)
-                                                                            <option value="{{ $category->id }}" {{in_array( $category->id ,$product->categories()->pluck('category_id')->toArray() ) ? 'selected' : ''}} >
-                                                                                {{ $category->name }}
-                                                                            </option>
+                                                                            </optgroup>
                                                                         @endforeach
-                                                                    @else
-                                                                        <option disabled> add category</option>
+                                                                        {{-- -------------end sub categories------ --}}
+
+                                                                        {{-- </optgroup> --}}
                                                                     @endif
-                                                                @endisset
-                                                            </select>
+                                                                @endforeach
+
+                                                                {{-- ------------end main category --}}
+
+                                                                </optgroup>
+                                                            @else
+                                                                <option disabled> add category</option>
+                                                            @endif
+
+
+                                                        </select>
+
+
+
 
 
                                                             @error('categories')

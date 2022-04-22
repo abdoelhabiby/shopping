@@ -109,6 +109,23 @@ public function scopeActive($q)
 
 
 
+    //-----------------------use in relation main categories to get subcategories------------
+
+
+    public function subCategories()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+
+    }
+
+    //-----------------------use in relation subcategories to get categories------------
+
+    public function categories()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+
+    }
+
     //------------------------------------------------------------
 
 

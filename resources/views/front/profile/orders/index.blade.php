@@ -71,16 +71,18 @@
                 </div>
                 @if ($orders->count() > 0)
 
-                    <table class="table display nowrap table-striped table-bordered ">
+                    {{-- <table class="table display nowrap table-striped table-bordered "> --}}
+                        <table class="table " style="    text-align-last: start;">
+
                         <thead>
                             <tr >
 
-                                <th class="text-center">{{ __('front.status') }}</th>
-                                <th class="text-center">{{ __('front.total_price') }}</th>
-                                <th class="text-center">{{ __('front.quantity') }}</th>
-                                <th class="text-center">{{ __('front.method_pay') }}</th>
-                                <th class="text-center">{{ __('front.created_at') }}</th>
-                                <th class="text-center">{{ __('front.show') }}</th>
+                                <th>{{ __('front.status') }}</th>
+                                <th>{{ __('front.total_price') }}</th>
+                                <th>{{ __('front.quantity') }}</th>
+                                <th>{{ __('front.method_pay') }}</th>
+                                <th>{{ __('front.created_at') }}</th>
+                                <th>{{ __('front.show') }}</th>
 
                             </tr>
                         </thead>

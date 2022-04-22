@@ -23,10 +23,30 @@ class OrderController extends BaseController
 
     public function show($id)
     {
-        $order = Order::where('user_id',user()->id)
-        ->whereHas('orderProducts')
-        ->with(['user.addressDetails','orderProducts'])
-        ->findOrFail($id);
+
+
+    $order = Order::with([
+        'orderProducts.product' => function ($query) {
+           $query->withTrashed()->select([
+               "id",
+               "slug",
+               "sku",
+               "is_active",
+           ])->with('image');
+       },
+       'orderProducts.attribute' => function ($query) {
+           $query->withTrashed()->select([
+               "id",
+               "sku",
+               "qty",
+               "product_id",
+               "is_active",
+           ]);
+       },
+       ])
+       ->where('user_id',user()->id)
+       ->findOrFail($id);
+
 
         return view('front.profile.orders.show',compact('order'));
 

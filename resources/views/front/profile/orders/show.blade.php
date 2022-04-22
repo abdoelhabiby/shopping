@@ -183,10 +183,13 @@
                                         <tr>
 
                                             <td>
+
                                                 {{ $order_product->product->name }}
                                             </td>
+
                                             <td>
-                                                {{ $order_product->attribute->name }}
+
+                                                {{ $order_product->attribute ? $order_product->attribute->name : '' }}
                                             </td>
                                             <td>
                                                 {{ $order_product->price }}
@@ -194,9 +197,10 @@
                                             <td>
                                                 {{ $order_product->quantity }}
                                             </td>
+
                                             <td>
                                                 @php
-                                                    $image = $order_product->productImage ? $order_product->productImage->name : pathNoImage();
+                                                    $image = $order_product->product->image ? $order_product->product->image->name : pathNoImage();
                                                 @endphp
 
                                                 <img class=""
@@ -204,9 +208,9 @@
                                                     alt="{{ $order_product->product->name }}" width='100' height="100">
                                             </td>
 
+
                                         </tr>
                                     @endforeach
-
 
                                 </tbody>
                             </table>
@@ -220,55 +224,55 @@
 
                     <!-- ---------------------------------- -->
 
-                       {{-- order user address details --}}
+                    {{-- order user address details --}}
 
-                       @if ($order->user->addressDetails)
-
-
-                       <div class="card mt-4 mb-4">
+                    @if ($order->user->addressDetails)
 
 
-                           <div class="card-header cleafix" style="background: #2d9ae8;color:white">
-
-                               <h4 class="float-right"> {{ __('front.about_address_details') }} </h4>
-
-                           </div>
-                           <div class="card-body p-3 " style="min-height: 225px; ">
+                        <div class="card mt-4 mb-4">
 
 
+                            <div class="card-header cleafix" style="background: #2d9ae8;color:white">
+
+                                <h4 class="float-right"> {{ __('front.about_address_details') }} </h4>
+
+                            </div>
+                            <div class="card-body p-3 " style="min-height: 225px; ">
 
 
-                               <p class="card-title">
-                                   {{ __('front.first_name') . ' : ' . user()->addressDetails->first_name }}</p>
-                               <p class="card-title">
-                                   {{ __('front.last_name') . ' : ' . user()->addressDetails->last_name }}</p>
-                               <p class="card-text">
-                                   {{ __('front.email') . ' : ' . user()->addressDetails->email }}
-                               </p>
-
-                               <p class="card-text">
-                                   {{ __('front.phone') . ' : ' . user()->addressDetails->phone }}
-                               </p>
-                               @if (user()->addressDetails->second_phone)
-                                   <p class="card-text">
-                                       {{ __('front.second_phone') . ' : ' . user()->addressDetails->second_phone }}
-                                   </p>
-                               @endif
-                               <p class="card-text">
-                                   {{ __('front.address') . ' : ' . user()->addressDetails->address }}
-                               </p>
-
-                               @if (user()->addressDetails->second_address)
-                                   <p class="card-text">
-                                       {{ __('front.second_address') . ' : ' . user()->addressDetails->second_address }}
-                                   </p>
-                               @endif
-
-                           </div>
-                       </div>
 
 
-                   @endif
+                                <p class="card-title">
+                                    {{ __('front.first_name') . ' : ' . user()->addressDetails->first_name }}</p>
+                                <p class="card-title">
+                                    {{ __('front.last_name') . ' : ' . user()->addressDetails->last_name }}</p>
+                                <p class="card-text">
+                                    {{ __('front.email') . ' : ' . user()->addressDetails->email }}
+                                </p>
+
+                                <p class="card-text">
+                                    {{ __('front.phone') . ' : ' . user()->addressDetails->phone }}
+                                </p>
+                                @if (user()->addressDetails->second_phone)
+                                    <p class="card-text">
+                                        {{ __('front.second_phone') . ' : ' . user()->addressDetails->second_phone }}
+                                    </p>
+                                @endif
+                                <p class="card-text">
+                                    {{ __('front.address') . ' : ' . user()->addressDetails->address }}
+                                </p>
+
+                                @if (user()->addressDetails->second_address)
+                                    <p class="card-text">
+                                        {{ __('front.second_address') . ' : ' . user()->addressDetails->second_address }}
+                                    </p>
+                                @endif
+
+                            </div>
+                        </div>
+
+
+                    @endif
 
 
 

@@ -127,7 +127,7 @@ class ProductReviewController extends BaseController
 
         } catch (\Throwable $th) {
 
-            return $th->getMessage();
+            // return $th->getMessage();
             return $this->notfound();
         }
     }

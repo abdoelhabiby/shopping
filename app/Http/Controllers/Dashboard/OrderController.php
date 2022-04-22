@@ -49,31 +49,28 @@ class OrderController extends Controller
     public function show($id)
     {
 
-          $order = Order::with([
-            'orderProducts' => function($q){
-                return $q->with([
-                    'product',
-                    'attribute' => function ($q){
-                    return $q->select([
-                        "id",
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "is_active",
-                    ]);
-                },'productImage']);
 
-            },
+        $order = Order::with([
+         'orderProducts.product' => function ($query) {
+            $query->withTrashed()->select([
+                "id",
+                "slug",
+                "sku",
+                "is_active",
+            ])->with('image');
+        },
+        'orderProducts.attribute' => function ($query) {
+            $query->withTrashed()->select([
+                "id",
+                "sku",
+                "qty",
+                "product_id",
+                "is_active",
+            ]);
+        },
+        ])
+        ->findOrFail($id);
 
-
-            // 'user' => function($q){
-            //     return $q->select(['id','name','email','image']);
-            // },
-            'user.addressDetails'
-            ])->findOrFail($id);
-
-
-            // return $order->user->addressDetails;
 
         return view($this->view_model . '.show',compact('order'));
     }

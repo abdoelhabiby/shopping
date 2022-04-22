@@ -89,7 +89,7 @@ class CategoryController extends BaseController
                             "id",
                         ])->withTranslation();
                 },
-                'vendor',
+                'vendor:id,name,email',
                 'reviewsRating',
                 'images' => function ($images) {
                     $images->take(2);

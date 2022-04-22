@@ -32,14 +32,11 @@ class OrderProduct extends Model
 
     public function attribute()
     {
-        return $this->belongsTo(ProductAttribute::class,'product_attribute_id','id');
-
+        return $this->belongsTo(ProductAttribute::class, 'product_attribute_id', 'id');
     }
-
 
     public function productImage()
     {
-        return $this->hasOne(ProductImage::class,'product_id','product_id');
+        return $this->hasOne(ProductImage::class, 'product_id', 'product_id');
     }
-
 }

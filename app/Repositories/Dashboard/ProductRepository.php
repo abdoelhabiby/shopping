@@ -37,7 +37,7 @@ class ProductRepository extends BaseRepository implements ProductContract
             $row = request()->start;
             $rowperpage = request()->length; // Rows display per page
             $columnIndex = isset(request()->order[0]['column']) ? request()->order[0]['column'] : 0; // Column index
-            $columnName = isset(request()->columns[$columnIndex]['data']) ?request()->columns[$columnIndex]['data'] : 'id' ; // Column name
+            $columnName = isset(request()->columns[$columnIndex]['data']) ? request()->columns[$columnIndex]['data'] : 'id' ; // Column name
             $columnSortOrder = isset(request()->order[0]['dir']) ? request()->order[0]['dir'] : 'desc'; // asc or desc
             $search = isset(request()->search['value']) ? request()->search['value'] : null; // Search value
 

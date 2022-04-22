@@ -149,8 +149,6 @@ trait MyfatoorahTrait
 
 
             if (!$order) {
-
-                // abort(404);
                 throw new Exception('myfatoorah callback invoice id ' . $invoice_id . " dosent exist in database orders");
             }
 
@@ -168,7 +166,6 @@ trait MyfatoorahTrait
 
             DB::commit();
 
-            // return redirect()->route('front.home')->with(['success' =>  __('front.order_success')]);
             return redirect()->route('front.user.orders')->with(['success' =>  __('front.order_success')]);
 
         } catch (\Throwable $th) {

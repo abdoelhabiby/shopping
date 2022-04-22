@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Dashboard;
 
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Http\Traits\HandelSlugTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 
 class ProductRequest extends FormRequest
 {
@@ -32,6 +34,8 @@ class ProductRequest extends FormRequest
 
 
 
+
+
         $rules = [
             "slug" => "required|string|" . Rule::unique('products', 'slug')->ignore($this->product),
             "sku" => "required|string|" . Rule::unique('products', 'sku')->ignore($this->product),
@@ -45,7 +49,8 @@ class ProductRequest extends FormRequest
             "brand_id" => "sometimes|nullable|numeric|exists:brands,id",
 
             "categories" => "required|array|min:1",
-            'categories.*' => 'numeric|exists:categories,id',
+            // 'categories.*' => 'numeric|exists:categories,id',
+            'categories.*' => 'numeric|' . Rule::in($this->getIdsCategory()),
 
             "tags" => "sometimes|nullable|array|min:1",
             'tags.*' => 'numeric|exists:tags,id',
@@ -70,4 +75,25 @@ class ProductRequest extends FormRequest
             "name.*" => 'input',
         ];
     }
+
+
+
+
+
+    // -----------------------------
+    public function getIdsCategory() : array
+    {
+        $categories =  Category::where(function ($q) {
+            return $q->whereNotNull('parent_id')->whereHas('parent', function ($q) { // sub
+                return $q->whereHas('parent', function ($q) { //main
+                    return $q->where('parent_id', null);
+                });
+            });
+        })
+        ->pluck('id')->toArray();
+
+            return $categories;
+    }
+    // -----------------------------
+
 }

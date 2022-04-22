@@ -180,8 +180,8 @@ class CheckOrdersPending extends Command
             $order->update([
                 'status' =>  'refused',
                 'return_quantity' => 1,
-                'refused_reason' => 'because expired date to paid',
-                'note' => 'back products count equal ' . $products_returned_quantity
+                'refused_reason' => 'This invoice has expired',
+                // 'note' => 'back products count equal ' . $products_returned_quantity
             ]);
         }
     }

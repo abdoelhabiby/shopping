@@ -45,7 +45,8 @@ $model_name = 'products';
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title" id="basic-layout-form"> add {{ Str::singular($model_name) }}
+                                    <h4 class="card-title" id="basic-layout-form"> add
+                                        {{ Str::singular($model_name) }}
                                     </h4>
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
@@ -64,8 +65,8 @@ $model_name = 'products';
 
 
 
-                                        <form class="form" action="{{ route($model_name . '.store') }}" method="POST"
-                                            enctype="multipart/form-data">
+                                        <form class="form" action="{{ route($model_name . '.store') }}"
+                                            method="POST" enctype="multipart/form-data">
                                             @csrf
 
                                             <div class="form-body">
@@ -76,22 +77,21 @@ $model_name = 'products';
                                                 <div class="row">
 
                                                     @foreach (supportedLanguages() as $index => $language)
-
                                                         <div class="col-md-6">
 
                                                             <div class="form-group">
-                                                                <label for="name-{{ $language }}"> {{ 'name ' . $language }}
+                                                                <label for="name-{{ $language }}">
+                                                                    {{ 'name ' . $language }}
                                                                 </label>
                                                                 <input type="text" value="{{ old('name.' . $language) }}"
                                                                     id="name-{{ $language }}" class="form-control"
                                                                     placeholder="input {{ 'name ' . $language }}   "
                                                                     name="name[{{ $language }}]">
-                                                                @error("name." . $language )
-                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @error('name.' . $language)
+                                                                    <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
-
                                                     @endforeach
 
 
@@ -99,36 +99,36 @@ $model_name = 'products';
 
                                                 <div class="row">
 
-                                                    {{-- -----slug -----
-                                                    --}}
+                                                    {{-- -----slug ----- --}}
                                                     <div class="col-md-6">
                                                         @php
-                                                        $input = 'slug';
+                                                            $input = 'slug';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="text" value="{{ old($input) }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}  "
+                                                            <input type="text" value="{{ old($input) }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input {{ $input }}  "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
 
-                                                    {{-- -----sku -----
-                                                    --}}
+                                                    {{-- -----sku ----- --}}
                                                     <div class="col-md-6">
                                                         @php
-                                                        $input = 'sku';
+                                                            $input = 'sku';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> {{ $input }} </label>
-                                                            <input type="text" value="{{ old($input) }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input {{ $input }}  "
+                                                            <input type="text" value="{{ old($input) }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input {{ $input }}  "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -138,13 +138,11 @@ $model_name = 'products';
 
 
 
-                                                {{-- description----------
-                                                --}}
+                                                {{-- description---------- --}}
 
                                                 <div class="row">
 
                                                     @foreach (supportedLanguages() as $index => $language)
-
                                                         <div class="col-md-6">
 
                                                             <div class="form-group">
@@ -152,17 +150,15 @@ $model_name = 'products';
                                                                     {{ 'description ' . $language }}
                                                                 </label>
 
-                                                                <textarea type="text" id="description-{{ $language }}"
-                                                                    class="form-control" rows="5"
+                                                                <textarea type="text" id="description-{{ $language }}" class="form-control" rows="5"
                                                                     placeholder="input {{ 'description ' . $language }}"
                                                                     name="description[{{ $language }}]">{{ old('description.' . $language) }}</textarea>
 
-                                                                @error("description." . $language )
-                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @error('description.' . $language)
+                                                                    <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
-
                                                     @endforeach
 
 
@@ -170,47 +166,64 @@ $model_name = 'products';
 
 
 
-                                                {{-- -----------------------
-                                                --}}
+                                                {{-- ----------------------- --}}
 
 
                                                 <div class="row">
 
-                                                    {{-- ------------sub category------
-                                                    --}}
+                                                    {{-- ------------sub category------ --}}
 
 
                                                     <div class="col-md-12">
                                                         <div class="form-group">
+
                                                             <label for="categories"> Categories</label>
 
                                                             <select name="categories[]" class="select2 form-control "
                                                                 multiple="" tabindex="-1" aria-hidden="true">
 
-                                                                @isset($sub_categories)
-                                                                    @if ($sub_categories->count() > 0)
+                                                                @if ($categories->count() > 0)
+                                                                    {{-- ---------------main category------ --}}
+                                                                    @foreach ($categories as $maincategory)
+                                                                        @if ($maincategory->count() > 0)
+                                                                            {{-- <optgroup label="{{$maincategory->name  }}"> --}}
+                                                                            {{-- -------------sub categories------ --}}
+                                                                            @foreach ($maincategory->subCategories as $subcategories)
+                                                                                <optgroup
+                                                                                    label="{{ $maincategory->name . ' / ' . $subcategories->name }}">
+                                                                                    {{-- --------categories last ---------- --}}
+                                                                                    @foreach ($subcategories->categories as $categories_last)
+                                                                                        <option
+                                                                                            value="{{ $categories_last->id }}"
+                                                                                            @if (old('categories') && is_array(old('categories'))) {{ in_array($categories_last->id, old('categories')) ? 'selected' : '' }} @endif>
+                                                                                            {{ $categories_last->name }}
+                                                                                        </option>
+                                                                                    @endforeach
 
-                                                                        @foreach ($sub_categories as $category)
-                                                                            <option value="{{ $category->id }}"
-                                                                                @if(old('categories') && is_array(old('categories')))
+                                                                                    {{-- --------end categories last ---------- --}}
 
-                                                                                {{ in_array($category->id,old('categories')) ? 'selected' : '' }}
+                                                                                </optgroup>
+                                                                            @endforeach
+                                                                            {{-- -------------end sub categories------ --}}
 
-                                                                                @endif
+                                                                            {{-- </optgroup> --}}
+                                                                        @endif
+                                                                    @endforeach
 
-                                                                                >
-                                                                                {{ $category->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option disabled> add category</option>
-                                                                    @endif
-                                                                @endisset
+                                                                    {{-- ------------end main category --}}
+
+                                                                    </optgroup>
+                                                                @else
+                                                                    <option disabled> add category</option>
+                                                                @endif
+
+
                                                             </select>
 
 
+
                                                             @error('categories')
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -222,41 +235,35 @@ $model_name = 'products';
                                                         <div class="form-group">
                                                             <label for="brand">brand</label>
 
-                                                            <select name="brand_id"
-                                                                class="select2  form-control "
+                                                            <select name="brand_id" class="select2  form-control "
                                                                 id="single-placeholder" tabindex="-1" aria-hidden="true">
 
                                                                 <option disabled selected>Select brand</option>
 
                                                                 @isset($brands)
-
                                                                     @if ($brands->count() > 0)
-
                                                                         @foreach ($brands as $brand)
-                                                                            <option value="{{ $brand->id }}" {{ $brand->id == old('brand_id') ? 'selected' : '' }}>
+                                                                            <option value="{{ $brand->id }}"
+                                                                                {{ $brand->id == old('brand_id') ? 'selected' : '' }}>
                                                                                 {{ $brand->name }}
                                                                             </option>
-
                                                                         @endforeach
-
                                                                     @else
                                                                         <option disabled> add brand</option>
                                                                     @endif
-
                                                                 @endisset
 
 
                                                             </select>
                                                             @error('brand_id')
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
 
                                                         </div>
                                                     </div>
 
 
-                                                    {{-- ------------tags------
-                                                    --}}
+                                                    {{-- ------------tags------ --}}
 
 
                                                     <div class="col-md-12">
@@ -267,7 +274,6 @@ $model_name = 'products';
                                                                 tabindex="-1" aria-hidden="true">
                                                                 @isset($tags)
                                                                     @if ($tags->count() > 0)
-
                                                                         @foreach ($tags as $tag)
                                                                             <option value="{{ $tag->id }}">
                                                                                 {{ $tag->name }}
@@ -281,7 +287,7 @@ $model_name = 'products';
 
 
                                                             @error('tags')
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -299,15 +305,16 @@ $model_name = 'products';
 
                                                     <div class="col-md-12">
                                                         @php
-                                                        $input = 'meta_keywords';
+                                                            $input = 'meta_keywords';
                                                         @endphp
                                                         <div class="form-group">
                                                             <label for="{{ $input }}"> meta keywords </label>
-                                                            <input type="text" value="{{ old($input) }}" id="{{ $input }}"
-                                                                class="form-control" placeholder="input meta keywords   "
+                                                            <input type="text" value="{{ old($input) }}"
+                                                                id="{{ $input }}" class="form-control"
+                                                                placeholder="input meta keywords   "
                                                                 name="{{ $input }}">
                                                             @error($input)
-                                                            <span class="text-danger">{{ $message }} </span>
+                                                                <span class="text-danger">{{ $message }} </span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -323,8 +330,8 @@ $model_name = 'products';
 
 
                                                             <label>
-                                                                <input type="checkbox" checked name="is_active" value="true"
-                                                                    > active
+                                                                <input type="checkbox" checked name="is_active"
+                                                                    value="true"> active
                                                             </label>
                                                         </div>
                                                     </div>
@@ -359,9 +366,7 @@ $model_name = 'products';
 @endsection
 
 @section('js')
+    <script>
 
-<script>
-
-</script>
-
+    </script>
 @endsection

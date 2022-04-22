@@ -70,11 +70,20 @@ class ProductController extends BaseController
      */
     public function create()
     {
-        $sub_categories = Category::subCategory()->select('id')->get();
+
+        $categories =  Category::mainCategory()
+            ->whereHas('subCategories')
+            ->with(['subCategories' => function ($query) {
+                $query->whereHas('categories')->with('categories:id,parent_id,slug')->select(['parent_id', 'slug', 'id']);
+            }])
+            ->select(['slug', 'id'])->get();
+
+
+
         $brands = Brand::select('id')->get();
         $tags = Tag::select('id')->get();
 
-        return view($this->view_model . '.create', compact(['sub_categories', 'brands', 'tags']));
+        return view($this->view_model . '.create', compact(['categories', 'brands', 'tags']));
     }
 
     /**
@@ -117,11 +126,20 @@ class ProductController extends BaseController
     {
 
 
-        $sub_categories = Category::subCategory()->select('id')->get();
+
+        $categories =  Category::mainCategory()
+        ->whereHas('subCategories')
+        ->with(['subCategories' => function ($query) {
+            $query->whereHas('categories')->with('categories:id,parent_id,slug')->select(['parent_id', 'slug', 'id']);
+        }])
+        ->select(['slug', 'id'])->get();
+
+        $product->load('categories');
+
 
         $brands = Brand::select('id')->get();
         $tags = Tag::select('id')->get();
-        return view($this->view_model . '.edit', compact(['product', 'sub_categories', 'brands', 'tags']));
+        return view($this->view_model . '.edit', compact(['product','categories', 'brands', 'tags']));
     }
 
     /**
