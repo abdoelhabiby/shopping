@@ -131,17 +131,24 @@ $model_name = 'sub-categories';
                                                             <label for="parent_id">Category</label>
                                                             <select id='parent_id' class="select2 form-control "
                                                                 name="parent_id" tabindex="-1" aria-hidden="true">
-                                                                @if ($main_categories->count() > 0)
 
-                                                                    @foreach ($main_categories as $main_category)
-                                                                        <option value="{{ $main_category->id }}" {{$row->parent_id == $main_category->id ? 'selected' : ''}}>
-                                                                            {{ $main_category->name }}</option>
+                                                                @if ($maincategories->count() > 0)
+                                                                @foreach ($maincategories as $maincategory)
+                                                                    <option value="{{ $maincategory->id }}" {{ old('parent_id',$row->parent_id) == $maincategory->id ? 'selected' : '' }}>
+                                                                        {{ $maincategory->name }}
+                                                                    </option>
+                                                                    @if ($maincategory->subCategories->count() > 0)
+                                                                        @foreach ($maincategory->subCategories as $subcategory)
+                                                                            <option value="{{ $subcategory->id }}" {{ old('parent_id',$row->parent_id) == $subcategory->id ? 'selected' : '' }}>
+                                                                                &#160;&#160; {{ $subcategory->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                @endforeach
+                                                            @else
+                                                                <option disabled> add  category</option>
+                                                            @endif
 
-                                                                    @endforeach
-
-                                                                @else
-                                                                    <option disabled> add main category</option>
-                                                                @endif
 
 
                                                             </select>

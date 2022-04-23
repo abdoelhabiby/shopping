@@ -115,7 +115,7 @@
                                     <div class="product-actionss">
 
                                         <form action="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}"
-                                            method="post" id="form-add-to-cart" class="row">
+                                            method="post" id="form-add-to-cart-withQuanitity" class="row">
 
                                             {{-- ---------------product reviews------------ --}}
                                             <div class="productdetail-right col-12 col-lg-6 col-md-6">
@@ -403,7 +403,6 @@
 
                 @include('front.product.product-detail-middle', $product)
 
-                {{-- @include('front.product.product-detail-bottom',$product) --}}
 
                 @include('front.product._product_images_modal', $product)
 

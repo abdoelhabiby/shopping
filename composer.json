@@ -9,8 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "ext-imagick": "*",
         "astrotomic/laravel-translatable": "^11.9",
         "barryvdh/laravel-snappy": "^0.4.8",
+        "beyondcode/laravel-websockets": "^1.13",
         "cartalyst/stripe-laravel": "^12.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
@@ -21,12 +23,12 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.4",
         "mcamara/laravel-localization": "^1.6",
+        "pusher/pusher-php-server": "~4.0",
         "spatie/laravel-permission": "^3.17",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "yajra/laravel-datatables-buttons": "^4.0",
         "yajra/laravel-datatables-html": "^4.0",
-        "yajra/laravel-datatables-oracle": "~9.0",
-        "ext-imagick": "*"
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

@@ -75,21 +75,18 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="social-sharingButton">
             <a class="dropdown-item"
-                href="http://www.facebook.com/sharer.php?u=http://demo.bestprestashoptheme.com/savemart/en/smartphone-tablet/3-the-best-is-yet-to-come-framed-poster.html"
+                href="http://www.facebook.com/sharer.php?u="
                 title="Share" target="_blank"><i
                     class="fa fa-facebook"></i>Facebook</a>
             <a class="dropdown-item"
-                href="https://twitter.com/intent/tweet?text=Mauris molestie porttitor diam http://demo.bestprestashoptheme.com/savemart/en/smartphone-tablet/3-the-best-is-yet-to-come-framed-poster.html"
+                href="https://twitter.com/intent/tweet?text=Mauris molestie porttitor diam "
                 title="Tweet" target="_blank"><i
                     class="fa fa-twitter"></i>Tweet</a>
             <a class="dropdown-item"
-                href="https://plus.google.com/share?url=http://demo.bestprestashoptheme.com/savemart/en/smartphone-tablet/3-the-best-is-yet-to-come-framed-poster.html"
+                href="https://plus.google.com/share?url="
                 title="Google+" target="_blank"><i
                     class="fa fa-google-plus"></i>Google+</a>
-            <a class="dropdown-item"
-                href="http://www.pinterest.com/pin/create/button/?media=http://demo.bestprestashoptheme.com/savemart/34/the-best-is-yet-to-come-framed-poster.jpg&amp;url=http://demo.bestprestashoptheme.com/savemart/en/smartphone-tablet/3-the-best-is-yet-to-come-framed-poster.html"
-                title="Pinterest" target="_blank"><i
-                    class="fa fa-pinterest"></i>Pinterest</a>
+
         </div>
     </div>
 

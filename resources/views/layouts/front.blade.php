@@ -30,19 +30,16 @@
     @if (currentLocale() == 'ar')
         <link rel="stylesheet" href="{{ asset('front/themes/vinova_savemart/assets/cache/theme-526bb624.css') }}"
             type="text/css" media="all"> <!-- ar ---- -->
-
     @else
         <link rel="stylesheet" href="{{ asset('front/themes/vinova_savemart/assets/cache/theme-78026624.css') }}"
             type="text/css" media="all">
-
     @endif
 
 
     <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
 
 
-{{--
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         var added_to_wishlist = "The product was successfully added to your wishlist.";
         var isLogged = false;
         var isLoggedWishlist = false;
@@ -66,7 +63,12 @@
             "cart": {
                 "products": [],
                 "totals": {
-                    "total": {"type": "total", "label": "Total", "amount": 0, "value": "\u00a30.00"},
+                    "total": {
+                        "type": "total",
+                        "label": "Total",
+                        "amount": 0,
+                        "value": "\u00a30.00"
+                    },
                     "total_including_tax": {
                         "type": "total",
                         "label": "Total (tax incl.)",
@@ -81,19 +83,37 @@
                     }
                 },
                 "subtotals": {
-                    "products": {"type": "products", "label": "Subtotal", "amount": 0, "value": "\u00a30.00"},
+                    "products": {
+                        "type": "products",
+                        "label": "Subtotal",
+                        "amount": 0,
+                        "value": "\u00a30.00"
+                    },
                     "discounts": null,
-                    "shipping": {"type": "shipping", "label": "Shipping", "amount": 0, "value": "Free"},
+                    "shipping": {
+                        "type": "shipping",
+                        "label": "Shipping",
+                        "amount": 0,
+                        "value": "Free"
+                    },
                     "tax": null
                 },
                 "products_count": 0,
                 "summary_string": "0 items",
-                "vouchers": {"allowed": 0, "added": []},
+                "vouchers": {
+                    "allowed": 0,
+                    "added": []
+                },
                 "discounts": [],
                 "minimalPurchase": 0,
                 "minimalPurchaseRequired": ""
             },
-            "currency": {"name": "British Pound", "iso_code": "GBP", "iso_code_num": "826", "sign": "\u00a3"},
+            "currency": {
+                "name": "British Pound",
+                "iso_code": "GBP",
+                "iso_code_num": "826",
+                "sign": "\u00a3"
+            },
             "customer": {
                 "lastname": null,
                 "firstname": null,
@@ -107,7 +127,10 @@
                 "siret": null,
                 "ape": null,
                 "is_logged": false,
-                "gender": {"type": null, "name": null},
+                "gender": {
+                    "type": null,
+                    "name": null
+                },
                 "addresses": []
             },
             "language": {
@@ -165,38 +188,7 @@
                 "js_url": "http:\/\/demo.bestprestashoptheme.com\/savemart\/themes\/vinova_savemart\/assets\/js\/",
                 "pic_url": "http:\/\/demo.bestprestashoptheme.com\/savemart\/upload\/",
                 "pages": {
-                    // "address": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/address",
-                    // "addresses": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/addresses",
-                    // "authentication": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/login",
-                    // "cart": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/cart",
-                    // "category": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=category",
-                    // "cms": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=cms",
-                    // "contact": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/contact-us",
-                    // "discount": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/discount",
-                    // "guest_tracking": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/guest-tracking",
-                    // "history": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/order-history",
-                    // "identity": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/identity",
-                    // "index": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/",
-                    // "my_account": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/my-account",
-                    // "order_confirmation": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/order-confirmation",
-                    // "order_detail": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=order-detail",
-                    // "order_follow": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/order-follow",
-                    // "order": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/order",
-                    // "order_return": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=order-return",
-                    // "order_slip": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/credit-slip",
-                    // "pagenotfound": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/page-not-found",
-                    // "password": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/password-recovery",
-                    // "pdf_invoice": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=pdf-invoice",
-                    // "pdf_order_return": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=pdf-order-return",
-                    // "pdf_order_slip": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=pdf-order-slip",
-                    // "prices_drop": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/prices-drop",
-                    // "product": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/index.php?controller=product",
-                    // "search": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/search",
-                    // "sitemap": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/sitemap",
-                    // "stores": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/stores",
-                    // "supplier": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/supplier",
-                    // "register": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/login?create_account=1",
-                    // "order_login": "http:\/\/demo.bestprestashoptheme.com\/savemart\/en\/order?login=1"
+
                 },
 
 
@@ -214,7 +206,6 @@
     <script type="text/javascript">
         var baseDir = "/savemart/";
         var static_token = "28add935523ef131c8432825597b9928";
-
     </script>
 
 
@@ -239,6 +230,8 @@
             #index .container {
                 width: 1200px;
             }
+
+
         }
 
         #popup-subscribe .modal-dialog .modal-content {
@@ -251,8 +244,6 @@
         }
 
 
-
-
     </style>
 
     @yield('style')
@@ -262,8 +253,6 @@
 
 <body id="index"
     class=" {{ currentLocale() == 'ar' ? 'lang-ar lang-rtl' : 'lang-en' }}  country-gb currency-gbp layout-full-width page-index tax-display-enabled">
-
-
 
 
 
@@ -352,7 +341,8 @@
             <div id="_mobile_cart" class="box-content"></div>
         </div>
     </div>
-    <div id="mobile-pageaccount" class="mobile-boxpage d-flex hidden-md-up" data-titlebox-parent="Account">
+
+    {{-- <div id="mobile-pageaccount" class="mobile-boxpage d-flex hidden-md-up" data-titlebox-parent="Account">
         <div class="content-boxpage col">
             <div class="box-header d-flex justify-content-between align-items-center">
                 <div class="back-box">Back</div>
@@ -445,10 +435,10 @@
             </div>
 
         </div>
-    </div>
+    </div> --}}
 
 
-    <div id="stickymenu_bottom_mobile"
+    {{-- <div id="stickymenu_bottom_mobile"
         class="d-flex align-items-center justify-content-center hidden-md-up text-center">
         <div class="stickymenu-item"><a href="http://demo.bestprestashoptheme.com/savemart/"><i
                     class="zmdi zmdi-home"></i><span>Home</span></a></div>
@@ -462,22 +452,142 @@
         </div>
         <div class="stickymenu-item"><a href="#" class="nov-toggle-page" data-target="#mobile-pageaccount"><i
                     class="zmdi zmdi-account-o"></i><span>Account</span></a></div>
-    </div>
+    </div> --}}
 
 
     <script type="text/javascript" src="{{ asset('front/themes/vinova_savemart/assets/cache/bottom-3c96ed23.js') }}">
     </script>
 
 
-<script>
+    @if (session()->has('success'))
+        <script>
+            swal({
+                title: "{{ session('success') }}",
+                type: "success",
+                timer: 3000,
+            });
+        </script>
+    @endif
+    @if (session()->has('error'))
+        <script>
+            swal({
+                title: "{{ session('error') }}",
+                type: "error",
+                timer: 3000,
+            });
+        </script>
+    @endif
+
+
+
+
+    <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        //---------------------------------------------------------------
 
-       //------------------ add product to wishlist--------------------
-       $(document).on('click', '.add_to_wislist', function(e) {
+
+
+        //------------------ add product to cart--------------------
+
+        $(document).on('click', '.add-product-to-cart', function(e) {
+            e.preventDefault();
+            var url = $(this).data('add-cart');
+
+            $.ajax({
+                method: 'post',
+                url,
+                success: function(response) {
+
+                    if (response.cart_products_count && parseInt(response.cart_products_count) > 0) {
+                        $(".cart-products-count").text(response.cart_products_count);
+
+                    }
+
+
+                    swal({
+                        title: '{{ __('front.success_add_product') }}',
+                        type: "success",
+                        timer: 2000,
+                    });
+
+                },
+                error: function(error) {
+                    // console.log(error);
+                }
+            });
+
+        });
+
+
+        //-----------------get modal ajax to show product details-----------
+
+        $(document).on('click', '.quick-view', function(e) {
+
+            e.preventDefault();
+
+
+            var url = $(this).data('url');
+
+            $.ajax({
+                method: 'post',
+                url,
+                success: function(response) {
+                    $('body').append(response.quickview_modal);
+                },
+                error: function(error) {
+                    // console.log(error);
+                }
+            });
+
+
+        });
+
+        //----------------------select attribute -------------------
+
+        $(document).on('change', '.select_attibute', function() {
+            var product_slug = $(this).data('product-slug');
+            var product_attribute_id = this.value;
+
+
+            var url = '/{{ localeLanguage() }}/product-details/' + product_slug + '/' + product_attribute_id;
+
+
+
+            $.ajax({
+                method: 'post',
+                url,
+                success: function(response) {
+                    $('.quickview').remove();
+                    $('body').append(response.quickview_modal);
+                },
+                error: function(error) {
+                    //console.log(error);
+                }
+            });
+
+        })
+
+        //-----------------close modal--------------
+
+        $(document).on('click', '.close', function() {
+            $(this).closest('.quickview').remove();
+        });
+
+
+
+
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+
+        // //------------------ add product to wishlist--------------------
+        $(document).on('click', '.add_to_wislist', function(e) {
             e.preventDefault();
             var url = $(this).attr('href');
 
@@ -498,7 +608,7 @@
             });
 
         });
-</script>
+    </script>
 
 
     @yield('scripts')

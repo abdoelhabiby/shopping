@@ -64,7 +64,7 @@ class ProductController extends BaseController
                 },
                 'reviewsRating',
                 'images' => function ($query) {
-                    $query->limit(7);
+                    $query->orderBy('id','asc')->limit(7);
                 },
                 'reviews' => function ($query) {
                     if(user()){
@@ -83,6 +83,8 @@ class ProductController extends BaseController
             ->withTranslation()
             ->firstOrFail();
 
+            // ------------set comment review user in first if found
+
         if (user()) {
             $product->load('authReview');
 
@@ -99,7 +101,7 @@ class ProductController extends BaseController
         $key = 'products_views_' . $sess_id;
 
         if (!Cache::has($key)) {
-            Cache::add($key, [], (60 * 60 * 24)); // 1 minute
+            Cache::add($key, [], (60 * 60 * 24)); // day
         }
 
         $latest = (array) Cache::get($key);
@@ -128,7 +130,9 @@ class ProductController extends BaseController
             ->with([
                 'attribute',
                 'reviewsRating',
-                'images'
+                'images' => function ($query) {
+                    $query->orderBy('id','asc')->limit(2);
+                },
             ])
             ->active()
             ->withTranslation()

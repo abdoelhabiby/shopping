@@ -4,6 +4,7 @@
 <head>
 
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +23,7 @@
 
 
 
-        <link rel="stylesheet" href="{{ asset('admin/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css') }}">
 
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/plugins/animate/animate.css"> --}}
     <!-- BEGIN VENDOR CSS-->
@@ -36,34 +37,31 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/morris.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/chartist.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/css/charts/chartist-plugin-tooltip.css">
 
 
 
-    {{-- --------------------rtl ---------------------------
-    --}}
+    {{-- --------------------rtl --------------------------- --}}
 
-    {{-- @if ('rtl' == 'test rtl')
-        --}}
+    {{-- @if ('rtl' == 'test rtl') --}}
 
-        <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/core/menu/menu-types/vertical-menu.css">
 
-              <!-- BEGIN VENDOR CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe.css">
-  <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/default-skin/default-skin.css">
-  <!-- END VENDOR CSS-->
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/default-skin/default-skin.css">
+    <!-- END VENDOR CSS-->
 
-        <!-- END VENDOR CSS-->
-        <!-- BEGIN MODERN CSS-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/app.css">
-        {{--
-        <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css-rtl/custom-rtl.css">
-        --}}
-        <!-- END MODERN CSS-->
-        <!-- BEGIN Page Level CSS-->
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css/app.css">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/css-rtl/custom-rtl.css"> --}}
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
 
-        {{--
-    @endif --}}
+    {{-- @endif --}}
 
 
 
@@ -101,11 +99,15 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css"> --}}
 
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/datatable/datatables.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/css/tables/datatable/datatables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/css/tables/extensions/responsive.dataTables.min.css">
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/colReorder.dataTables.min.css"> --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/css/tables/extensions/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('admin') }}/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/fixedHeader.dataTables.min.css"> --}}
 
 
@@ -115,6 +117,23 @@
     <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
 
     <script src="  https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
+
+    {{-- ------------------laravel echo js---------- --}}
+
+    {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
+
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.8.1/echo.iife.min.js"
+        integrity="sha512-ksYghyTUS4zG9uK9YDF5XLXLCi4/+s02PsujMroDkRHjIoPKCwxr12cLYRkZSuw5U70VYC0w3QJ23uPWFXHLcA=="
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.8.1/echo.js"
+        integrity="sha512-XPbYz2WHuAXIJIrn05xwPN/FBauU8d3B4Ql7JaakpM3wGsoA5g4BK3aaAuv6XnaPhdRpNKw9ZUCrBH2vLWiPKQ=="
+        crossorigin="anonymous"></script> --}}
+
+
+    {{-- ---------------------------------- --}}
+
 
 
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css" integrity="sha512-3g+prZHHfmnvE1HBLwUnVuunaPOob7dpksI7/v6UnF/rnKGwHf/GdEq9K7iEN7qTtW+S0iivTcGpeTBqqB04wA==" crossorigin="anonymous" /> --}}
@@ -154,37 +173,34 @@
 
 
 
-
     <!-- BEGIN VENDOR JS-->
     <script src="{{ asset('admin') }}/vendors/js/vendors.min.js" type="text/javascript"></script>
 
     <script src="{{ asset('admin') }}/vendors/js/forms/select/select2.full.min.js" type="text/javascript"></script>
 
 
-      <!-- BEGIN PAGE VENDOR JS-->
-  <script src="{{ asset('admin') }}/vendors/js/gallery/masonry/masonry.pkgd.min.js"
-  type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe.min.js"
-  type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe-ui-default.min.js"
-  type="text/javascript"></script>
-  <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="{{ asset('admin') }}/vendors/js/gallery/masonry/masonry.pkgd.min.js" type="text/javascript"></script>
+    <script src="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe.min.js" type="text/javascript"></script>
+    <script src="{{ asset('admin') }}/vendors/js/gallery/photo-swipe/photoswipe-ui-default.min.js"
+        type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
 
     <!-- BEGIN VENDOR JS-->
-  <!-- BEGIN PAGE VENDOR JS-->
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"
-  type="text/javascript"></script>
-  {{-- <script src="{{ asset('admin') }}/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.responsive.min.js" type="text/javascript">
+    </script>
+    {{-- <script src="{{ asset('admin') }}/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
   <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.colReorder.min.js"
   type="text/javascript"></script> --}}
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js"
-  type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/buttons.bootstrap4.min.js"
-  type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.fixedHeader.min.js"
-  type="text/javascript"></script>
-  <!-- END PAGE VENDOR JS-->
+    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript">
+    </script>
+    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/buttons.bootstrap4.min.js" type="text/javascript">
+    </script>
+    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.fixedHeader.min.js" type="text/javascript">
+    </script>
+    <!-- END PAGE VENDOR JS-->
 
 
     {{-- <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
@@ -210,10 +226,10 @@
     {{-- <script src="{{ asset('admin') }}/js/scripts/pages/dashboard-crypto.js"
         type="text/javascript"></script> --}}
 
-  <!-- BEGIN PAGE LEVEL JS-->
-  <script src="{{ asset('admin') }}/js/scripts/gallery/photo-swipe/photoswipe-script.js"
-  type="text/javascript"></script>
-  <!-- END PAGE LEVEL JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="{{ asset('admin') }}/js/scripts/gallery/photo-swipe/photoswipe-script.js" type="text/javascript">
+    </script>
+    <!-- END PAGE LEVEL JS-->
     <script src="{{ asset('admin') }}/js/scripts/tables/datatables/datatable-basic.js" type="text/javascript"></script>
     <!-- END PAGE LEVEL JS-->
 
@@ -236,8 +252,70 @@
 
 
 
+    <script>
+        var token = "{{ json_encode(['csrfToken' => csrf_token()]) }}";
+        var pusher_key = "{{ env('PUSHER_APP_KEY') }}";
 
-    @yield('admin_notification_in_include_nav')
+
+        window.Laravel = token;
+        // var module = {}; /*   <-----THIS LINE */
+    </script>
+
+
+    <script type="module">
+
+
+        import Echo from '{{ asset('lib/js/echo.js') }}'
+
+        import {
+            Pusher
+        } from '{{ asset('lib/js/pusher.js') }}'
+
+        window.Pusher = Pusher;
+
+        Pusher.logToConsole = true;
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: pusher_key,
+            cluster: 'mt1',
+            forceTLS: true,
+            authEndpoint: '/broadcasting/auth',
+
+        });
+
+        // window.Echo.channel('your-channel')
+        // .listen('your-event-class', (e) => {
+        //         console.log(e)
+        // })
+
+    </script>
+
+
+    {{-- <script>
+
+
+
+
+
+        Pusher.logToConsole = true;
+
+        window.Echo = new Echo({
+
+            broadcaster: 'pusher',
+            key: '2c9bbe2e60d7a5bca5b6',
+            cluster: 'mt1',
+            forceTLS: true,
+            authEndpoint: '/broadcasting/auth',
+
+
+        });
+
+
+
+
+    </script> --}}
+
 
 
 

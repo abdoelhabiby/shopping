@@ -112,7 +112,7 @@
                                                 @if ($product->offer->qty > 0)
                                                     <form action="" method="post" class="formAddToCart">
                                                         @csrf
-                                                        <a class="add-to-cart" href="#"
+                                                        <a class="add-to-cart add-product-to-cart" href="#"
                                                             data-add-cart="{{ route('cart.add', [$product->slug, $product->offer->id]) }}">
                                                             <i class="novicon-cart"></i>
                                                             <span>Add to cart</span>
@@ -310,7 +310,7 @@
                                                     @if ($product->attribute->qty > 0)
                                                         <form action="" method="post" class="formAddToCart">
                                                             @csrf
-                                                            <a class="add-to-cart" href="#"
+                                                            <a class="add-to-cart add-product-to-cart" href="#"
                                                                 data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                                                 <i class="novicon-cart"></i>
                                                                 <span>Add to cart</span>

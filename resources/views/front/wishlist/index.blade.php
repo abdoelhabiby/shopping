@@ -216,7 +216,7 @@
                                                                                 <form action="" method="post"
                                                                                     class="formAddToCart">
                                                                                     @csrf
-                                                                                    <a class="add-to-cart" href="#"
+                                                                                    <a class="add-to-cart add-product-to-cart" href="#"
                                                                                         data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                                                                         <i class="novicon-cart"></i>
                                                                                         <span>Add to cart</span>
@@ -389,36 +389,6 @@
             }
         });
 
-        //------------------ add product to cart--------------------
-
-        $(document).on('click', '.add-to-cart', function(e) {
-            e.preventDefault();
-            var url = $(this).data('add-cart');
-
-            $.ajax({
-                method: 'post',
-                url,
-                success: function(response) {
-
-                    if (response.cart_products_count && parseInt(response.cart_products_count) > 0) {
-                        $(".cart-products-count").text(response.cart_products_count);
-
-                    }
-
-
-                    swal({
-                        title: "{{ __('front.success_add_product') }}",
-                        type: "success",
-                        timer: 2000,
-                    });
-                    //---- fetch get count products to change icon cart add total products count
-                },
-                error: function(error) {
-                    // console.log(error);
-                }
-            });
-
-        });
 
 
         //---------------------------------------------------

@@ -4,12 +4,13 @@ use App\Cart\Cart;
 
 use Carbon\Carbon;
 
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Services\MyfatoorahPaymentService;
-use App\Models\Category;
-use App\Models\Order;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -25,7 +26,14 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 */
 
 
+Route::get('test', function () {
 
+
+dd( env('PUSHER_APP_KEY'));
+
+
+
+});
 
 
 Route::group(

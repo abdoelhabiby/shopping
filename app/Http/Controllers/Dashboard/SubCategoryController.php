@@ -43,9 +43,12 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        $main_categories = Category::select('id')->get();
-        // $main_categories = Category::mainCategory()->select('id')->get();
-        return view($this->view_model . '.create', compact('main_categories'));
+
+        $maincategories =  Category::mainCategory()
+        ->with('subCategories:id,parent_id,slug')
+        ->get();
+
+        return view($this->view_model . '.create', compact('maincategories'));
     }
 
     /**
@@ -115,11 +118,16 @@ class SubCategoryController extends Controller
     public function edit(Category $sub_category)
     {
         $row = $sub_category;
-        //          $main_categories = Category::mainCategory()->select('id')->get();
-        $main_categories = Category::select('id')->get();
+
+       $maincategories =  Category::mainCategory()
+        ->with(['subCategories' => function($q) use($row) {
+            $q->where('id','!=',$row->id)->select(['id','parent_id','slug']);
+        }])
+        ->where('id','!=',$row->id)
+        ->get();
 
 
-        return view($this->view_model . '.edit', compact('row', 'main_categories'));
+        return view($this->view_model . '.edit', compact('row', 'maincategories'));
     }
 
     /**
@@ -132,7 +140,6 @@ class SubCategoryController extends Controller
     public function update(SubCategoryRequest $request, Category $sub_category)
     {
 
-        //return $request->validated();
         try {
 
             DB::beginTransaction();

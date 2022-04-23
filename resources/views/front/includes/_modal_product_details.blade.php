@@ -121,12 +121,12 @@
 
                                 @if ($product->attribute->qty > 0)
                                     <div class="add">
-                                        <button class="btn btn-primary add-to-cart"
+                                        <button class="btn btn-primary add-to-cart add-product-to-cart"
                                             data-add-cart="{{ route('cart.add', [$product->slug, $product->attribute->id]) }}">
                                             <div class="icon-cart">
                                                 <i class="shopping-cart"></i>
                                             </div>
-                                            <span>Add to cart</span>
+                                            <span>{{ __('front.add_to_cart') }}</span>
                                         </button>
                                     </div>
 
@@ -136,13 +136,13 @@
                                     <a class="addToWishlist add_to_wislist"
                                         href="{{ route('mywishlist.store', [$product->slug]) }}">
                                         <i class="fa fa-heart"></i>
-                                        <span>Add to Wishlist</span>
+                                        <span>{{ __('front.add_to_wishlist') }}</span>
                                     </a>
                                 @else
 
                                     <a class="addToWishlist " href="{{ route('login') }}">
                                         <i class="fa fa-heart"></i>
-                                        <span>Add to Wishlist</span>
+                                        <span>{{ __('front.add_to_wishlist') }}</span>
                                     </a>
 
 

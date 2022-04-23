@@ -43,7 +43,7 @@ class HomeIndexRepository implements HomeIndexContract
                     ])->active()->withTranslation();
                 },
                 'images' => function ($query) {
-                    $query->take(2);
+                    $query->orderBy('id','asc')->take(2);
                 },
                 'reviewsRating'
             ])
@@ -87,7 +87,7 @@ class HomeIndexRepository implements HomeIndexContract
                             ])->active()->withTranslation();
                         },
                         'images' => function ($query) {
-                            $query->take(2);
+                            $query->orderBy('id','asc')->take(2);
                         },
                         'reviewsRating'
 
@@ -133,7 +133,7 @@ class HomeIndexRepository implements HomeIndexContract
                             ])->where('is_active', true)->withTranslation();
                         },
                         'images' => function ($query) {
-                            $query->take(2);
+                            $query->orderBy('id','asc')->take(2);
                         },
                         'reviewsRating'
 
@@ -177,7 +177,7 @@ class HomeIndexRepository implements HomeIndexContract
                             ])->where('is_active', true)->withTranslation();
                         },
                         'images' => function ($query) {
-                            $query->take(2);
+                            $query->orderBy('id','asc')->take(2);
                         },
                         'reviewsRating'
 
@@ -203,37 +203,41 @@ class HomeIndexRepository implements HomeIndexContract
 
 
 
-        $ttl = 60 * 60 * 4; //evry 4 hours
+        // $ttl = 60 * 60 * 4; //evry 4 hours
 
         // $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
 
-            $categories = Category::mainCategory()
-                ->whereHas('chields.chields')
-                ->with([
-                    'chields' => function ($query) {
-                        $query->active()->select(['id', 'parent_id', 'slug'])->withTranslation();
-                    },
-                    'chields.chields' => function ($query) {
-                        $query->active()->select(['id', 'parent_id', 'slug'])->whereHas('products.attributes')->withTranslation();
-                    },
+            $main_categories =  Category::mainCategory()
+            ->whereHas('subCategories',function($q){
+                $q->whereHas('categories',function($category){
+                    $category->where('is_active', true)->whereHas('products', function ($q) {
+                        $q->active();
+                    });
+                });
+            })
+            ->with(['subCategories' => function ($query) {
+                $query->whereHas('categories', function ($category) {
+                    $category->where('is_active', true)->whereHas('products', function ($q) {
+                        $q->active();
+                    });
+                })
+                    ->with('categories:id,parent_id,slug')
+                    ->select(['parent_id', 'slug', 'id']);
+            }])
+            ->select(['id', 'parent_id', 'slug'])
+            ->inRandomOrder()
+            ->withTranslation()
+            ->active()
+            ->limit($main_categories_limit)
+            ->get();
 
-                ])
-                ->select(['id', 'parent_id', 'slug'])
-                ->inRandomOrder()
-                ->withTranslation()
-                ->active()
-                ->limit($main_categories_limit)->get();
 
 
-
-
-
-
-            $main_category_with_las_chields_id = $categories->mapWithKeys(function ($main) {
+            $main_category_with_las_chields_id = $main_categories->mapWithKeys(function ($main) {
                 return [
                     $main->slug => [
-                        'chields' =>  $main->chields->map(function ($lastchield) {
-                            return  $lastchield->chields->map(function ($map) {
+                        'categories' =>  $main->subCategories->map(function ($lastchield) {
+                            return  $lastchield->categories->map(function ($map) {
                                 return  $map->id;
                             });
                         })->collapse(), 'category_translations' => $main->translations->pluck('name', 'locale')->toArray()
@@ -247,7 +251,7 @@ class HomeIndexRepository implements HomeIndexContract
             foreach ($main_category_with_las_chields_id as $category => $data) {
 
 
-                $chields_id = $data['chields']->toArray();
+                $chields_id = $data['categories']->toArray(); //ids category has products relation
 
 
                 if ($category && is_array($chields_id) && count($chields_id) > 0) {
@@ -275,7 +279,7 @@ class HomeIndexRepository implements HomeIndexContract
                                 ])->where('is_active', true)->withTranslation();
                             },
                             'images' => function ($query) {
-                                $query->take(2);
+                                $query->orderBy('id','asc')->take(2);
                             },
                             'reviewsRating'
                         ])
@@ -291,7 +295,10 @@ class HomeIndexRepository implements HomeIndexContract
                 }
             }
 
+
             return  $category_products;
+
+
 
         // }); // end cache
 

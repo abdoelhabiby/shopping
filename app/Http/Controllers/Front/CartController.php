@@ -47,6 +47,7 @@ class CartController extends BaseController
     public function store($product_slug, $product_attribute_id)
     {
 
+
         if (!request()->ajax()) {
             return $this->notfound();
         }
@@ -73,7 +74,9 @@ class CartController extends BaseController
             ])
             ->first();
 
+
         if (!$product) {
+
             return $this->notfound();
         }
 
@@ -175,7 +178,7 @@ class CartController extends BaseController
     //-------------------------------------------------------
 
     //---------------------check if session has products-----
-    private function myCart()
+    public function myCart()
     {
         if (session()->has('cart')) {
 

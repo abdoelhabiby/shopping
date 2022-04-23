@@ -1,12 +1,4 @@
-@if (session()->has('success'))
-    <script>
-        swal({
-            title: "{{ session('success') }}",
-            type: "success",
-            timer: 2000,
-        });
-    </script>
-@endif
+
 @if (session()->has('exception_error'))
     <script>
         swal({
@@ -453,10 +445,12 @@
 
     //------------------ add product to cart--------------------
 
-    $(document).on('submit', '#form-add-to-cart', function(e) {
+    $(document).on('submit', '#form-add-to-cart-withQuanitity', function(e) {
+
         e.preventDefault();
         var url = $(this).attr('action');
         var quantity = $(this).find('input[name="quantity"]').val();
+
 
 
 

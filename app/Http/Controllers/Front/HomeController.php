@@ -24,10 +24,6 @@ class HomeController extends BaseController
 
 
         $home_repository = $home_repository_interface;
-
-
-
-
         $products_offer = $home_repository->getProductsOffer(9);
         $new_poducts = $home_repository->getNewProducts(18);
         $best_sellers = $home_repository->getBestSellers(18);

@@ -12,7 +12,7 @@ class BaseController extends Controller
 
     public function __construct()
     {
-        $ttl = 60 * 60 * 24;
+        // $ttl = 60 * 60 * 24;
         // $main_categories_home = Cache::remember('main_categories_views_shared', $ttl, function () {
 
             $main_categories_home =  Category::mainCategory()

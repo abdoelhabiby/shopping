@@ -97,12 +97,23 @@
                                     <p class="card-text">
 
 
-                            <div class="m-4" style="text-align: left;">
-                                <h5>{{ __('front.test_card') }}</h5>
-                                <p> card holder name : test test </p>
-                                <p> card number : 5123 4500 0000 0008 </p>
-                                <p> MM/YY : 05 / 21</p>
-                                <p> CVC: 100</p>
+                            <div class="m-4 row" style="text-align: left;">
+                                <div class="col-6">
+                                    <h5>{{ __('front.test_card') }}</h5>
+                                    <p> card holder name : test test </p>
+                                    <p> card number :  5453010000095539</p>
+                                    <p> MM/YY :  12/25	 </p>
+                                    <p> CVC:  300</p>
+                                </div>
+
+                                <div class="col-6">
+                                    <h5>{{ __('front.test_card') }}</h5>
+                                    <p> card holder name : test test </p>
+                                    <p> card number : 5123 4500 0000 0008 </p>
+                                    <p> MM/YY : 05 / 21 	 </p>
+                                    <p> CVC: 100 </p>
+                                </div>
+
 
 
                             </div>
