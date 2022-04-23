@@ -26,14 +26,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 */
 
 
-Route::get('test', function () {
-
-
-dd( env('PUSHER_APP_KEY'));
-
-
-
-});
 
 
 Route::group(
