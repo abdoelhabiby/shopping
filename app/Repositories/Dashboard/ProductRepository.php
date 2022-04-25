@@ -246,6 +246,7 @@ class ProductRepository extends BaseRepository implements ProductContract
             $product->delete();
             DB::commit();
             return $product;
+
         } catch (\Throwable $th) {
 
             DB::rollback();

@@ -170,7 +170,17 @@ $model_name = 'notifications';
 
 
 
-                    ]
+                    ],
+                    "drawCallback": function(settings) {
+                        // Here the response
+                        var response = settings.json;
+                        var unreadcount = response.unreadcount;
+
+                        $("#show_notification_count").text(unreadcount);
+
+
+
+                    },
                 });
 
 

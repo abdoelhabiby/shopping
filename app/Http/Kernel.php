@@ -80,6 +80,7 @@ class Kernel extends HttpKernel
         'checkAddressDetails' => \App\Http\Middleware\RedirectIfAddressNotExists::class,
 
         'shar_view_dash' =>\App\Http\Middleware\SharInDashboardView::class,
+        'MakeNotifyAsRead' =>\App\Http\Middleware\MakeNotifyAsRead::class,
 
     ];
 }

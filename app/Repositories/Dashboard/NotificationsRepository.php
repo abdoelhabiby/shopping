@@ -44,6 +44,7 @@ class NotificationsRepository  implements NotificationContract
 
         $totalRecords = admin()->notifications()->count();
         $totalRecordwithFilter = $notifications->get()->count();
+        $unreadcount = admin()->unreadNotifications->count();
 
         $data = $notifications->skip($row)
             ->limit($rowperpage)
@@ -57,7 +58,8 @@ class NotificationsRepository  implements NotificationContract
             "draw" => intval($draw),
             "iTotalDisplayRecords" => $totalRecordwithFilter,
             "iTotalRecords" => $totalRecords,
-            "aaData" => $data['data']
+            "aaData" => $data['data'],
+            'unreadcount' => $unreadcount
         );
 
 

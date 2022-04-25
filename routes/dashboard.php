@@ -32,21 +32,22 @@ use App\Http\Resources\Dashboard\AdminNotificationsCollection;
 if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 
-Route::group(['middleware' => ['auth:admin','shar_view_dash']], function () {
+Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
 
 
     // ----------------------test-------------------
 
 
-    Route::get('test',function(){
-        return dd(admin()->unreadNotifications->markAsRead());
+    Route::get('test', function () {
+
+
     });
 
 
     //-------------------------------------------
 
-    Route::get('/','HomeController@index')->name('dashboard.home');
+    Route::get('/', 'HomeController@index')->name('dashboard.home');
 
 
     Route::resources([
@@ -66,11 +67,11 @@ Route::group(['middleware' => ['auth:admin','shar_view_dash']], function () {
 
     // ----------------------admin notifications-------------
 
-    Route::get('notifications','AdminNotificationsController@index')->name('dashboard.notifications.index');
-    Route::get('notifications/fetch','AdminNotificationsController@fetch')->name('dashboard.notifications.fetch');
-    Route::get('notifications/fetch-datatable','AdminNotificationsController@fetchDatatable')->name('dashboard.notifications.fetchDatatable');
-    Route::post('notifications','AdminNotificationsController@makeAllRead')->name('dashboard.notifications.makeAllRead');
-    Route::delete('notifications/{id}','AdminNotificationsController@destroy')->name('dashboard.notifications.delete');
+    Route::get('notifications', 'AdminNotificationsController@index')->name('dashboard.notifications.index');
+    Route::get('notifications/fetch', 'AdminNotificationsController@fetch')->name('dashboard.notifications.fetch');
+    Route::get('notifications/fetch-datatable', 'AdminNotificationsController@fetchDatatable')->name('dashboard.notifications.fetchDatatable');
+    Route::post('notifications', 'AdminNotificationsController@makeAllRead')->name('dashboard.notifications.makeAllRead');
+    Route::delete('notifications/{id}', 'AdminNotificationsController@destroy')->name('dashboard.notifications.delete');
 
     // ---------------------------------------------------
 
@@ -125,7 +126,7 @@ Route::group(['middleware' => ['auth:admin','shar_view_dash']], function () {
         'orders',
         OrderController::class,
         ['as' => 'dashboard', 'except' => ['create', 'store']]
-    );
+    )->middleware('MakeNotifyAsRead:admin');
 
     //----------------------end orders-----------------------
 
