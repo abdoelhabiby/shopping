@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
-use App\Contracts\ProductContract;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\Front\HomeIndexContract;
+use App\Contracts\Dashboard\ProductContract;
 use App\Repositories\Front\HomeIndexRepository;
+use App\Contracts\Dashboard\NotificationContract;
 use App\Repositories\Dashboard\ProductRepository;
+use App\Repositories\Dashboard\NotificationsRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
         ProductContract::class  => ProductRepository::class,
         HomeIndexContract::class  => HomeIndexRepository::class,
+        NotificationContract::class  => NotificationsRepository::class,
     ];
 
 

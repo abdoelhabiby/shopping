@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 class BaseController extends Controller
 {
 
+
     protected function responseJson($error = true, $responseCode = 200, $message = [], $data = null)
     {
         return response()->json([

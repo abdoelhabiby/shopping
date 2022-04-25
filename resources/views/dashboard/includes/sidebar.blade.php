@@ -1,6 +1,6 @@
 {{-- <div class="main-menu menu-fixed menu-light menu-accordion    menu-shadow " data-scroll-to-active="true"> --}}
 
-    <div class="main-menu menu-fixed menu-dark menu-accordion    menu-shadow " data-scroll-to-active="true">
+<div class="main-menu menu-fixed menu-dark menu-accordion    menu-shadow " data-scroll-to-active="true">
 
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
@@ -199,11 +199,11 @@
 
                 @php  $module_name = 'products';  @endphp
 
-            @php
-                $routes = ['product.images.*',$module_name .'.*'] ;
-            @endphp
-                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
-                    :route-name-open="$routes" count="{{ App\Models\Product::count() }}">
+                @php
+                    $routes = ['product.images.*', $module_name . '.*'];
+                @endphp
+                <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false" :route-name-open="$routes"
+                    count="{{ App\Models\Product::count() }}">
                     <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
                     <ul class="menu-content">
                         @if (admin()->can('read_product'))
@@ -234,7 +234,8 @@
                     <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
                     <ul class="menu-content">
                         @if (admin()->can('read_order'))
-                            <x-dashboard.sidbar-item-list name="show all" route-name="dashboard.{{ $module_name }}.index" />
+                            <x-dashboard.sidbar-item-list name="show all"
+                                route-name="dashboard.{{ $module_name }}.index" />
                         @endif
 
                     </ul>
@@ -247,12 +248,29 @@
             {{-- ------end nav orders --------- --}}
 
 
-            {{-- -----start nav item -------- --}}
-            {{-- ------end nav item --------- --}}
-            {{-- -----start nav item -------- --}}
-            {{-- ------end nav item --------- --}}
-            {{-- -----start nav item -------- --}}
-            {{-- ------end nav item --------- --}}
+            {{-- -----start nav item notifications-------- --}}
+
+            @php
+                $module_name = 'notifications';
+                $count = 0;
+                if (isset($navbar['notify_count'])) {
+                    $count = $navbar['notify_count'];
+                }
+
+            @endphp
+
+            <x-dashboard.sidbar-item name="notifications" :one-list="true" route-name-open="dashboard.notifications.index">
+                <x-slot name="icon"> <i class="ficon ft-bell"></i> </x-slot>
+            </x-dashboard.sidbar-item>
+
+
+
+
+
+
+
+            {{-- ------end nav item notifications--------- --}}
+
 
 
 
@@ -262,25 +280,6 @@
             {{-- -----start nav item settings-------- --}}
 
             @if (admin() && admin()->can('read_slider'))
-
-
-
-            {{-- @php  $module_name = 'orders';  @endphp
-
-            <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
-                route-name-open="dashboard.{{ $module_name }}.*" count="{{ App\Models\Product::count() }}">
-                <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
-                <ul class="menu-content">
-                    @if (admin()->can('read_order'))
-                        <x-dashboard.sidbar-item-list name="show all" route-name="dashboard.{{ $module_name }}.index" />
-                    @endif
-
-                </ul>
-
-            </x-dashboard.sidbar-item> --}}
-
-
-
                 <li class="nav-item @if (request()->routeIs('admin.homepage_slider.index')) active open @endif">
 
                     @php

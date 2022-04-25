@@ -181,7 +181,7 @@ class CheckOrdersPending extends Command
                 'status' =>  'refused',
                 'return_quantity' => 1,
                 'refused_reason' => 'This invoice has expired',
-                // 'note' => 'back products count equal ' . $products_returned_quantity
+                // 'note' => ''
             ]);
         }
     }

@@ -33,7 +33,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->with('user');
+        return $model->with('user')->orderBy('created_at','desc');
     }
 
     /**

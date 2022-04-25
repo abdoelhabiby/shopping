@@ -263,8 +263,6 @@
 
 
     <script type="module">
-
-
         import Echo from '{{ asset('lib/js/echo.js') }}'
 
         import {
@@ -275,48 +273,25 @@
 
         Pusher.logToConsole = true;
 
+
+
+
         window.Echo = new Echo({
             broadcaster: 'pusher',
-            key: pusher_key,
-            cluster: 'mt1',
-            forceTLS: true,
-            authEndpoint: '/broadcasting/auth',
-
+            key: 'websocketKey',
+            wsHost: window.location.hostname,
+            wsPort: 6001,
+            forceTLS: false,
+            disableStats: true,
         });
 
-        // window.Echo.channel('your-channel')
-        // .listen('your-event-class', (e) => {
-        //         console.log(e)
-        // })
+
+
+
 
     </script>
 
-
-    {{-- <script>
-
-
-
-
-
-        Pusher.logToConsole = true;
-
-        window.Echo = new Echo({
-
-            broadcaster: 'pusher',
-            key: '2c9bbe2e60d7a5bca5b6',
-            cluster: 'mt1',
-            forceTLS: true,
-            authEndpoint: '/broadcasting/auth',
-
-
-        });
-
-
-
-
-    </script> --}}
-
-
+    @yield('admin_notification_in_include_nav')
 
 
     @stack('scripts')

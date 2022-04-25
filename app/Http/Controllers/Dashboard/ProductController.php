@@ -7,10 +7,10 @@ use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Contracts\ProductContract;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Traits\AjaxResponseTrait;
+use App\Contracts\Dashboard\ProductContract;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Http\Controllers\Dashboard\BaseController;
 use App\Http\Resources\Dahboard\ProdctsCollection;
@@ -178,37 +178,15 @@ class ProductController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($product)
+    public function destroy($id)
     {
-        try {
-            $product = Product::find($product);
 
-            if (!$product) {
-                return $this->responseJson(true, 404, ['not found']);
-            }
-
-
-            if ($this->product_repository->deleteProduct($product->id)) {
-                DB::commit();
-
+            if ($this->product_repository->deleteProduct($id)) {
                 return $this->responseJson(false, 200, ['success delete product']);
-
-                // return redirect()->route($this->model . '.index')->with(['success' => "success delete"]);
             }
 
-            // return $this->redirectBackError();
-
-
-
-            return $this->responseJson(true, 404, ['not found']);
-        } catch (\Throwable $th) {
-
-            DB::rollback();
-            Log::alert($th);
             return $this->responseJson(true, 404, ['not found']);
 
-            // return catchErro($this->model . '.index', $th);
-        }
     }
 
     // -----------------------------------------

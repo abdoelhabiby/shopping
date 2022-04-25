@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserCollection;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Resources\ProductImagesCollection;
 use App\Http\Resources\Dahboard\ProdctsCollection;
+use App\Events\Dashboard\NotificationNewOrderEvenet;
+use App\Http\Resources\Dashboard\AdminNotificationsCollection;
 
 /*
 
@@ -28,23 +32,21 @@ use App\Http\Resources\Dahboard\ProdctsCollection;
 if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 
-Route::group(['middleware' => 'auth:admin'], function () {
+Route::group(['middleware' => ['auth:admin','shar_view_dash']], function () {
 
 
 
     // ----------------------test-------------------
 
 
+    Route::get('test',function(){
+        return dd(admin()->unreadNotifications->markAsRead());
+    });
+
 
     //-------------------------------------------
 
-    Route::get('/', function () {
-
-
-
-
-        return view('dashboard.home');
-    })->name('dashboard.home');
+    Route::get('/','HomeController@index')->name('dashboard.home');
 
 
     Route::resources([
@@ -59,6 +61,19 @@ Route::group(['middleware' => 'auth:admin'], function () {
     ], [
         'except' => 'show'
     ]);
+
+
+
+    // ----------------------admin notifications-------------
+
+    Route::get('notifications','AdminNotificationsController@index')->name('dashboard.notifications.index');
+    Route::get('notifications/fetch','AdminNotificationsController@fetch')->name('dashboard.notifications.fetch');
+    Route::get('notifications/fetch-datatable','AdminNotificationsController@fetchDatatable')->name('dashboard.notifications.fetchDatatable');
+    Route::post('notifications','AdminNotificationsController@makeAllRead')->name('dashboard.notifications.makeAllRead');
+    Route::delete('notifications/{id}','AdminNotificationsController@destroy')->name('dashboard.notifications.delete');
+
+    // ---------------------------------------------------
+
 
     // -----------------------fetch datatable ajax----------------
 

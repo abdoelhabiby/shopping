@@ -61,7 +61,7 @@ class MyfatoorahPaymentService
 
         //-------expire date---------------------------------
         $tz = 'Asia/Kuwait';
-        $timestamp = time() + 60 * 15; // expire after 15 minut from now
+        $timestamp = time() + 60 * 10; // expire after 10 minut from now
         $dt = new DateTime('now', new DateTimeZone($tz)); //first argument "must" be a string
         $dt->setTimestamp($timestamp); //adjust the object to correct timestamp
         $expiry_date =  $dt->format('Y-m-d\TH:i:s');

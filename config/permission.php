@@ -165,4 +165,45 @@ return [
 
         'store' => 'default',
     ],
+
+
+
+
+    'roles_permissions_admin' => [
+        'admin' => [
+            'create_admin', 'read_admin', 'update_admin', 'delete_admin'
+        ],
+        'user' => [
+            'create_user', 'read_user', 'update_user', 'delete_user'
+        ],
+        'category' => [
+            'create_category', 'read_category', 'update_category', 'delete_category'
+        ],
+        'product' => [
+            'create_product', 'read_product', 'update_product', 'delete_product'
+        ],
+        'brand' => [
+            'create_brand', 'read_brand', 'update_brand', 'delete_brand'
+        ],
+        'tag' => [
+            'create_tag', 'read_tag', 'update_tag', 'delete_tag'
+        ],
+        'slider' => [
+            'create_slider', 'read_slider', 'update_slider', 'delete_slider'
+        ],
+        'order' => [
+            'create_order', 'read_order', 'update_order', 'delete_order'
+        ],
+        'wishlist' => [
+            'create_wishlist', 'read_wishlist', 'update_wishlist', 'delete_wishlist'
+        ],
+         'notifications' => [
+            'receive_new_orders'
+        ],
+
+    ],
+
+    //-------------------------------------------
+
+
 ];

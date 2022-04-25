@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Resources\Dahboard;
+namespace App\Http\Resources\Dashboard;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProdctsCollection extends JsonResource
 {

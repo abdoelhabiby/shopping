@@ -120,6 +120,7 @@ $model_name = 'products';
         var checkPermissionCreate = "{{ admin()->can('create_product') }}";
 
 
+
         var table = $('#tableProducts').DataTable({
             'responsive': true,
             'processing': true,
@@ -151,7 +152,7 @@ $model_name = 'products';
                 'pageLength',
                 {
                     text: 'create <i class="la la-plus" style="font-size: 13px;"></i>',
-                    enabled: checkPermissionCreate ?? false,
+                    enabled: checkPermissionCreate ? true : false,
                     action: function(e, dt, node, config) {
                         window.location = urlcreate;
                     }
@@ -295,42 +296,4 @@ $model_name = 'products';
 
 
 
-    <script>
-        //-------------------------------------------------
-
-        $("#select-serach-type").on('change', function() {
-            $(this).attr('name', $(this).val());
-        });
-
-
-        //-------------------form submit search------------------
-
-        $("#form-search").submit(function(e) {
-
-            e.preventDefault();
-
-            var type_search = $("#select-serach-type").val();
-            var search = $(this).find('input[name="search"]').val();
-            var url = $(this).attr('action') + "?" + type_search + "=" + search;
-
-            window.location = url;
-
-        })
-
-
-
-        //-------------------------------------------------
-
-        $(".printMe").click(function() {
-
-            $('.tabel-print').printThis({
-                importCSS: true,
-                importStyle: true,
-                loadCSS: "{{ asset('css/print-this-style.css') }}",
-                printDelay: 333, // variable print delay
-                header: "<h4>Products</h4>", // prefix to html
-                footer: null,
-            });
-        });
-    </script>
 @stop

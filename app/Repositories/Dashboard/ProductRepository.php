@@ -3,11 +3,13 @@
 namespace App\Repositories\Dashboard;
 
 use App\Models\Product;
-use App\Contracts\ProductContract;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Resources\Dahboard\ProdctsCollection;
+use App\Contracts\Dashboard\ProductContract;
+use App\Http\Resources\Dashboard\ProdctsCollection;
 
 class ProductRepository extends BaseRepository implements ProductContract
 {
@@ -23,7 +25,7 @@ class ProductRepository extends BaseRepository implements ProductContract
     }
 
 
-        /**
+    /**
      * fetch with datatable
      *
      * @return mixed
@@ -33,79 +35,77 @@ class ProductRepository extends BaseRepository implements ProductContract
     {
 
 
-            $draw = request()->draw;
-            $row = request()->start;
-            $rowperpage = request()->length; // Rows display per page
-            $columnIndex = isset(request()->order[0]['column']) ? request()->order[0]['column'] : 0; // Column index
-            $columnName = isset(request()->columns[$columnIndex]['data']) ? request()->columns[$columnIndex]['data'] : 'id' ; // Column name
-            $columnSortOrder = isset(request()->order[0]['dir']) ? request()->order[0]['dir'] : 'desc'; // asc or desc
-            $search = isset(request()->search['value']) ? request()->search['value'] : null; // Search value
+        $draw = request()->draw;
+        $row = request()->start;
+        $rowperpage = request()->length; // Rows display per page
+        $columnIndex = isset(request()->order[0]['column']) ? request()->order[0]['column'] : 0; // Column index
+        $columnName = isset(request()->columns[$columnIndex]['data']) ? request()->columns[$columnIndex]['data'] : 'id'; // Column name
+        $columnSortOrder = isset(request()->order[0]['dir']) ? request()->order[0]['dir'] : 'desc'; // asc or desc
+        $search = isset(request()->search['value']) ? request()->search['value'] : null; // Search value
 
-            $orderBy_translations = ['name', 'description'];
+        $orderBy_translations = ['name', 'description'];
 
-            $products =  Product::leftJoin('product_attributes', 'products.id', '=', 'product_attributes.product_id')
-                ->selectRaw('products.*, IFNULL(SUM(product_attributes.qty),0) AS `quantity`')
-                ->when($search, function ($query, $search) {
+        $products =  Product::leftJoin('product_attributes', 'products.id', '=', 'product_attributes.product_id')
+            ->selectRaw('products.*, IFNULL(SUM(product_attributes.qty),0) AS `quantity`')
+            ->when($search, function ($query, $search) {
 
-                    return $query
+                return $query
 
-                        ->whereTranslationLike('name', '%' . $search . '%')
-                        ->orWhere('products.sku', 'like', '%' . $search . '%')
-                        ->orWhere('products.slug', 'like', '%' . $search . '%')
-                        ->orWhereRaw("(CASE WHEN products.is_active = 1 THEN 'active' ELSE 'deactive' END) like '$search%'")
-                        ->orWhereHas('categories', function ($query) use ($search) {
-                            return $query->whereTranslationLike('name', '%' . $search . '%')
-                                ->orWhere('slug', 'like', '%' . $search . '%');
-                        })
-                        ->orWhereHas('brand', function ($query) use ($search) {
-                            return $query->whereTranslationLike('name', '%' . $search . '%')
-                                ->orWhere('slug', 'like', '%' . $search . '%');
-                        })
-                        ->orWhereHas('tags', function ($query) use ($search) {
-                            return $query->whereTranslationLike('name', '%' . $search . '%')
-                                ->orWhere('slug', 'like', '%' . $search . '%');
-                        })
-                        // ->orWhere(function ($query) use($search){
-                        //     $query->select(DB::raw('IFNULL(SUM(qty), 0) as quantity'))
-                        //         ->from('product_attributes')
-                        //         ->whereColumn('product_attributes.product_id', 'products.id')
-                        //         ->limit(1)
-                        //         ;
-                        // }, $search)
-                        ;
-                })
+                    ->whereTranslationLike('name', '%' . $search . '%')
+                    ->orWhere('products.sku', 'like', '%' . $search . '%')
+                    ->orWhere('products.slug', 'like', '%' . $search . '%')
+                    ->orWhereRaw("(CASE WHEN products.is_active = 1 THEN 'active' ELSE 'deactive' END) like '$search%'")
+                    ->orWhereHas('categories', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('brand', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('tags', function ($query) use ($search) {
+                        return $query->whereTranslationLike('name', '%' . $search . '%')
+                            ->orWhere('slug', 'like', '%' . $search . '%');
+                    })
+                    // ->orWhere(function ($query) use($search){
+                    //     $query->select(DB::raw('IFNULL(SUM(qty), 0) as quantity'))
+                    //         ->from('product_attributes')
+                    //         ->whereColumn('product_attributes.product_id', 'products.id')
+                    //         ->limit(1)
+                    //         ;
+                    // }, $search)
+                ;
+            })
 
-                ->when(in_array($columnName, $orderBy_translations), function ($query) use ($columnName, $columnSortOrder) {
-                    return $query->orderByTranslation($columnName, $columnSortOrder);
-                }, function ($query) use ($columnName, $columnSortOrder) {
-                    return $query->orderBy($columnName, $columnSortOrder);
-                })
-
-
-                ->groupBy('products.id');
+            ->when(in_array($columnName, $orderBy_translations), function ($query) use ($columnName, $columnSortOrder) {
+                return $query->orderByTranslation($columnName, $columnSortOrder);
+            }, function ($query) use ($columnName, $columnSortOrder) {
+                return $query->orderBy($columnName, $columnSortOrder);
+            })
 
 
-
-            $totalRecords = Product::count();
-            $totalRecordwithFilter = $products->get()->count();
-
-            $data = $products->skip($row)
-                ->limit($rowperpage)
-                ->get();
-
-            $data =  ProdctsCollection::collection($data)->response()->getData(true);
-            $response = array(
-                'row' => $row,
-                "draw" => intval($draw),
-                "iTotalDisplayRecords" => $totalRecordwithFilter,
-                "iTotalRecords" => $totalRecords,
-                "aaData" => $data['data']
-            );
+            ->groupBy('products.id');
 
 
-            return json_encode($response);
+
+        $totalRecords = Product::count();
+        $totalRecordwithFilter = $products->get()->count();
+
+        $data = $products->skip($row)
+            ->limit($rowperpage)
+            ->get();
+
+        $data =  ProdctsCollection::collection($data)->response()->getData(true);
+        $response = array(
+            'row' => $row,
+            "draw" => intval($draw),
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "iTotalRecords" => $totalRecords,
+            "aaData" => $data['data']
+        );
 
 
+        return json_encode($response);
     }
 
 
@@ -233,11 +233,25 @@ class ProductRepository extends BaseRepository implements ProductContract
      */
     public function deleteProduct($id)
     {
-        $product = $this->findProductById($id);
-        $product->images()->delete();
-        File::deleteDirectory(public_path('images/products/' . $product->id));
-        $product->delete();
-        return $product;
+
+
+        try {
+            DB::beginTransaction();
+
+
+            $product = $this->findProductById($id);
+
+            $product->images()->delete();
+            File::deleteDirectory(public_path('images/products/' . $product->id));
+            $product->delete();
+            DB::commit();
+            return $product;
+        } catch (\Throwable $th) {
+
+            DB::rollback();
+            Log::alert($th);
+            return false;
+        }
     }
 
     /**
