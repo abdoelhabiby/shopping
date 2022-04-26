@@ -29,6 +29,7 @@ class AdminNotificationsController extends BaseController
 
     public function index()
     {
+
         return view('dashboard.admins.notifications.index');
     }
 
@@ -46,33 +47,39 @@ class AdminNotificationsController extends BaseController
     {
 
         $collection = $this->notification_repository->fetch();
-        return $this->responseJson(false, 200, [],$collection);
-
+        return $this->responseJson(false, 200, [], $collection);
     }
+
+    // -----------------------------------------
+    public function makeAsRead($id)
+    {
+
+
+
+        if ($this->notification_repository->makeNotificationsAsRead($id)) {
+
+            return $this->responseJson(false, 200, ['success update']);
+        }
+
+        return $this->responseJson(true, 400, ['some thing wrong..']);
+    }
+    // -----------------------------------------
 
     // -----------------------------------------
     public function makeAllRead()
     {
 
-        try {
-
-            if($this->notification_repository->makeAllNotificationsAsRead()){
-                return $this->responseJson(false, 200, ['success update']);
-            }
-
-            return $this->responseJson(true, 404, ['not found']);
 
 
-        } catch (\Throwable $th) {
-
-            Log::alert($th);
-            return $this->responseJson(true, 404, ['not found']);
-
+        if ($this->notification_repository->makeAllNotificationsAsRead()) {
+            return $this->responseJson(false, 200, ['success update']);
         }
+
+        return $this->responseJson(true, 400, ['some thing wrong..']);
     }
     // -----------------------------------------
 
-        /**
+    /**
      * Remove the specified product from storage.
      *
      * @param  int  $id
@@ -88,8 +95,6 @@ class AdminNotificationsController extends BaseController
         }
 
         return $this->responseJson(true, 404, ['not found']);
-
-
     }
     // -----------------------------------------
     // -----------------------------------------

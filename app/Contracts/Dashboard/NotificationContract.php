@@ -20,23 +20,32 @@ interface NotificationContract
 
     /**
      * fetch with datatable
-     *
+     * @param int $limit
      * @return mixed
      */
     public function fetch($limit = 6);
     // -------------------------------
+    /**
+     *
+     * @return bool
+     */
     public function makeAllNotificationsAsRead();
 
     // -------------------------------
+    /**
+     * @param  $id
+     * @return  bool
+     */
+    public function makeNotificationsAsRead($id);
 
     /**
      * @param int $id
      * @return mixed
      */
-    public function findNotificationById( $id);
+    public function findNotificationById($id);
     /**
      * @param int $id
      *
      */
-    public function deleteNotification( $id);
+    public function deleteNotification($id);
 }

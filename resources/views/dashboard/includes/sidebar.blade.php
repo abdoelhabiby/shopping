@@ -230,7 +230,7 @@
                 @php  $module_name = 'orders';  @endphp
 
                 <x-dashboard.sidbar-item name="{{ $module_name }}" :one-list="false"
-                    route-name-open="dashboard.{{ $module_name }}.*" count="{{ App\Models\Product::count() }}">
+                    route-name-open="dashboard.{{ $module_name }}.*" count="{{ App\Models\Order::count() }}">
                     <x-slot name="icon"> <i class="las la-tshirt"></i> </x-slot>
                     <ul class="menu-content">
                         @if (admin()->can('read_order'))

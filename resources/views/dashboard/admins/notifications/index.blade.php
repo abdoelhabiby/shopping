@@ -64,6 +64,7 @@ $model_name = 'notifications';
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
+
                                         <table class="table table-striped table-bordered" id="tableNotifications">
                                             {{-- <table class="table table-striped table-bordered dataex-html5-export" id="tableProducts"> --}}
                                             <thead>
@@ -92,211 +93,309 @@ $model_name = 'notifications';
 
 
         </div>
+    </div>
 
 
 
-    @endsection
+@endsection
 
 
 
 
-    @section('js')
+@section('js')
 
-        {{-- ttttttsssss --}}
-
-
-        <script>
-            $(function() {
+    {{-- ttttttsssss --}}
 
 
-                var urlftech = "{{ route('dashboard.notifications.fetchDatatable') }}";
-                var token = "{{ csrf_token() }}";
-
-                var check_coun_unread = "{{ isset($navbar['notify_count']) ? $navbar['notify_count'] : 0 }}"
+    <script>
+        $(function() {
 
 
 
-                var table = $('#tableNotifications').DataTable({
-                    'responsive': true,
-                    'processing': true,
-                    'serverSide': true,
-                    "bServerSide": true,
-                    searching: false,
-                    ordering: false,
-                    'serverMethod': 'get',
-                    'ajax': {
-                        'url': urlftech
+
+
+
+            var urlftech = "{{ route('dashboard.notifications.fetchDatatable') }}";
+            var token = "{{ csrf_token() }}";
+
+            var table = $('#tableNotifications').DataTable({
+                'responsive': true,
+                'processing': true,
+                'serverSide': true,
+                "bServerSide": true,
+                searching: false,
+                ordering: false,
+                'serverMethod': 'get',
+                'ajax': {
+                    'url': urlftech
+                },
+                dom: 'Bfrtip',
+
+                buttons: [
+
+                    'pageLength',
+
+                    {
+                        text: "<span>Refresh</span>",
+                        className: 'btn btn-info ml-1',
+                        action: function(e, dt, node, config) {
+                            dt.ajax.reload(null, false);
+                        }
                     },
-                    dom: 'Bfrtip',
+                    {
+                        text: 'make all read',
+                        className: 'makeAllRead ml-1 btn btn-primary',
+                    },
 
-                    buttons: [
+                ],
+                'columns': [{
+                        data: 'title',
+                        orderable: false,
+                    },
+                    {
+                        data: 'message',
+                        orderable: false,
 
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created at'
+                    },
+                    {
+                        data: 'read_at',
+                        name: 'read at',
+                        render: function(data, type, row) {
 
-                        'pageLength',
-                        {
-                            text: '<span id="makeAllRead">make all read</span>',
-                            enabled: check_coun_unread > 0 ? true : false,
+                            if (row.read_at == null) {
+                                return `<button type="button" data-rwo-id="${row.id}" class="btn btn-info btn-sm round btn-min-width mr-1 mb-1 makeAsRead">make read</button>`;
+                            }
+
+                            return row.read_at;
 
                         }
-
-                    ],
-                    'columns': [{
-                            data: 'title',
-                            orderable: false,
-                        },
-                        {
-                            data: 'message',
-                            orderable: false,
-
-                        },
-                        {
-                            data: 'created_at',
-                            name: 'created at'
-                        },
-                        {
-                            data: 'read_at',
-                            name: 'read at'
-                        },
-                        {
-                            data: null,
-                            orderable: false,
-                            searchable: false,
-                            render: function(data, type, row) {
-                                var id = row.id;
-                                var show_url = row.url;
-                                return actionButtons(id, show_url);
-                            }
-                        },
-
-
-
-                    ],
-                    "drawCallback": function(settings) {
-                        // Here the response
-                        var response = settings.json;
-                        var unreadcount = response.unreadcount;
-
-                        $("#show_notification_count").text(unreadcount);
-
-
-
                     },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row) {
+                            var id = row.id;
+                            var show_url = row.url;
+                            return actionButtons(id, show_url);
+                        }
+                    },
+
+
+
+                ],
+                "drawCallback": function(settings) {
+                    // Here the response
+                    var response = settings.json;
+                    var unreadcount = response.unreadcount;
+
+                    $("#show_notification_count").text(unreadcount);
+
+                    if (!unreadcount > 0) {
+                        table.buttons('.makeAllRead').disable()
+                    }
+
+
+                },
+            });
+
+
+            $(document).on('click', '#delete_row', function(e) {
+                e.preventDefault();
+                var row = $(this);
+                var row_id = row.data('id');
+
+                swal({
+                    title: "{{ __('front.are_you_sure') }}",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6B6F82',
+                    cancelButtonText: "{{ __('front.cancel') }}",
+                    confirmButtonText: "{{ __('front.yes_delete') }}"
+                }).then(function(result) {
+
+                    if (result.value == true) {
+
+                        var url_delete =
+                            '{{ route('dashboard.notifications.delete', ':id') }}';
+                        url_delete = url_delete.replace(':id', row_id);
+
+                        $.ajax({
+                            url: url_delete,
+                            method: 'delete',
+                            data: {
+                                _token: token,
+                            },
+
+                            success: function(response) {
+
+                                if (response.error == false) {
+
+                                    table.row(row.parents('tr')).remove().draw();
+
+                                    swal({
+                                        title: response.message[0],
+                                        type: "success",
+                                        timer: 2000,
+                                        position: 'top-end',
+                                        toast: true,
+
+                                    });
+
+
+
+                                } else {
+
+                                    var message = response.message[0];
+
+                                    swal({
+                                        title: message ? message : 'not found',
+                                        type: "error",
+                                        timer: 2000,
+                                        position: 'top-end',
+                                        toast: true,
+                                    });
+                                }
+                            },
+
+                        })
+                    } // endif
                 });
 
 
-                $(document).on('click', '#delete_row', function(e) {
-                    e.preventDefault();
-                    var row = $(this);
-                    var id = row.data('id');
-
-                    swal({
-                        title: "{{ __('front.are_you_sure') }}",
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6B6F82',
-                        cancelButtonText: "{{ __('front.cancel') }}",
-                        confirmButtonText: "{{ __('front.yes_delete') }}"
-                    }).then(function(result) {
-
-                        if (result.value == true) {
-
-                            var url = "{{ route('dashboard.notifications.index') }}/" + id;
-
-                            $.ajax({
-                                url: url,
-                                method: 'delete',
-                                data: {
-                                    _token: token,
-                                },
-
-                                success: function(response) {
-
-                                    if (response.error == false) {
-
-                                        table.row(row.parents('tr')).remove().draw();
-
-                                        swal({
-                                            title: response.message[0],
-                                            type: "success",
-                                            timer: 2000,
-                                        });
-
-                                    } else {
-
-                                        swal({
-                                            title: '404 not found',
-                                            type: "error",
-                                            timer: 2000,
-                                        });
-
-                                    }
-                                },
-
-                            })
-                        } // endif
-                    });
+            });
 
 
-                });
+            function actionButtons(id, show_url) {
 
 
-                function actionButtons(id, show_url) {
+                button_delete =
+                    `<i class="la la-trash text-danger" id="delete_row" data-id="${id}" style="cursor: pointer;"></i>`;
+                button_show = `<a href="${show_url}"> <i class="la la-eye "></i></a>`;
 
+                return `${button_show} ${button_delete}`;
 
-                    button_delete =
-                        `<i class="la la-trash text-danger" id="delete_row" data-id="${id}" style="cursor: pointer;"></i>`;
-                    button_show = `<a href="${show_url}"> <i class="la la-eye "></i></a>`;
-
-                    return `${button_show} ${button_delete}`;
-
-                }
+            }
 
 
 
-                $(document).on('click', '#makeAllRead', function(e) {
+            $(document).on('click', '.makeAsRead', function(e) {
 
-                    var url_read = "{{ route('dashboard.notifications.makeAllRead') }}";
+                var row_id = $(this).data('rwo-id');
+                var url_make_read = "{{ route('dashboard.notifications.makeAsRead', ':id') }}";
+                url_make_read = url_make_read.replace(':id', row_id);
 
-                    $.ajax({
-                        url: url_read,
-                        method: 'post',
-                        data: {
-                            _token: token,
-                        },
+                $.ajax({
+                    url: url_make_read,
+                    method: 'post',
+                    data: {
+                        _token: token,
+                    },
 
-                        success: function(response) {
+                    success: function(response) {
 
-                            if (response.error == false) {
+                        if (response.error == false) {
 
-                                table.ajax.reload();
-
-                                swal({
-                                    title: response.message[0],
-                                    type: "success",
-                                    timer: 2000,
-                                });
-
-                            } else {
-
-                                swal({
-                                    title: '404 not found',
-                                    type: "error",
-                                    timer: 2000,
-                                });
-
-                            }
-                        },
-
-                    })
-
-
-                });
-            })
-        </script>
+                            table.ajax.reload();
 
 
 
-        {{-- ------------------------ --}}
 
-    @stop
+                            swal({
+
+                                title: 'success',
+                                text: response.message[0] ? response.message[0] :
+                                    'success',
+                                type: "success",
+
+                                timer: 2000,
+                                position: 'top-end',
+                                toast: true,
+                            });
+
+
+                        } else {
+
+                            var message = response.message[0];
+
+                            swal({
+
+                                title: 'error',
+                                text: message ? message : 'not found',
+                                type: "error",
+                                timer: 2000,
+                                position: 'top-end',
+                                toast: true,
+
+
+                            });
+
+                        }
+                    },
+
+                })
+
+
+            });
+
+            $(document).on('click', '.makeAllRead', function(e) {
+
+                var url_read = "{{ route('dashboard.notifications.makeAllRead') }}";
+
+
+                $.ajax({
+                    url: url_read,
+                    method: 'post',
+                    data: {
+                        _token: token,
+                    },
+
+                    success: function(response) {
+
+                        if (response.error == false) {
+
+                            table.ajax.reload();
+
+                            swal({
+                                title: response.message[0],
+                                type: "success",
+                                timer: 2000,
+                                position: 'top-end',
+                                toast: true,
+
+                            });
+
+                        } else {
+
+                            var message = response.message[0];
+
+                            swal({
+                                title: message ? message : 'not found',
+                                type: "error",
+                                timer: 2000,
+                                position: 'top-end',
+                                toast: true,
+                            });
+
+                        }
+                    },
+
+                })
+
+
+            });
+
+
+        })
+    </script>
+
+
+
+    {{-- ------------------------ --}}
+
+@stop

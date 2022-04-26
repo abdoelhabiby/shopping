@@ -12,10 +12,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Services\StripePaymentService;
+use App\Http\Services\AdminNotificationService;
 
 trait StripeTrait
 {
 
+
+    protected function paymentWithSrtipeInit()
+    {
+
+
+        try {
+
+           $data = StripePaymentService::init();
+           return view('front.checkout.stripe', compact('data'));
+
+
+        } catch (\Throwable $th) {
+
+            Log::alert($th);
+            return redirect()->back()->with(['error' => __('front.exception_error')]);
+        }
+    }
+
+
+    // --------------------------
 
     public function chargeStripe(Request $request)
     {
@@ -54,6 +75,9 @@ trait StripeTrait
                 'status' => $charge['status'] == 'succeeded' ? 'paid' : 'pending',
                 'payment_method' => $charge['payment_method'],
             ]);
+
+           AdminNotificationService::notificationNewOrder($order);
+
 
             //forget the session
             $cart->resetCart();

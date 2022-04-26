@@ -6,10 +6,11 @@ use DateTime;
 use DateTimeZone;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use App\Http\Services\AdminNotificationService;
 use App\Http\Services\MyfatoorahPaymentService;
-use App\Models\Product;
 
 class CheckOrdersPending extends Command
 {
@@ -137,6 +138,9 @@ class CheckOrdersPending extends Command
             'status' =>  'paid',
             'note' => 'updated to paid after check '
         ]);
+
+        AdminNotificationService::notificationNewOrder($order);
+
     }
     // --------------------------------------------
 

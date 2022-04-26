@@ -48,9 +48,10 @@ class NotificationNewOrderEvenet implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $unread_count = (int) admin()->unreadNotifications()->count() + 1;
+
         return [
             'notification' => 'new order notify',
-            'notifications_unread_count' => admin()->unreadNotifications()->count()
         ];
     }
 

@@ -92,9 +92,10 @@ $model_name = 'products';
 
                 {{-- ------------------------------------------- --}}
 
+            </div>
+
+
         </div>
-
-
     </div>
 
 
@@ -133,21 +134,29 @@ $model_name = 'products';
             dom: 'Bfrtip',
             buttons: [
 
-                  {
+                {
                     extend: 'print',
-                    exportOptions: { columns: "thead th:not(.noExport)" }
+                    exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }
                 },
                 {
                     extend: 'excelHtml5',
-                    exportOptions: { columns: "thead th:not(.noExport)" }
+                    exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }
                 },
                 {
                     extend: 'csvHtml5',
-                    exportOptions: { columns: "thead th:not(.noExport)" }
+                    exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }
                 },
                 {
                     extend: 'pdfHtml5',
-                    exportOptions: {  columns: "thead th:not(.noExport)"}
+                    exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }
                 },
                 'pageLength',
                 {
@@ -160,19 +169,33 @@ $model_name = 'products';
                 }
 
             ],
-            'columns': [
-                { data: 'name',  },
-                { data: 'sku'  },
-                { data: 'quantity'  },
-                { data: 'is_active',  name: 'active'},
-                { data: 'slug'},
-                { data: 'created_at',name:'created at'},
+            'columns': [{
+                    data: 'name',
+                },
+                {
+                    data: 'sku'
+                },
+                {
+                    data: 'quantity'
+                },
+                {
+                    data: 'is_active',
+                    name: 'active'
+                },
+                {
+                    data: 'slug'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created at'
+                },
                 {
                     data: null,
                     orderable: false,
                     searchable: false,
                     render: function(data, type, row) {
-                        var row_td = ` <a href="${row.link_attributes}" class="btn btn-outline-info btn-sm">  Attributes </a>`;
+                        var row_td =
+                            ` <a href="${row.link_attributes}" class="btn btn-outline-info btn-sm">  Attributes </a>`;
                         return row_td;
                     }
                 },

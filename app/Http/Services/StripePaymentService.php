@@ -50,7 +50,7 @@ class StripePaymentService
             'total_price' => $total_price
         ];
 
-        return view('front.checkout.stripe', compact('data'));
+        return $data;
     }
 
     // ----------------------------------------

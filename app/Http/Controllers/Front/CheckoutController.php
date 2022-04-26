@@ -15,6 +15,7 @@ use App\Http\Traits\MyfatoorahTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Services\StripePaymentService;
 use App\Http\Controllers\Front\BaseController;
+use App\Http\Services\AdminNotificationService;
 
 
 class CheckoutController extends BaseController
@@ -71,7 +72,7 @@ class CheckoutController extends BaseController
         switch ($gateway) {
             case 'stripe': {
 
-                    return StripePaymentService::init();
+                    return $this->paymentWithSrtipeInit();
                 }
                 break;
 
@@ -84,10 +85,6 @@ class CheckoutController extends BaseController
                 return redirect()->route('front.home');
         }
     }
-
-
-
-
 
     //------------------------------------------------
 
@@ -159,18 +156,6 @@ class CheckoutController extends BaseController
 
         return $order;
     }
-
-    //------------------------------------------------
-
-    //------------------------------------------------
-    //------------------------------------------------
-
-
-
-
-    //------------------------------------------------
-
-
 
 
 

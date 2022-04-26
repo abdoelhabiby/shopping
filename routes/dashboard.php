@@ -2,6 +2,7 @@
 
 use App\Cart\Cart;
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
@@ -11,13 +12,17 @@ use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserCollection;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\ProductImagesCollection;
+use App\Http\Services\AdminNotificationService;
 use App\Http\Resources\Dahboard\ProdctsCollection;
 use App\Events\Dashboard\NotificationNewOrderEvenet;
+use App\Notifications\Dashboard\AdminNewOrderNotification;
 use App\Http\Resources\Dashboard\AdminNotificationsCollection;
 
 /*
@@ -35,14 +40,6 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
 
-
-    // ----------------------test-------------------
-
-
-    Route::get('test', function () {
-
-
-    });
 
 
     //-------------------------------------------
@@ -66,12 +63,18 @@ Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
 
     // ----------------------admin notifications-------------
+    Route::group(['prefix' => 'notifications','as' => 'dashboard.notifications.'], function () {
 
-    Route::get('notifications', 'AdminNotificationsController@index')->name('dashboard.notifications.index');
-    Route::get('notifications/fetch', 'AdminNotificationsController@fetch')->name('dashboard.notifications.fetch');
-    Route::get('notifications/fetch-datatable', 'AdminNotificationsController@fetchDatatable')->name('dashboard.notifications.fetchDatatable');
-    Route::post('notifications', 'AdminNotificationsController@makeAllRead')->name('dashboard.notifications.makeAllRead');
-    Route::delete('notifications/{id}', 'AdminNotificationsController@destroy')->name('dashboard.notifications.delete');
+            Route::get('/', 'AdminNotificationsController@index')->name('index');
+            Route::get('fetch', 'AdminNotificationsController@fetch')->name('fetch');
+            Route::get('fetch-datatable', 'AdminNotificationsController@fetchDatatable')->name('fetchDatatable');
+            Route::post('make-all-read', 'AdminNotificationsController@makeAllRead')->name('makeAllRead');
+            Route::post('{id}/make-read', 'AdminNotificationsController@makeAsRead')->name('makeAsRead');
+            Route::delete('{id}', 'AdminNotificationsController@destroy')->name('delete');
+
+    });
+
+
 
     // ---------------------------------------------------
 

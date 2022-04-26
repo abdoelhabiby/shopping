@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Services\AdminNotificationService;
 use App\Http\Services\MyfatoorahPaymentService;
 
 trait MyfatoorahTrait
@@ -35,9 +36,6 @@ trait MyfatoorahTrait
      * first we will save invoice id in column charge id
      * and set status pending
      *
-     * in callback if succes will change charge id to reponse paymentd
-     *
-     *
      */
 
 
@@ -61,6 +59,7 @@ trait MyfatoorahTrait
 
             session()->flash('fatoorah_' . user()->id, $save_insession);
             return view('front.checkout.myfatoorah', compact('data'));
+
         } catch (\Throwable $th) {
 
             Log::alert($th);
@@ -162,12 +161,13 @@ trait MyfatoorahTrait
                 'payment_method' => $gateway_method
             ]);
 
+            AdminNotificationService::notificationNewOrder($order);
+
             $this->myCart()->resetCart();
 
             DB::commit();
 
             return redirect()->route('front.user.orders')->with(['success' =>  __('front.order_success')]);
-
         } catch (\Throwable $th) {
 
             Log::alert($th);
@@ -175,6 +175,4 @@ trait MyfatoorahTrait
             return redirect()->back()->with(['error' => __('front.exception_error')]);
         }
     }
-
-
 }

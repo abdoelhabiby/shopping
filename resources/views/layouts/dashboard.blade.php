@@ -140,6 +140,8 @@
 
     @yield('css')
     @stack('css')
+
+
 </head>
 
 <body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar" data-open="click"
@@ -284,11 +286,6 @@
             forceTLS: false,
             disableStats: true,
         });
-
-
-
-
-
     </script>
 
     @yield('admin_notification_in_include_nav')

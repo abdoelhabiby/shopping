@@ -77,13 +77,35 @@ class NotificationsRepository  implements NotificationContract
 
     // ---------------------------------
 
-    public function makeAllNotificationsAsRead()
+    public function makeNotificationsAsRead($id)
     {
-        if( admin()->unreadNotifications()->count() > 0){
-            admin()->unreadNotifications->markAsRead();
+
+        $notification = $this->findNotificationById($id);
+        if ($notification) {
+            $notification->markAsRead();
             return true;
         }
 
+        return false;
+    }
+    // ---------------------------------
+    // ---------------------------------
+
+    public function makeAllNotificationsAsRead()
+    {
+
+        try {
+
+            // -------- if success return null
+
+            admin()->unreadNotifications->markAsRead();
+
+            return true;
+        } catch (\Throwable $th) {
+
+            Log::alert($th);
+            return false;
+        }
     }
     // ---------------------------------
 
@@ -92,10 +114,9 @@ class NotificationsRepository  implements NotificationContract
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findNotificationById( $id)
+    public function findNotificationById($id)
     {
-            return admin()->notifications()->where('id',$id)->first();
-
+        return admin()->notifications()->where('id', $id)->first();
     }
 
 
@@ -106,7 +127,7 @@ class NotificationsRepository  implements NotificationContract
      * @param $id
      * @return bool|mixed
      */
-    public function deleteNotification( $id)
+    public function deleteNotification($id)
     {
         try {
 
@@ -115,7 +136,6 @@ class NotificationsRepository  implements NotificationContract
             $notification->delete();
 
             return true;
-
         } catch (\Throwable $th) {
 
             Log::alert($th);

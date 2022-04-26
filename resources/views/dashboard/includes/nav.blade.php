@@ -4,6 +4,7 @@
 <nav
     class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-dark navbar-shadow">
 
+    <audio id="notification_s" src="{{ asset('soundes/notification.wav') }}" muted style="display: hidden"></audio>
 
     <div class="navbar-wrapper">
         <div class="navbar-header">
@@ -72,7 +73,8 @@
                                 </div>
                             </li>
                             <li class="dropdown-menu-footer"><a class="dropdown-item text-muted text-center"
-                                    href="{{ route('dashboard.notifications.index') }}">Read all notifications</a></li>
+                                    href="{{ route('dashboard.notifications.index') }}">Read all notifications</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -203,6 +205,8 @@
             </div>
         </div>
     </div>
+
+
 </nav>
 
 
@@ -212,15 +216,27 @@
         <script>
             $(function() {
 
+
+
+                function soundNotification(){
+                    document.getElementById('notification_s').muted = false;
+                    document.getElementById('notification_s').play();
+                }
+
+
                 var admin_id = "{{ admin() ? admin()->id : null }}";
 
                 window.Echo.private('notification-new-order')
 
                     .listen('.new-order-notification', (e) => {
 
-                        $("#show_notification_count").text(e.notifications_unread_count);
+                        var current_count = parseInt($("#show_notification_count").text());
+                        $("#show_notification_count").text(current_count + 1);
 
                         fetchNotifications();
+
+                        soundNotification();
+
 
                     });
 

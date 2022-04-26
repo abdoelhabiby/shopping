@@ -2,10 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\NotificationNewOrderEvenet;
-use App\Notifications\Dashboard\AdminNewOrderNotification;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Admin;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Events\NotificationNewOrderEvenet;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Dashboard\AdminNewOrderNotification;
+use Illuminate\Support\Facades\Log;
 
 class NotificationNewOrderListener
 {
@@ -27,7 +30,16 @@ class NotificationNewOrderListener
      */
     public function handle($event)
     {
-        admin()->notify(new AdminNewOrderNotification($event->order));
 
+        try {
+            //-----will exception error if not found permission name
+
+            $admins = Admin::permission('receive_new_orders')->get();
+            Notification::send($admins, new AdminNewOrderNotification($event->order));
+
+        } catch (\Throwable $th) {
+
+            Log::alert($th);
+        }
     }
 }
