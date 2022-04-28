@@ -30,10 +30,17 @@
                 <div class="row match-height">
 
 
-                    @include('dashboard.home.includes._products_sales_chart')
+                    @include(
+                        'dashboard.home.includes._products_sales_chart'
+                    )
 
-                    @includeWhen(isset($new_products_order) && $new_products_order->count() > 0,'dashboard.home.includes._new_products_orders',$new_products_order)
-
+                    @if (admin()->can('read_order'))
+                        @includeWhen(
+                            isset($new_products_order) && $new_products_order->count() > 0,
+                            'dashboard.home.includes._new_products_orders',
+                            $new_products_order
+                        )
+                    @endif
 
 
 
@@ -44,7 +51,7 @@
 
                 <!-- Recent Transactions -->
 
-                @includeWhen(isset($latest_transactions),'dashboard.home.includes._latest_transactions')
+                @includeWhen(isset($latest_transactions), 'dashboard.home.includes._latest_transactions')
 
 
                 <!--/ Recent Transactions -->
@@ -429,8 +436,8 @@
 
                 var WeekLabelList = [
                     @foreach ($chart_information->get('profit_per_week') as $weeks)
-                            "W{{ $weeks->week }}",
-                        @endforeach
+                        "W{{ $weeks->week }}",
+                    @endforeach
                 ];
                 var WeekSeries1List = {
                     name: "series-1",
@@ -445,8 +452,8 @@
 
                 var MonthLabelList = [
                     @foreach ($chart_information->get('profit_per_months') as $months)
-                            "{{ $months->month }}",
-                        @endforeach
+                        "{{ $months->month }}",
+                    @endforeach
                 ];
                 var MonthSeries1List = {
                     name: "series-1",
