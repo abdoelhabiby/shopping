@@ -132,49 +132,48 @@ $model_name = 'orders';
 
                                                     {{-- order user address details --}}
 
+                                                    @if ($order->user->addressDetails)
+                                                        <div class="card ">
 
-                                                    <div class="card ">
+                                                            <div class="card-body p-3 " style="min-height: 225px; ">
 
-                                                        <div class="card-body p-3 " style="min-height: 225px; ">
+                                                                <p class="mb-2">Address detials : </p>
 
-                                                            <p class="mb-2">Address detials : </p>
-
-                                                            <p class="card-title">
-                                                                first name :
-                                                                {{ $order->user->addressDetails->first_name }}
-                                                            </p>
-                                                            <p class="card-title">
-                                                                last name :
-                                                                {{ $order->user->addressDetails->last_name }}
-                                                            </p>
-                                                            <p class="card-text">
-                                                                email : {{ $order->user->addressDetails->email }}
-                                                            </p>
-
-                                                            <p class="card-text">
-                                                                phone : {{ $order->user->addressDetails->phone }}
-                                                            </p>
-                                                            @if ($order->user->addressDetails->second_phone)
-                                                                <p class="card-text">
-                                                                    second phone :
-                                                                    {{ $order->user->addressDetails->second_phone }}
+                                                                <p class="card-title">
+                                                                    first name :
+                                                                    {{ $order->user->addressDetails->first_name }}
                                                                 </p>
-                                                            @endif
-                                                            <p class="card-text">
-                                                                address : {{ $order->user->addressDetails->address }}
-                                                            </p>
-
-                                                            @if ($order->user->addressDetails->second_address)
-                                                                <p class="card-text">
-                                                                    second address :
-                                                                    {{ $order->user->addressDetails->second_address }}
+                                                                <p class="card-title">
+                                                                    last name :
+                                                                    {{ $order->user->addressDetails->last_name }}
                                                                 </p>
-                                                            @endif
+                                                                <p class="card-text">
+                                                                    email : {{ $order->user->addressDetails->email }}
+                                                                </p>
 
+                                                                <p class="card-text">
+                                                                    phone : {{ $order->user->addressDetails->phone }}
+                                                                </p>
+                                                                @if ($order->user->addressDetails->second_phone)
+                                                                    <p class="card-text">
+                                                                        second phone :
+                                                                        {{ $order->user->addressDetails->second_phone }}
+                                                                    </p>
+                                                                @endif
+                                                                <p class="card-text">
+                                                                    address : {{ $order->user->addressDetails->address }}
+                                                                </p>
+
+                                                                @if ($order->user->addressDetails->second_address)
+                                                                    <p class="card-text">
+                                                                        second address :
+                                                                        {{ $order->user->addressDetails->second_address }}
+                                                                    </p>
+                                                                @endif
+
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-
+                                                    @endif
 
 
                                                     <!--  products  -->
@@ -205,36 +204,34 @@ $model_name = 'orders';
 
 
                                                                     @foreach ($order->orderProducts as $order_product)
+                                                                        <tr>
+                                                                            <td>
+                                                                                @php
+                                                                                    $image = $order_product->product->image ? $order_product->product->image->name : pathNoImage();
+                                                                                @endphp
 
-                                                                            <tr>
-                                                                                <td>
-                                                                                    @php
-                                                                                        $image = $order_product->product->image ? $order_product->product->image->name : pathNoImage();
-                                                                                    @endphp
+                                                                                <img class=""
+                                                                                    src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
+                                                                                    alt="{{ $order_product->product->name }}"
+                                                                                    width='100' height="100">
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ $order_product->product->name }}
+                                                                            </td>
 
-                                                                                    <img class=""
-                                                                                        src="{{ fileExist($image) ? asset($image) : getLinkImageNoImage() }}"
-                                                                                        alt="{{ $order_product->product->name }}"
-                                                                                        width='100' height="100">
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ $order_product->product->name }}
-                                                                                </td>
+                                                                            <td>
 
-                                                                                <td>
-
-                                                                                    {{ $order_product->attribute ? $order_product->attribute->name : ''}}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ $order_product->price }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ $order_product->quantity }}
-                                                                                </td>
+                                                                                {{ $order_product->attribute ? $order_product->attribute->name : '' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ $order_product->price }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ $order_product->quantity }}
+                                                                            </td>
 
 
-                                                                            </tr>
-
+                                                                        </tr>
                                                                     @endforeach
 
 

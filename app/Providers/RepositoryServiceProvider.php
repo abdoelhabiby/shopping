@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\Front\HomeIndexContract;
+use App\Contracts\Front\HomeIndexContract as FrontHomeIndexContract;
 use App\Contracts\Dashboard\ProductContract;
-use App\Repositories\Front\HomeIndexRepository;
+use App\Repositories\Front\HomeIndexRepository as FrontHomeIndexRepository;
 use App\Contracts\Dashboard\NotificationContract;
 use App\Repositories\Dashboard\ProductRepository;
 use App\Repositories\Dashboard\NotificationsRepository;
+use App\Contracts\Dashboard\HomeIndexContract as DashboardHomeIndexContract;
+use App\Repositories\Dashboard\HomeIndexRepository as DashboardHomeIndexRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -22,8 +24,9 @@ class RepositoryServiceProvider extends ServiceProvider
     protected $repositories = [
 
         ProductContract::class  => ProductRepository::class,
-        HomeIndexContract::class  => HomeIndexRepository::class,
+        FrontHomeIndexContract::class  => FrontHomeIndexRepository::class,
         NotificationContract::class  => NotificationsRepository::class,
+        DashboardHomeIndexContract::class  => DashboardHomeIndexRepository::class,
     ];
 
 

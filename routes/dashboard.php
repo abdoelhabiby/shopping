@@ -1,6 +1,8 @@
 <?php
 
 use App\Cart\Cart;
+use Carbon\Carbon;
+use App\Events\Test;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Order;
@@ -37,6 +39,8 @@ use App\Http\Resources\Dashboard\AdminNotificationsCollection;
 if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 
+
+
 Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
 
@@ -63,15 +67,14 @@ Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
 
     // ----------------------admin notifications-------------
-    Route::group(['prefix' => 'notifications','as' => 'dashboard.notifications.'], function () {
+    Route::group(['prefix' => 'notifications', 'as' => 'dashboard.notifications.'], function () {
 
-            Route::get('/', 'AdminNotificationsController@index')->name('index');
-            Route::get('fetch', 'AdminNotificationsController@fetch')->name('fetch');
-            Route::get('fetch-datatable', 'AdminNotificationsController@fetchDatatable')->name('fetchDatatable');
-            Route::post('make-all-read', 'AdminNotificationsController@makeAllRead')->name('makeAllRead');
-            Route::post('{id}/make-read', 'AdminNotificationsController@makeAsRead')->name('makeAsRead');
-            Route::delete('{id}', 'AdminNotificationsController@destroy')->name('delete');
-
+        Route::get('/', 'AdminNotificationsController@index')->name('index');
+        Route::get('fetch', 'AdminNotificationsController@fetch')->name('fetch');
+        Route::get('fetch-datatable', 'AdminNotificationsController@fetchDatatable')->name('fetchDatatable');
+        Route::post('make-all-read', 'AdminNotificationsController@makeAllRead')->name('makeAllRead');
+        Route::post('{id}/make-read', 'AdminNotificationsController@makeAsRead')->name('makeAsRead');
+        Route::delete('{id}', 'AdminNotificationsController@destroy')->name('delete');
     });
 
 

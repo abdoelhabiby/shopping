@@ -76,7 +76,6 @@ class Product extends Model
     }
 
 
-
     //------------------get tags relation-----------
 
     public function tags()

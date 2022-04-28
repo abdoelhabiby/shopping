@@ -39,4 +39,9 @@ class OrderProduct extends Model
     {
         return $this->hasOne(ProductImage::class, 'product_id', 'product_id');
     }
+
+
+
+
+
 }

@@ -120,7 +120,7 @@ return [
   'success' => 'success',
   'fails' => 'fails',
   'refused_reason' => 'refused reason',
-  'no_found_order' => 'dont make order for now',
+  'no_found_order' => 'dont add order for now',
   'pending' => 'pending',
   'attribute' => 'attribute',
   'price' => 'price',

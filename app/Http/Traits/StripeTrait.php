@@ -76,6 +76,7 @@ trait StripeTrait
                 'payment_method' => $charge['payment_method'],
             ]);
 
+
            AdminNotificationService::notificationNewOrder($order);
 
 

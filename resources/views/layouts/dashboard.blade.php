@@ -35,11 +35,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/icheck.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/forms/icheck/custom.css">
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/morris.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/charts/chartist.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('admin') }}/vendors/css/charts/chartist-plugin-tooltip.css">
-
 
 
     {{-- --------------------rtl --------------------------- --}}
@@ -95,9 +90,6 @@
 
 
 
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css"> --}}
-
 
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin') }}/vendors/css/tables/datatable/datatables.min.css">
@@ -108,7 +100,6 @@
         href="{{ asset('admin') }}/vendors/css/tables/extensions/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin') }}/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
-    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin') }}/vendors/css/tables/extensions/fixedHeader.dataTables.min.css"> --}}
 
 
 
@@ -193,9 +184,7 @@
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.responsive.min.js" type="text/javascript">
     </script>
-    {{-- <script src="{{ asset('admin') }}/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
-  <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.colReorder.min.js"
-  type="text/javascript"></script> --}}
+
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript">
     </script>
     <script src="{{ asset('admin') }}/vendors/js/tables/datatable/buttons.bootstrap4.min.js" type="text/javascript">
@@ -205,17 +194,19 @@
     <!-- END PAGE VENDOR JS-->
 
 
-    {{-- <script src="{{ asset('admin') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
-    <script src="{{ asset('admin') }}/vendors/js/tables/datatable/dataTables.buttons.min.js" type="text/javascript">
-    </script> --}}
 
     <script src="{{ asset('admin') }}/vendors/js/forms/toggle/bootstrap-switch.min.js" type="text/javascript"></script>
     <script src="{{ asset('admin') }}/vendors/js/forms/toggle/bootstrap-checkbox.min.js" type="text/javascript">
     </script>
 
     <!-- BEGIN PAGE VENDOR JS-->
-    <script src="{{ asset('admin') }}/vendors/js/charts/chart.min.js" type="text/javascript"></script>
-    <script src="{{ asset('admin') }}/vendors/js/charts/echarts/echarts.js" type="text/javascript"></script>
+
+
+
+
+
+    {{-- <script src="{{ asset('admin') }}/vendors/js/charts/chart.min.js" type="text/javascript"></script>
+    <script src="{{ asset('admin') }}/vendors/js/charts/echarts/echarts.js" type="text/javascript"></script> --}}
 
 
     <!-- END PAGE VENDOR JS-->
@@ -227,6 +218,8 @@
     <!-- BEGIN PAGE LEVEL JS-->
     {{-- <script src="{{ asset('admin') }}/js/scripts/pages/dashboard-crypto.js"
         type="text/javascript"></script> --}}
+
+
 
     <!-- BEGIN PAGE LEVEL JS-->
     <script src="{{ asset('admin') }}/js/scripts/gallery/photo-swipe/photoswipe-script.js" type="text/javascript">
@@ -286,10 +279,15 @@
             forceTLS: false,
             disableStats: true,
         });
+
+
+
+
+
     </script>
 
-    @yield('admin_notification_in_include_nav')
 
+@yield('admin_notification_in_include_nav')
 
     @stack('scripts')
 

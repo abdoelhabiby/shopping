@@ -2,53 +2,68 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Contracts\Dashboard\HomeIndexContract;
 use App\Http\Services\AdminNotificationService;
 use App\Http\Controllers\Dashboard\BaseController;
 use App\Events\Dashboard\NotificationNewOrderEvenet;
 use App\Http\Resources\Dashboard\AdminNotificationsCollection;
-use App\Models\User;
 
 class HomeController extends Controller
-
-
 {
+
+    public $home_repository;
+    public function __construct(HomeIndexContract $homeIndexRepository)
+    {
+        $this->home_repository = $homeIndexRepository;
+    }
 
 
     public function index()
     {
+        $year =Carbon::now()->format('Y');
 
-        $products_sold = OrderProduct::sum('quantity');
 
-        // -------------profit--------------
+        $products_sold = $this->home_repository->getTotalProductsSold();
+        $profit =  $this->home_repository->getTotalProfit();
+        $new_customers = $this->home_repository->getNewCustomers();
+        $profit_per_day= $this->home_repository->getProfitLatestDayes(7);
+        $profit_per_week= $this->home_repository->getProfitLatestWeek(10,$year);
+        $profit_per_months= $this->home_repository->getProfitByMonths($year);
+        $new_products_order= $this->home_repository->getProductsNewOrders($limit = 6);
+        $latest_transactions= $this->home_repository->getLatestTransactions();
 
-           $profit = OrderProduct::join('product_attributes','order_products.product_attribute_id','product_attributes.id')
-        ->select([
 
-            DB::raw("SUM((order_products.price * order_products.quantity) - (product_attributes.purchase_price * order_products.quantity)) as profit")
-            ])
-        ->first();
-        $profit = (float) $profit->profit;
-
-        $new_customers = User::count();
 
         $card_information = collect([
             'profit' => $profit,
             'products_sold' => $products_sold,
-            'new_customers' => $new_customers
+            'new_customers' => $new_customers,
+
+        ]);
+
+        $chart_information = collect([
+            'profit_per_day' => $profit_per_day,
+            'profit_per_week' => $profit_per_week,
+            'profit_per_months' => $profit_per_months,
         ]);
 
 
         $compacts = [
-           'card_information',
+            'card_information',
+            'chart_information',
+            'new_products_order',
+            'latest_transactions'
         ];
 
 
 
-        return view('dashboard.home.index',compact($compacts));
+        return view('dashboard.home.index', compact($compacts));
     }
 }
