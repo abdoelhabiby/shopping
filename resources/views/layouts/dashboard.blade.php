@@ -266,7 +266,7 @@
 
         window.Pusher = Pusher;
 
-        Pusher.logToConsole = true;
+        // Pusher.logToConsole = true;
 
 
 

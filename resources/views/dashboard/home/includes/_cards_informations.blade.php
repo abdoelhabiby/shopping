@@ -5,7 +5,7 @@
           <div class="card-body">
             <div class="media d-flex">
               <div class="media-body text-left">
-                <h3 class="info">{{ $card_information->get('products_sold')  }}</h3>
+                <h3 class="info">{{ $card_information->get('products_sold_quantity')  }}</h3>
                 <h6>Products Sold</h6>
               </div>
               <div>

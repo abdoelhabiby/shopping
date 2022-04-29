@@ -2,13 +2,11 @@
     <div class="card card-shadow" style="height: 433px;">
         <div class="card-header card-header-transparent py-20">
             <div class="btn-group dropdown">
-                <p class="text-body blue-grey-700">PRODUCTS SALES</p>
-                {{-- <a href="#" class="text-body dropdown-toggle blue-grey-700" data-toggle="dropdown">PRODUCTS SALES</a> --}}
-                {{-- <div class="dropdown-menu animate" role="menu">
-                    <a class="dropdown-item" href="#" role="menuitem">Sales</a>
-                    <a class="dropdown-item" href="#" role="menuitem">Total sales</a>
-                    <a class="dropdown-item" href="#" role="menuitem">profit</a>
-                </div> --}}
+                <a href="#" class="text-body dropdown-toggle blue-grey-700" data-toggle="dropdown">PRODUCTS {{Str::upper( $type) }}</a>
+                <div class="dropdown-menu animate" role="menu">
+                    <a class="dropdown-item" href="{{ route('dashboard.home',['chart-type=profits']) }}" role="menuitem">Profits</a>
+                    <a class="dropdown-item" href="{{ route('dashboard.home',['chart-type=sales']) }}" role="menuitem"> Sales</a>
+                </div>
             </div>
             <ul class="nav nav-pills nav-pills-rounded chart-action float-right btn-group" role="group">
                 <li class="nav-item"><a class="active nav-link" data-toggle="tab" href="#scoreLineToDay">Day</a>

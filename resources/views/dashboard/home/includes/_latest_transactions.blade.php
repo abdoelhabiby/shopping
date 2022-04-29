@@ -66,25 +66,25 @@
                                         <td class="text-truncate p-1">
                                             <ul class="list-unstyled users-list m-0">
 
+                                                @if ($order->products)
+                                                    @foreach ($order->products->take(3) as $product)
+                                                        <li data-toggle="tooltip " data-popup="tooltip-custom"
+                                                            data-original-title="{{ $product->name }}"
+                                                            class="avatar avatar-sm pull-up">
+                                                            <img class="media-object rounded-circle no-border-top-radius no-border-bottom-radius"
+                                                                src="{{ asset('admin') }}/app-assets/images/portfolio/portfolio-1.jpg"
+                                                                title="{{ $product->name }}">
+                                                        </li>
+                                                    @endforeach
 
-                                                @foreach ($order->products->take(3) as $product)
-                                                    <li data-toggle="tooltip " data-popup="tooltip-custom"
-                                                        data-original-title="{{ $product->name }}"
-                                                        class="avatar avatar-sm pull-up">
-                                                        <img class="media-object rounded-circle no-border-top-radius no-border-bottom-radius"
-                                                            src="{{ asset('admin') }}/app-assets/images/portfolio/portfolio-1.jpg"
-                                                            title="{{ $product->name }}">
-                                                    </li>
-                                                @endforeach
-
-                                                @if ($order->products->count() > 3)
-                                                    <li class="avatar avatar-sm">
-                                                        <span
-                                                            class="badge badge-info">+{{ $order->products->count() - 3 }}
-                                                            more</span>
-                                                    </li>
+                                                    @if ($order->products->count() > 3)
+                                                        <li class="avatar avatar-sm">
+                                                            <span
+                                                                class="badge badge-info">+{{ $order->products->count() - 3 }}
+                                                                more</span>
+                                                        </li>
+                                                    @endif
                                                 @endif
-
 
 
                                             </ul>
