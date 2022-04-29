@@ -24,6 +24,7 @@
         "laravel/ui": "^2.4",
         "mcamara/laravel-localization": "^1.6",
         "pusher/pusher-php-server": "~4.0",
+        "rap2hpoutre/laravel-log-viewer": "^2.2",
         "spatie/laravel-permission": "^3.17",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "yajra/laravel-datatables-buttons": "^4.0",

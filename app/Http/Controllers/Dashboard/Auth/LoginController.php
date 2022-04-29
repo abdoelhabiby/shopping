@@ -25,10 +25,9 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        try {
             $validate = $request->validate([
-                "email" => "required",
-                "password" => "required",
+                "email" => 'required|string',
+                'password' => 'required|string',
             ]);
 
             $remember = $request->has('remember_me') ? true : false;
@@ -39,12 +38,8 @@ class LoginController extends Controller
                 return redirect()->intended($default);
             }
 
-            return redirect()->back()->with(['error' => 'invalid data']);
-        } catch (\Throwable $th) {
-            Log::alert($th);
+            return redirect()->back()->with(['login_error' => 'invalid data']);
 
-            return redirect()->back()->with(['error' => 'invalid data']);
-        }
     }
 
     //---------------------------------------------------

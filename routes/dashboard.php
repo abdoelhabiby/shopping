@@ -41,9 +41,12 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 
 
+
 Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
-
+    Route::group(['namespace' => '\Rap2hpoutre\LaravelLogViewer','middleware' => 'role:super_admin'], function() {
+        Route::get('logs', 'LogViewerController@index')->name('dashboard.logs');
+    });
 
 
     //-------------------------------------------

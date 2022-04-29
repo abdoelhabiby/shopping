@@ -182,6 +182,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
 
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
 
     ],
