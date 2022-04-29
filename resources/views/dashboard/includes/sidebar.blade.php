@@ -247,7 +247,6 @@
 
             {{-- ------end nav orders --------- --}}
 
-
             {{-- -----start nav item notifications-------- --}}
 
             @php
@@ -272,6 +271,17 @@
             {{-- ------end nav item notifications--------- --}}
 
 
+
+            {{-- -----start nav item Logs-------- --}}
+
+            @if(admin()->hasRole('super_admin'))
+
+
+
+            <x-dashboard.sidbar-item name="Logs" :one-list="true" route-name-open="dashboard.logs">
+                <x-slot name="icon"> <i class="las la-exclamation-triangle"></i></x-slot>
+            </x-dashboard.sidbar-item>
+            @endif
 
 
 

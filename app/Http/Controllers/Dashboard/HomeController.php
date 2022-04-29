@@ -37,10 +37,21 @@ class HomeController extends BaseController
 
         $sales_months= $this->home_repository->getSalesByMonths($year);
 
+        $total_products_percentage =ceil(($products_sold_quantity / ($products_sold_quantity + $products_in_stock_quantity)) * 100);
+        $total_profit_percentage =ceil(($profit / $total_products_cost) * 100);
+
 
         $card_information = collect([
-            'profit' => $profit,
-            'products_sold_quantity' => $products_sold_quantity,
+            'profit' =>[
+                'total' =>  (int) $profit ,
+                'percentage' => $total_profit_percentage
+            ],
+            'products_sold' =>
+            [
+                'total' => $products_sold_quantity,
+                'percentage' => $total_products_percentage
+
+            ] ,
             'new_customers' => $new_customers,
 
         ]);
@@ -49,9 +60,7 @@ class HomeController extends BaseController
 
         $chart_information = $this->getChrtInforamionByType($request->get("chart-type"));
 
-        $total_products_percentage =ceil(($products_sold_quantity / ($products_sold_quantity + $products_in_stock_quantity)) * 100);
         $total_sales_percentage =ceil(($total_products_sold_amount / $total_products_cost) * 100);
-        $total_profit_percentage =ceil(($profit / $total_products_cost) * 100);
 
 
         $chart_cost_revenue = collect([
@@ -70,7 +79,7 @@ class HomeController extends BaseController
             ],
               'total_revenue' => [
                 'total' =>  (int) $profit ,
-                'percentage' => $total_sales_percentage
+                'percentage' => $total_profit_percentage
             ]
 
 
