@@ -74,8 +74,8 @@ class MyfatoorahPaymentService
             'InvoiceValue'       => $total_price,
 
             //Fill optional data
-            'DisplayCurrencyIso' => 'EGP',
-            'DisplayCountryIso' => 'EGY',
+            // 'DisplayCurrencyIso' => 'EGP',
+            // 'DisplayCountryIso' => 'EGY',
             'CallBackUrl'        => env('MAYFATOORAH_CALLBACK_SUCCESS'),
             // 'ErrorUrl'           => env('MAYFATOORAH_CALLBACK_ERROR'), //or 'https://example.com/error.php'
             //'Language'           => 'en', //or 'ar'

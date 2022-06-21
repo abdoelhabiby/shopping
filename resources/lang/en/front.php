@@ -128,8 +128,8 @@ return [
   'products' => 'products',
   'order_number' => 'order number',
   'add_to_cart' => 'add to cart',
-  'add_to_wishlist' => 'add to wishlist'
-
+  'add_to_wishlist' => 'add to wishlist',
+  'password_confirmation' => 'password confirmation',
 
 
 

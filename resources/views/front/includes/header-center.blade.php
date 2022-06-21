@@ -15,7 +15,7 @@
                     <div class="content-data-contact">
                         <div class="support">Call customer services :</div>
                         <div class="phone-support">
-                            01015357722
+                            00000000
                         </div>
                     </div>
                 </div>

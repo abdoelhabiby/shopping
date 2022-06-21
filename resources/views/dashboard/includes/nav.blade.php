@@ -188,13 +188,13 @@
                             </span>
 
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right pr-1"><a class="dropdown-item" href=""><i
-                                    class="ft-user"></i> تعديل الملف الشحصي </a>
+                        <div class="dropdown-menu dropdown-menu-right pr-1">
+                            <a class="dropdown-item" href="{{ route('dashboard.profile.index') }}"><i
+                                    class="ft-user"></i> Edit Profile </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('dashboard.logout') }}"><i
                                     class="ft-power"></i>
-                                تسجيل
-                                الخروج </a>
+                                Logout </a>
                         </div>
                     </li>
 

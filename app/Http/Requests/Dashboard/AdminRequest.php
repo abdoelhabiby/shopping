@@ -29,7 +29,7 @@ class AdminRequest extends FormRequest
         $rules  = [
             "name" => "required|string|min:3|max:100",
             "email" => "required|string|email|max:100|" . Rule::unique('admins', 'email')->ignore($this->admin),
-            "password" => "required|string|min:6|max:100|confirmed",
+            "password" => "required|string|min:8|max:100|confirmed",
             "permissions" => 'array',
             "permissions.*" => 'exists:permissions,name|' . Rule::in($permissions),
         ];

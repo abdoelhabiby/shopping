@@ -1,36 +1,12 @@
 <?php
 
-use App\Cart\Cart;
-use Carbon\Carbon;
-use App\Events\Test;
-use App\Models\User;
-use App\Models\Admin;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\OrderProduct;
-use App\Models\ProductImage;
-use Illuminate\Http\Request;
-use App\Models\ProductAttribute;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use App\Http\Resources\UserCollection;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Notification;
-use App\Http\Resources\ProductImagesCollection;
-use App\Http\Services\AdminNotificationService;
-use App\Http\Resources\Dahboard\ProdctsCollection;
-use App\Events\Dashboard\NotificationNewOrderEvenet;
-use App\Notifications\Dashboard\AdminNewOrderNotification;
-use App\Http\Resources\Dashboard\AdminNotificationsCollection;
+
 
 /*
 
- ** comment at 9/10/2021.
- ** we have some mistakes...
+ ** comment at 9/10/2021. befor return to military
+ ** we have  mistakes...
  ** routes name dosent have same name start like (dashbord).
  ** fixxxxxxxxxxxxxxxx it....
 
@@ -40,14 +16,19 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 
 
-
-
 Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
     Route::group(['namespace' => '\Rap2hpoutre\LaravelLogViewer','middleware' => 'role:super_admin'], function() {
         Route::get('logs', 'LogViewerController@index')->name('dashboard.logs');
 
     });
+
+
+
+    // -----------------------------------------
+
+    Route::get('profile',"Auth\AdminUpdateProfileController@index")->name('dashboard.profile.index');
+    Route::put('profile',"Auth\AdminUpdateProfileController@update")->name('dashboard.profile.update');
 
 
     //-------------------------------------------

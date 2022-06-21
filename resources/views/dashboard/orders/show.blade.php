@@ -216,7 +216,11 @@ $model_name = 'orders';
                                                                                     width='100' height="100">
                                                                             </td>
                                                                             <td>
-                                                                                {{ $order_product->product->name }}
+                                                                                <a
+                                                                                    href="{{ route('product.attibutes.index', $order_product->product->slug) }}">
+                                                                                    {{ $order_product->product->name }}
+
+                                                                                </a>
                                                                             </td>
 
                                                                             <td>

@@ -307,7 +307,7 @@
                                         </div>
                                         <div class="cart-summary-line" id="cart-subtotal-shipping">
                                             <span class="label">
-                                                {{ __('front.totla_shipping') }}:
+                                                {{ __('front.total_shipping') }}:
                                             </span>
 
                                             <span class="value">{{ __('front.free') }}</span>

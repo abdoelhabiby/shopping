@@ -62,6 +62,7 @@ trait MyfatoorahTrait
 
         } catch (\Throwable $th) {
 
+
             Log::alert($th);
             return redirect()->back()->with(['error' => __('front.exception_error')]);
         }

@@ -126,8 +126,9 @@ return [
     'products' => 'المنتجات',
     'order_number' => 'رقم الطلب',
     'add_to_cart' => 'اضف الي السله',
-    'add_to_wishlist' => 'اضف الي المفضله'
+    'add_to_wishlist' => 'اضف الي المفضله',
 
+    'password_confirmation' => 'تأكيد الرقم السري',
 
 
 

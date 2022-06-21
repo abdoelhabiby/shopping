@@ -32,7 +32,7 @@ class ProfileAddressRequest extends FormRequest
             'email' => "required|email",
             'address' => "required|string|min:10|max:500",
             'second_address' => "sometimes|nullable|string|min:10|max:500",
-            'phone' => "required|numeric|digits:11",
+            'phone' => "required|numeric|digits_between:5,11",
             'second_phone' => "sometimes|nullable|numeric|digits:11",
         ];
     }

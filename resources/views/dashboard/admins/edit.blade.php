@@ -248,7 +248,7 @@ $model_name = 'admins';
                                                                                     >
                                                                                     <label class="custom-control-label"
                                                                                         for="checkbox_{{ $permission }}">
-                                                                                        {{ $permission }} </label>
+                                                                                        {{ str_replace("_"," ", $permission) }} </label>
                                                                                 </div>
 
                                                                         @endforeach

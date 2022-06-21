@@ -33,7 +33,7 @@ class OrderDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->with('user')->orderBy('created_at','desc');
+        return $model->with('user');
     }
 
     /**
@@ -90,7 +90,7 @@ class OrderDataTable extends DataTable
 
 
             // Column::make('id'),
-            Column::make('user.name')->title('name'),
+            Column::make('user.name')->title('name')->orderable(false)->searchable(false),
             Column::make('charge_id')->title('charge id'),
             Column::make('status')->title('status'),
             Column::make('payment_gateway')->title('gateway'),
