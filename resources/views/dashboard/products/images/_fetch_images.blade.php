@@ -124,7 +124,7 @@
                     </div>
 
 
-                    <div class="card-content collapse show">
+                    <div class="card-content collapse ">
                         <div class="card-body card-dashboard">
 
                             <p class="card-text "> images</p>

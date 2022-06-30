@@ -6,16 +6,7 @@ use DateTime;
 use Exception;
 use DateTimeZone;
 use App\Cart\Cart;
-use App\Models\Order;
-use Illuminate\Support\Str;
-use App\Models\OrderProduct;
-use Cartalyst\Stripe\Stripe;
-use App\Models\UserAddressDetails;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Database\Eloquent\Model;
 
 
 class MyfatoorahPaymentService
@@ -23,10 +14,6 @@ class MyfatoorahPaymentService
 
 
 
-    private static function newStripe()
-    {
-        return new Stripe(env('STRIPE_SECRET_KEY'));
-    }
 
 
     public static function cart()

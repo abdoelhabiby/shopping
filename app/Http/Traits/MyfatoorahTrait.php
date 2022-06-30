@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\SaveOrderTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Services\AdminNotificationService;
@@ -15,6 +16,9 @@ use App\Http\Services\MyfatoorahPaymentService;
 
 trait MyfatoorahTrait
 {
+
+    use SaveOrderTrait;
+
 
     private function myCart()
     {
@@ -96,17 +100,15 @@ trait MyfatoorahTrait
                 return redirect()->route('cart.index');
             }
 
-            $order = $this->saveOrder($invoice_id, 'myfatoorah', 'card', $cart);
+            $order = $this->saveOrder(user()->id,$invoice_id, 'myfatoorah', 'card', $cart);
 
-            if (!$order instanceof Model) {
+            if (!$order instanceof Order) {
                 throw new Exception('order not saved ');
             }
 
             DB::commit();
-
-            // $cart->resetCart();
-
             return redirect($payment_link);
+
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::alert($th);
@@ -122,6 +124,9 @@ trait MyfatoorahTrait
         try {
 
             DB::beginTransaction();
+
+            // ------------- fetch api order payment from myfatoorah by transaction (charge id) paymentId
+
             $payment = MyfatoorahPaymentService::getPaymentData($request->paymentId);
 
             $status = $payment->InvoiceStatus; //Paid or Pending
@@ -132,9 +137,9 @@ trait MyfatoorahTrait
                 return redirect()->route('cart.index')->with(['error' => __('front.myfat_callback_not_paid')]);
             }
 
-            if (count($payment->InvoiceTransactions) > 1) {
+            if (count($payment->InvoiceTransactions) > 1) {  // if user try multiple myfatoorah save this
                 foreach ($payment->InvoiceTransactions as $transaction) {
-                    if ($transaction->TransactionStatus == 'Succss') {
+                    if ($transaction->TransactionStatus == 'Succss') { // api return keda (Succss)  !!!
                         $gateway_method = $transaction->PaymentGateway;
                         break;
                     }
@@ -152,6 +157,7 @@ trait MyfatoorahTrait
                 throw new Exception('myfatoorah callback invoice id ' . $invoice_id . " dosent exist in database orders");
             }
 
+            //-------------need update this-----------------------
             if ((int) substr($amount, 0, 1)  != (int) substr($order->amount, 0, 1)) {
                 throw new Exception('myfatoorah payemnts dosent equals');
             }

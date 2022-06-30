@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\SaveOrderTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Services\StripePaymentService;
@@ -16,6 +17,8 @@ use App\Http\Services\AdminNotificationService;
 
 trait StripeTrait
 {
+
+    use SaveOrderTrait;
 
 
     protected function paymentWithSrtipeInit()
@@ -51,9 +54,9 @@ trait StripeTrait
 
             $charge_id = Str::random();
 
-            $order = $this->saveOrder($charge_id, 'stripe', 'card', $cart);
+            $order = $this->saveOrder(user()->id,$charge_id, 'stripe', 'card', $cart);
 
-            if (!$order instanceof Model) {
+            if (!$order instanceof Order) {
                 throw new Exception('order not saved ');
             }
 
@@ -77,7 +80,7 @@ trait StripeTrait
             ]);
 
 
-           AdminNotificationService::notificationNewOrder($order);
+           AdminNotificationService::notificationNewOrder($order); // set try catch
 
 
             //forget the session

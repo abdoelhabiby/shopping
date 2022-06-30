@@ -1,16 +1,7 @@
 <?php
 
-use App\Cart\Cart;
 
-use Carbon\Carbon;
-
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
-use App\Http\Services\MyfatoorahPaymentService;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
