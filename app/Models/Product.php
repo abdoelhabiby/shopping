@@ -40,6 +40,13 @@ class Product extends Model
 
 
 
+    // ------------relation has many in orders ----------
+
+
+    public function orders(){
+        return $this->hasMany(OrderProduct::class,'product_id','id');
+    }
+
 
     //------------------get brand relation-----------
     public function brand()

@@ -1,16 +1,10 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 
-/*
 
- ** comment at 9/10/2021. befor return to military
- ** we have  mistakes...
- ** routes name dosent have same name start like (dashbord).
- ** fixxxxxxxxxxxxxxxx it....
-
-*/
 
 if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
@@ -18,22 +12,22 @@ if (!defined('PAGINATE_COUNT')) define('PAGINATE_COUNT', '10');
 
 Route::group(['middleware' => ['auth:admin', 'shar_view_dash']], function () {
 
-    Route::group(['namespace' => '\Rap2hpoutre\LaravelLogViewer','middleware' => 'role:super_admin'], function() {
+    Route::group(['namespace' => '\Rap2hpoutre\LaravelLogViewer', 'middleware' => 'role:super_admin'], function () {
         Route::get('logs', 'LogViewerController@index')->name('dashboard.logs');
-
     });
 
 
 
     // -----------------------------------------
 
-    Route::get('profile',"Auth\AdminUpdateProfileController@index")->name('dashboard.profile.index');
-    Route::put('profile',"Auth\AdminUpdateProfileController@update")->name('dashboard.profile.update');
+    Route::get('profile', "Auth\AdminUpdateProfileController@index")->name('dashboard.profile.index');
+    Route::put('profile', "Auth\AdminUpdateProfileController@update")->name('dashboard.profile.update');
 
 
     //-------------------------------------------
 
     Route::get('/', 'HomeController@index')->name('dashboard.home');
+
 
 
     Route::resources([

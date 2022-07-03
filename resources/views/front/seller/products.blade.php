@@ -27,6 +27,16 @@
 
 
                     <li itemprop="itemListElement" itemscope="">
+
+                            <span itemprop="name">
+                                Seller
+                            </span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                    </li>
+
+
+                    <li itemprop="itemListElement" itemscope="">
                         <a itemprop="item"
                             href="{{ route('front.seller.products',$seller->id) }}">
                             <span itemprop="name">

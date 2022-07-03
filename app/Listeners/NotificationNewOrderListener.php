@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\Dashboard\AdminNewOrderNotification;
 use Illuminate\Support\Facades\Log;
 
-class NotificationNewOrderListener
+class NotificationNewOrderListener implements ShouldQueue
 {
     /**
      * Create the event listener.

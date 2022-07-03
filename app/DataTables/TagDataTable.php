@@ -32,7 +32,16 @@ class TagDataTable extends DataTable
      */
     public function query(Tag $model)
     {
-        return $model->newQuery();
+        // return $model->newQuery();
+
+        $locale = \Config::get('app.locale');
+        $fallback_locale = \Config::get('translatable.fallback_locale');
+
+        return $model->with(['translation_default' => function($q) use ($locale,$fallback_locale){
+            return $q->where('locale',$locale)->orWhere('locale',$fallback_locale)->get();
+        }])
+        ->newQuery()
+        ;
     }
 
     /**
@@ -88,8 +97,8 @@ class TagDataTable extends DataTable
 
             Column::make('id'),
             Column::make('slug'),
-            Column::make('name')->title('name')->orderable(false)->searchable(false),
-            Column::make('is_active')->title('active'),
+            Column::make('translation_default.name')->title('name')->orderable(false),
+            // Column::make('is_active')->title('active'),
             Column::make('created_at')->title('created at'),
             Column::computed('action')
                 ->exportable(false)

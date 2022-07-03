@@ -33,7 +33,17 @@ class BrandDataTable extends DataTable
      */
     public function query(Brand $model)
     {
-        return $model->newQuery();
+
+        // return $model->with('translations')->newQuery();
+
+        $locale = \Config::get('app.locale');
+        $fallback_locale = \Config::get('translatable.fallback_locale');
+
+        return $model->with(['translation_default' => function($q) use ($locale,$fallback_locale){
+            return $q->where('locale',$locale)->orWhere('locale',$fallback_locale)->get();
+        }])
+        ->newQuery()
+        ;
     }
 
     /**
@@ -89,8 +99,8 @@ class BrandDataTable extends DataTable
 
             Column::make('id'),
             Column::make('slug'),
-            Column::make('name')->title('name')->orderable(false)->searchable(false),
-            Column::make('is_active')->title('active'),
+            Column::make('translation_default.name')->title('name')->orderable(false),
+            // Column::make('is_active')->title('active'),
             Column::make('created_at')->title('created at'),
             Column::computed('image')
                 ->exportable(false)

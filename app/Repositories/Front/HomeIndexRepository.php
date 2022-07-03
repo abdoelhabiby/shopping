@@ -29,26 +29,26 @@ class HomeIndexRepository implements HomeIndexContract
 
         // $products_offer = Cache::remember('home_products_offer', $ttl, function () use ($limit) {
 
-            $products_offer = $this->product->active()->whereHas('offer')->with([
-                'offer' => function ($offer) {
-                    return $offer->select([
-                        "id",
-                        "sku",
-                        "qty",
-                        "product_id",
-                        "price",
-                        "price_offer",
-                        "start_offer_at",
-                        "end_offer_at",
-                    ])->active()->withTranslation();
-                },
-                'images' => function ($query) {
-                    $query->orderBy('id','asc')->take(2);
-                },
-                'reviewsRating'
-            ])
-                ->withTranslation()
-                ->limit($limit)->get();
+        $products_offer = $this->product->active()->whereHas('offer')->with([
+            'offer' => function ($offer) {
+                return $offer->select([
+                    "id",
+                    "sku",
+                    "qty",
+                    "product_id",
+                    "price",
+                    "price_offer",
+                    "start_offer_at",
+                    "end_offer_at",
+                ])->active()->withTranslation();
+            },
+            'images' => function ($query) {
+                $query->orderBy('id', 'asc')->take(2);
+            },
+            'reviewsRating'
+        ])
+            ->withTranslation()
+            ->limit($limit)->get();
         // });
 
 
@@ -67,34 +67,34 @@ class HomeIndexRepository implements HomeIndexContract
 
         // $new_products = Cache::remember('home_new_products', $ttl, function () use ($limit) {
 
-            $new_products =  $this->product->active()
-                ->with(
-                    [
-                        'vendor' => function ($vend) {
-                            return $vend->select(['name', 'id']);
-                        },
-                        'attribute' => function ($attr) {
-                            return $attr->select([
-                                "id",
-                                "sku",
-                                "qty",
-                                "product_id",
-                                "is_active",
-                                "price",
-                                "price_offer",
-                                "start_offer_at",
-                                "end_offer_at",
-                            ])->active()->withTranslation();
-                        },
-                        'images' => function ($query) {
-                            $query->orderBy('id','asc')->take(2);
-                        },
-                        'reviewsRating'
+        $new_products =  $this->product->active()
+            ->with(
+                [
+                    'vendor' => function ($vend) {
+                        return $vend->select(['name', 'id']);
+                    },
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->active()->withTranslation();
+                    },
+                    'images' => function ($query) {
+                        $query->orderBy('id', 'asc')->take(2);
+                    },
+                    'reviewsRating'
 
-                    ]
-                )
-                ->withTranslation()
-                ->active()->latest()->limit($limit)->get();
+                ]
+            )
+            ->withTranslation()
+            ->active()->latest()->limit($limit)->get();
         // });
 
         return  $new_products;
@@ -109,38 +109,43 @@ class HomeIndexRepository implements HomeIndexContract
 
         // $products_best_seller = Cache::remember('home_products_best_seller', $ttl, function () use ($limit) {
 
-            $products_best_seller = $this->product->active()
-                ->whereHas('attribute', function ($attribute) {
-                    return $attribute->active();
-                })
+        $products_best_seller = $this->product->leftJoin('order_products', 'products.id', '=', 'order_products.product_id')
+            ->selectRaw('products.*, IFNULL(SUM(order_products.quantity),0) AS `quantity`')
+            ->active()
+            ->whereHas('attribute', function ($attribute) {
+                return $attribute->active();
+            })
 
-                ->with(
-                    [
-                        'vendor' => function ($vend) {
-                            return $vend->select(['name', 'id']);
-                        },
-                        'attribute' => function ($attr) {
-                            return $attr->select([
-                                "id",
-                                "sku",
-                                "qty",
-                                "product_id",
-                                "is_active",
-                                "price",
-                                "price_offer",
-                                "start_offer_at",
-                                "end_offer_at",
-                            ])->where('is_active', true)->withTranslation();
-                        },
-                        'images' => function ($query) {
-                            $query->orderBy('id','asc')->take(2);
-                        },
-                        'reviewsRating'
+            ->with(
+                [
+                    'vendor' => function ($vend) {
+                        return $vend->select(['name', 'id']);
+                    },
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->where('is_active', true)->withTranslation();
+                    },
+                    'images' => function ($query) {
+                        $query->orderBy('id', 'asc')->take(2);
+                    },
+                    'reviewsRating'
 
-                    ]
-                )
-                ->withTranslation()
-                ->latest()->limit($limit)->get();
+                ]
+            )
+            ->withTranslation()
+            ->groupBy('products.id')
+            ->orderBy('quantity', 'desc')
+            ->limit($limit)
+            ->get();
         // });
 
         return $products_best_seller;
@@ -156,36 +161,34 @@ class HomeIndexRepository implements HomeIndexContract
         // $products_trending = Cache::remember('home_products_trending', $ttl, function () use ($limit) {
 
 
-            $products_trending =  $this->product->active()
+        $products_trending =  $this->product->active()
 
-                ->with(
-                    [
-                        'vendor' => function ($vend) {
-                            return $vend->select(['name', 'id']);
-                        },
-                        'attribute' => function ($attr) {
-                            return $attr->select([
-                                "id",
-                                "sku",
-                                "qty",
-                                "product_id",
-                                "is_active",
-                                "price",
-                                "price_offer",
-                                "start_offer_at",
-                                "end_offer_at",
-                            ])->where('is_active', true)->withTranslation();
-                        },
-                        'images' => function ($query) {
-                            $query->orderBy('id','asc')->take(2);
-                        },
-                        'reviewsRating'
+            ->with(
+                [
+                    'vendor:id,name',
+                    'attribute' => function ($attr) {
+                        return $attr->select([
+                            "id",
+                            "sku",
+                            "qty",
+                            "product_id",
+                            "is_active",
+                            "price",
+                            "price_offer",
+                            "start_offer_at",
+                            "end_offer_at",
+                        ])->where('is_active', true)->withTranslation();
+                    },
+                    'images' => function ($query) {
+                        $query->orderBy('id', 'asc')->take(2);
+                    },
+                    'reviewsRating'
 
 
-                    ]
-                )
-                ->withTranslation()
-                ->latest()->limit($limit)->get();
+                ]
+            )
+            ->withTranslation()
+            ->latest()->limit($limit)->get();
         // });
 
         return $products_trending;
@@ -207,9 +210,9 @@ class HomeIndexRepository implements HomeIndexContract
 
         // $main_category_with_nested_chields_products = Cache::remember('home_main_category_with_nested_chields_products', $ttl, function () use ($main_categories_limit, $products_limit, $image_count) {
 
-            $main_categories =  Category::mainCategory()
-            ->whereHas('subCategories',function($q){
-                $q->whereHas('categories',function($category){
+        $main_categories =  Category::mainCategory()
+            ->whereHas('subCategories', function ($q) {
+                $q->whereHas('categories', function ($category) {
                     $category->where('is_active', true)->whereHas('products', function ($q) {
                         $q->active();
                     });
@@ -233,70 +236,70 @@ class HomeIndexRepository implements HomeIndexContract
 
 
 
-            $main_category_with_las_chields_id = $main_categories->mapWithKeys(function ($main) {
-                return [
-                    $main->slug => [
-                        'categories' =>  $main->subCategories->map(function ($lastchield) {
-                            return  $lastchield->categories->map(function ($map) {
-                                return  $map->id;
-                            });
-                        })->collapse(), 'category_translations' => $main->translations->pluck('name', 'locale')->toArray()
-                    ]
-                ];
-            })->toArray();
+        $main_category_with_las_chields_id = $main_categories->mapWithKeys(function ($main) {
+            return [
+                $main->slug => [
+                    'categories' =>  $main->subCategories->map(function ($lastchield) {
+                        return  $lastchield->categories->map(function ($map) {
+                            return  $map->id;
+                        });
+                    })->collapse(), 'category_translations' => $main->translations->pluck('name', 'locale')->toArray()
+                ]
+            ];
+        })->toArray();
 
 
-            $category_products = [];
+        $category_products = [];
 
-            foreach ($main_category_with_las_chields_id as $category => $data) {
-
-
-                $chields_id = $data['categories']->toArray(); //ids category has products relation
+        foreach ($main_category_with_las_chields_id as $category => $data) {
 
 
-                if ($category && is_array($chields_id) && count($chields_id) > 0) {
+            $chields_id = $data['categories']->toArray(); //ids category has products relation
 
 
-                    $products = Product::whereHas('categories', function ($query) use ($chields_id) {
-                        $query->whereIn('product_categories.category_id', $chields_id);
-                    })
-                        ->with([
+            if ($category && is_array($chields_id) && count($chields_id) > 0) {
 
-                            'vendor' => function ($vend) {
-                                return $vend->select(['name', 'id']);
-                            },
-                            'attribute' => function ($attr) {
-                                return $attr->select([
-                                    "id",
-                                    "sku",
-                                    "qty",
-                                    "product_id",
-                                    "is_active",
-                                    "price",
-                                    "price_offer",
-                                    "start_offer_at",
-                                    "end_offer_at",
-                                ])->where('is_active', true)->withTranslation();
-                            },
-                            'images' => function ($query) {
-                                $query->orderBy('id','asc')->take(2);
-                            },
-                            'reviewsRating'
-                        ])
-                        ->active()
-                        ->orderBy('created_at', 'desc')
-                        ->limit($products_limit)
-                        ->withTranslation()
-                        ->get();
 
-                    $category_products[$category]['products'] = $products;
+                $products = Product::whereHas('categories', function ($query) use ($chields_id) {
+                    $query->whereIn('product_categories.category_id', $chields_id);
+                })
+                    ->with([
 
-                    $category_products[$category]['category_translations'] = $data['category_translations'] ?? $category;
-                }
+                        'vendor' => function ($vend) {
+                            return $vend->select(['name', 'id']);
+                        },
+                        'attribute' => function ($attr) {
+                            return $attr->select([
+                                "id",
+                                "sku",
+                                "qty",
+                                "product_id",
+                                "is_active",
+                                "price",
+                                "price_offer",
+                                "start_offer_at",
+                                "end_offer_at",
+                            ])->where('is_active', true)->withTranslation();
+                        },
+                        'images' => function ($query) {
+                            $query->orderBy('id', 'asc')->take(2);
+                        },
+                        'reviewsRating'
+                    ])
+                    ->active()
+                    ->orderBy('created_at', 'desc')
+                    ->limit($products_limit)
+                    ->withTranslation()
+                    ->get();
+
+                $category_products[$category]['products'] = $products;
+
+                $category_products[$category]['category_translations'] = $data['category_translations'] ?? $category;
             }
+        }
 
 
-            return  $category_products;
+        return  $category_products;
 
 
 

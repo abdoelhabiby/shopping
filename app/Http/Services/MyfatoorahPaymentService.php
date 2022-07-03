@@ -61,7 +61,7 @@ class MyfatoorahPaymentService
             'InvoiceValue'       => $total_price,
 
             //Fill optional data
-            // 'DisplayCurrencyIso' => 'EGP',
+            // 'DisplayCurrencyIso' => 'EGP', // get error not support
             // 'DisplayCountryIso' => 'EGY',
             'CallBackUrl'        => env('MAYFATOORAH_CALLBACK_SUCCESS'),
             // 'ErrorUrl'           => env('MAYFATOORAH_CALLBACK_ERROR'), //or 'https://example.com/error.php'
@@ -80,7 +80,6 @@ class MyfatoorahPaymentService
         //Call endpoint
         $data = self::sendPayment(self::getApiUrl(), self::getApiKey(), $postFields);
 
-        //  dd($data);
         //You can save payment data in database as per your needs
 
         $invoiceId   = $data->InvoiceId;

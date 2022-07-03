@@ -37,13 +37,19 @@ class SubCategoryRequest extends FormRequest
             'parent_id' => 'required|integer|' . Rule::in($this->getIdsCategoryMainSubCategory()),
             "slug" => "required|string|" . Rule::unique('categories', 'slug')->ignore($this->sub_category),
             "name" =>   "required|array|min:1|max:" . count(supportedLanguages()),
-            "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('category_translations', 'name')->ignore($this->sub_category->id, 'category_id'),
+            "name.*" =>   "required|string|min:2|max:150|" . Rule::unique('category_translations', 'name'),
             "meta_keywords" => "sometimes|nullable|string|max:100",
             "meta_description" => "sometimes|nullable|string|max:500",
             "image" => "sometimes|nullable|image|mimes:png,jpg,jpeg|max:8000",
             "is_active" => "sometimes|nullable|",
 
         ];
+
+        if (in_array($this->getMethod(), ['PUT', 'PATCH'])) {
+
+            $rules["name.*"] = "required|string|min:2|max:150|" . Rule::unique('category_translations', 'name')->ignore($this->sub_category->id, 'category_id');
+        }
+
 
         return $rules;
     }
@@ -71,14 +77,19 @@ class SubCategoryRequest extends FormRequest
     // -----------------------------
     public function getIdsCategoryMainSubCategory(): array
     {
+
+
         $categories = Category::where('parent_id', null)
             ->orWhere(function ($q) {
                 $q->whereHas('parent', function ($q) {  // sub categories
-                    $q->where('parent_id', null)
-                    ->where('id','!=',$this->sub_category->id);
+                    $q->where('parent_id', null)->when(($this->sub_category), function ($q) {
+                        $q->where('id', '!=', $this->sub_category->id);
+                    });
                 });
             })
-            ->where('id','!=',$this->sub_category->id)
+            ->when(($this->sub_category), function ($q) {
+                $q->where('id', '!=', $this->sub_category->id);
+            })
             ->pluck('id')->toArray();
 
         return $categories;
