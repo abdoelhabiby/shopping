@@ -23,7 +23,12 @@ class MakeNotifyAsRead
 
                 if($guard === 'admin'){
 
-                    admin()->notifications()->where('id',$request->get('notify'))->first()->markAsRead();
+                    $notify = admin()->notifications()->where('id',$request->get('notify'))->first();
+
+                    if($notify){
+                        $notify ->markAsRead();
+                    }
+
                 }
 
             }
